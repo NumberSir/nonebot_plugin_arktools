@@ -11,7 +11,7 @@ from nonebot.adapters.onebot.v11 import Message, MessageSegment
 from playwright._impl._api_types import TimeoutError
 
 from .config import Config
-from .utils import get_browser
+from .._utils import get_browser
 
 
 ark_daily_config = Config.parse_obj(get_driver().config.dict())
