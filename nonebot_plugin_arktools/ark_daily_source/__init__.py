@@ -11,8 +11,8 @@ from .data_source import get_daily_sources
 global_config = nonebot.get_driver().config
 ark_daily_config = Config(**global_config.dict())
 
-material = on_regex(r"[今日|天]*方舟[今日|天]*[资源]*[材料]*", priority=5, block=True)
-super_cmd = on_regex(r"更新[今日|天]*方舟[今日|天]*[资源]*[材料]*", permission=SUPERUSER, priority=1, block=True)
+material = on_regex(r"方舟[今|每]+[日|天]*[资源]*[材料]*", priority=5, block=True)
+super_cmd = on_regex(r"更新方舟[今|每]+[日|天]*[资源]*[材料]*", permission=SUPERUSER, priority=1, block=True)
 
 
 @material.handle()
