@@ -2,6 +2,7 @@
 import nonebot
 from nonebot import logger
 from nonebot import on_regex
+from nonebot.permission import SUPERUSER
 from nonebot_plugin_apscheduler import scheduler
 
 from .config import Config
