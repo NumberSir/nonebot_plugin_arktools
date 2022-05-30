@@ -66,8 +66,9 @@ activities_data_path="xxx"  # 新活动的数据文件在本地存储的路径
 ```
 
 ## 图片示例
-
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/170930067-8b80374b-a454-4920-bc41-a15137b86118.png" width="500" />
+</div>
 <div align="left">
   <img src="https://user-images.githubusercontent.com/52584526/170831808-5b1bc7b4-3bea-45f5-8565-cc8b5a8372e3.png" width="500" />
 </div>
-
