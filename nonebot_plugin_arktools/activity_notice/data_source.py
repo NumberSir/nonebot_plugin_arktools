@@ -14,12 +14,13 @@ from nonebot.adapters.onebot.v11 import MessageSegment
 from playwright._impl._api_types import TimeoutError
 from nonebot.adapters.onebot.v11 import Message
 from io import BytesIO
+from pathlib import Path
 
 from .config import Config
 
 activity_config = Config.parse_obj(get_driver().config.dict())
-DATA_PATH = activity_config.activities_data_path
-IMG_PATH = activity_config.activities_img_path
+DATA_PATH = Path(activity_config.activities_data_path)
+IMG_PATH = Path(activity_config.activities_img_path)
 
 
 async def get_activities(*, is_force: bool = False, is_cover: bool = False):

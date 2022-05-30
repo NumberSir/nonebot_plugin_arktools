@@ -1,2 +1,2 @@
-from browser_utils import *
-from http_utils import *
+from .browser_utils import *
+from .http_utils import *
