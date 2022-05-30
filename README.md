@@ -81,9 +81,9 @@ activities_data_path="xxx"  # 新活动的数据文件在本地存储的路径
 > - 添加了查询最新活动信息的功能
 >
 > 2022-05-30 v0.2.1
-> - 修复了使用 nb plugin install 命令安装后无法正常工作的问题
+> - 修复了使用 nb plugin install 命令安装后无法正常工作的问题[@issue/1](https://github.com/NumberSir/nonebot_plugin_arktools/issues/1)
 > 
 > 2022-05-30 v0.3.0
-> - 向下兼容到 Python 3.7.3 版本
+> - 向下兼容到 Python 3.7.3 版本[@issue/2](https://github.com/NumberSir/nonebot_plugin_arktools/issues/2)
 > 
 
