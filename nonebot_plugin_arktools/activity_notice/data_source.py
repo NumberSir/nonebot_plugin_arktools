@@ -1,22 +1,19 @@
-import httpx
-import os
-import json
 import asyncio
-import base64
-
-from lxml import etree
-from nonebot import get_driver, logger
-
-from PIL import Image
-from .._utils import async_GET
-from .._utils import get_browser
-from nonebot.adapters.onebot.v11 import MessageSegment
-from playwright._impl._api_types import TimeoutError
-from nonebot.adapters.onebot.v11 import Message
+import json
+import os
 from io import BytesIO
 from pathlib import Path
 
+import httpx
+from PIL import Image
+from lxml import etree
+from nonebot import get_driver, logger
+from nonebot.adapters.onebot.v11 import Message
+from nonebot.adapters.onebot.v11 import MessageSegment
+
 from .config import Config
+from .._utils import get_browser
+from .._utils import request_
 
 activity_config = Config.parse_obj(get_driver().config.dict())
 DATA_PATH = Path(activity_config.activities_data_path)
@@ -30,7 +27,7 @@ async def get_activities(*, is_force: bool = False, is_cover: bool = False):
     result = None
     for retry in range(5):
         try:
-            result = await async_GET(url=announcement_url)
+            result = await request_(url=announcement_url)
         except httpx.TimeoutException:
             logger.warning(f"获取方舟近期活动第{retry + 1}次失败...")
             continue
@@ -102,6 +99,7 @@ async def get_latest_info(activity_data: dict, latest: str, *, is_cover: bool = 
         )
 
     page = None
+    screenshot = None
     for retry in range(3):
         try:
             browser = await get_browser()
@@ -112,25 +110,29 @@ async def get_latest_info(activity_data: dict, latest: str, *, is_cover: bool = 
             await page.set_viewport_size({"width": 960, "height": 1080})
             await asyncio.sleep(1)
             screenshot = await page.screenshot(full_page=True, type='jpeg', quality=50)
-        except TimeoutError:
-            logger.warning(f"第{retry + 1}次获取方舟活动截图失败……")
+        except TimeoutError as e:
+            logger.warning(f"第{retry + 1}次获取方舟活动截图失败…… {e}")
             continue
         except Exception as e:
             if page:
                 await page.close()
-            logger.error(f"方舟活动截图失败！ - {type(e)}: {e}")
+            logger.error(f"方舟活动截图失败！ - {e}")
             return None
         else:
             await page.close()
-            b_scr = BytesIO(screenshot)
-            img = Image.open(b_scr)
+            break
+
+    if screenshot:
+        b_scr = BytesIO(screenshot)
+        with Image.open(b_scr) as img:
             img.save(file_name)
-            return Message(
-                f"{MessageSegment.image(base64.b64encode(screenshot))}"
-                f"{title}\n"
-                f"公告更新日期: {latest}\n"
-                f"数据来源于: {url}"
-            )
+        return Message(
+            f"{MessageSegment.image(file_name)}"
+            f"{title}\n"
+            f"公告更新日期: {latest}\n"
+            f"数据来源于: {url}"
+        )
     if page:
         await page.close()
-    return None
+
+    return url

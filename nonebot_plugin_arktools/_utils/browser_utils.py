@@ -1,9 +1,9 @@
 from typing import Optional
-from playwright.async_api import Browser, async_playwright
+
 import nonebot
 from nonebot import Driver
 from nonebot.log import logger
-
+from playwright.async_api import Browser, async_playwright
 
 driver: Driver = nonebot.get_driver()
 
@@ -18,10 +18,10 @@ async def init(**kwargs) -> Optional[Browser]:
         _browser = await browser.chromium.launch(**kwargs)
         return _browser
     except NotImplementedError:
-        logger.warning("初始化playwright失败，请依次进行如下操作：")
-        logger.warning("1.请检查playwright库和uvicorn库是否为最新版本")
-        logger.warning("2.请删除env文件中的“FASTAPI_RELOAD=true”语句")
-        logger.warning("3.请不要在windows环境下部署")
+        logger.warning("初始化 playwright 失败，请依次进行如下操作：")
+        logger.warning("1.请检查 playwright 库和 uvicorn 库是否为最新版本")
+        logger.warning("2.请删除 env 文件中的 “FASTAPI_RELOAD=true” 语句")
+        logger.warning("3.请不要在 windows 环境下部署")
     except Exception as e:
         logger.warning(f"启动chromium发生错误 {type(e)}：{e}")
         if _browser:

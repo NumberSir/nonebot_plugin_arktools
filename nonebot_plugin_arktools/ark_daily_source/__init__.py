@@ -4,9 +4,11 @@ from nonebot import logger
 from nonebot import on_regex
 from nonebot.permission import SUPERUSER
 from nonebot_plugin_apscheduler import scheduler
+import os
 
 from .config import Config
 from .data_source import get_daily_sources
+from .alter import alter_plan
 
 global_config = nonebot.get_driver().config
 ark_daily_config = Config(**global_config.dict())
@@ -21,7 +23,12 @@ async def _():
     if rst_img:
         rst = rst_img
     else:
-        rst = f"方舟今日资源截图失败！请更换至非windows平台部署本插件\n或检查网络连接并稍后重试"
+        result = await alter_plan()
+        result = ", ".join(result)
+        rst = (
+            f"方舟今日资源截图失败！\n请更换至非windows平台部署本插件\n或检查网络连接并稍后重试\n"
+            f"今日开放的资源关卡：{result}"
+        )
     await material.finish(rst)
 
 
@@ -46,3 +53,11 @@ async def _():
         await get_daily_sources(is_force=True)
     except Exception as e:
         logger.error(f"方舟今日资源更新失败！{type(e)}: {e}")
+
+
+driver = nonebot.get_driver()
+@driver.on_startup
+async def _():
+    if not os.path.exists(ark_daily_config.daily_levels_path):
+        os.makedirs(ark_daily_config.daily_levels_path)
+    await get_daily_sources(is_force=True)

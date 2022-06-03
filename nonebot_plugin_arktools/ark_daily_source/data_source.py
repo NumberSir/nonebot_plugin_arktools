@@ -1,5 +1,4 @@
 import asyncio
-import base64
 import os
 from datetime import datetime, timedelta
 from io import BytesIO
@@ -8,7 +7,6 @@ from pathlib import Path
 from PIL import Image
 from nonebot import get_driver, logger
 from nonebot.adapters.onebot.v11 import Message, MessageSegment
-from playwright._impl._api_types import TimeoutError
 
 from .config import Config
 from .._utils import get_browser
@@ -26,6 +24,7 @@ async def get_daily_sources(is_force: bool = False):
         return Message(MessageSegment.image(file_name) + f"{today} - 数据来源于 https://prts.wiki/")
 
     page = None
+    screenshot = None
     for retry in range(3):
         try:
             browser = await get_browser()
@@ -45,11 +44,11 @@ async def get_daily_sources(is_force: bool = False):
             box['height'] += 70
             await asyncio.sleep(1)
             screenshot = await page.screenshot(clip=box)
-        except TimeoutError:
-            logger.warning(f"第{retry + 1}次获取方舟每日资源截图失败……")
+        except TimeoutError as e:
+            logger.warning(f"第{retry + 1}次获取方舟每日资源截图失败…… {e}")
             continue
-        except AttributeError:
-            logger.warning(f"第{retry + 1}次获取方舟每日资源截图失败……")
+        except AttributeError as e:
+            logger.warning(f"第{retry + 1}次获取方舟每日资源截图失败…… {e}")
             continue
         except Exception as e:
             if page:
@@ -58,11 +57,14 @@ async def get_daily_sources(is_force: bool = False):
             return None
         else:
             await page.close()
-            b_scr = BytesIO(screenshot)
-            img = Image.open(b_scr)
+            break
+
+    if screenshot:
+        b_scr = BytesIO(screenshot)
+        with Image.open(b_scr) as img:
             img.save(file_name)
-            return Message(
-                MessageSegment.image(base64.b64encode(screenshot)) + f"{today} - 数据来源于 https://prts.wiki/")
+        return Message(
+            MessageSegment.image(file_name) + f"{today} - 数据来源于 https://prts.wiki/")
     if page:
         await page.close()
     return None
