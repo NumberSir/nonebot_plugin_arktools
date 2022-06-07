@@ -95,4 +95,8 @@ activities_data_path="xxx"  # 新活动的数据文件在本地存储的路径
 > - 向下兼容到 Python 3.7.3 版本[@issue/2](https://github.com/NumberSir/nonebot_plugin_arktools/issues/2)
 >
 > 2022-06-03 v0.4.0
+<<<<<<< HEAD
 > - 添加了查询推荐公招标签的功能
+=======
+> - 添加了查询推荐公招标签的功能
+>>>>>>> 2d45e15c2e8ff52b47d5961fd6852418369535b3
