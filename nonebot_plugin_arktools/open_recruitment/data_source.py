@@ -1,4 +1,5 @@
 from .._utils import request_
+from typing import List
 
 
 TAGS = [
@@ -9,7 +10,7 @@ TAGS = [
 ]
 
 
-async def get_recommend_tags(taglist: list[str]):
+async def get_recommend_tags(taglist: List[str]):
     taglist = await preprocess_tags(taglist)
 
     url = "http://110.40.221.138:8000/api/ark/tools/recruit/recommend"
@@ -39,7 +40,7 @@ async def get_recommend_tags(taglist: list[str]):
 
     return result
 
-async def preprocess_tags(taglist: list[str]) -> list[str]:
+async def preprocess_tags(taglist: List[str]) -> List[str]:
     for idx, tag in enumerate(taglist):
         if tag in ['近卫', '重装', '先锋', '医疗', '辅助', '特种', '术师', '狙击']:
             taglist[idx] = tag + "干员"
