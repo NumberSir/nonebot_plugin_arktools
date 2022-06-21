@@ -4,9 +4,9 @@ from .._exceptions import *
 
 
 async def request_(url, method: str = "GET", *, retry: int = 5, **kwargs):
-    if method in ["get", "GET"]:
+    if method in {"get", "GET"}:
         return await async_get(url, retry=retry, **kwargs)
-    elif method in ["post", "POST"]:
+    elif method in {"post", "POST"}:
         return await async_post(url, retry=retry, **kwargs)
     else:
         raise NoMethodException

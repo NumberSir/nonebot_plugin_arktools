@@ -27,7 +27,7 @@ async def _():
             f"最新的活动信息请见链接: {rst_msg}"
         )
     else:
-        rst = f"无法获得方舟最新活动信息！请稍后重试"
+        rst = "无法获得方舟最新活动信息！请稍后重试"
     await latest_activity.finish(rst)
 
 

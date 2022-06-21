@@ -38,9 +38,9 @@ async def _():
         await get_daily_sources(is_force=True)
     except Exception as e:
         logger.error(f"方舟今日资源更新失败！{type(e)}: {e}")
-        await super_cmd.finish(f"方舟今日资源更新失败！请稍后重试！")
+        await super_cmd.finish("方舟今日资源更新失败！请稍后重试！")
     else:
-        await super_cmd.finish(f"方舟今日资源更新完成！")
+        await super_cmd.finish("方舟今日资源更新完成！")
 
 
 @scheduler.scheduled_job(

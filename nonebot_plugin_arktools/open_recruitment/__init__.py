@@ -15,9 +15,9 @@ async def _(arg: Message = CommandArg()):
     rst = await get_recommend_tags(taglist)
 
     if rst is None:
-        rst = f"获取公招推荐数据失败！请检查网络连接并稍后重试"
+        rst = "获取公招推荐数据失败！请检查网络连接并稍后重试"
 
     if not rst:
-        rst = f"当前没有必出稀有干员的公招标签"
+        rst = "当前没有必出稀有干员的公招标签"
 
     await recruit.finish(rst, at_sender=True)

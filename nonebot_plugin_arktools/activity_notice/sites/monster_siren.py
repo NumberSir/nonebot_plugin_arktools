@@ -24,13 +24,13 @@ async def get_album_news() -> list:
 
     data = response.json()
     if data['code'] != 0:
-        logger.error(f"塞壬唱片最新专辑获取失败")
+        logger.error("塞壬唱片最新专辑获取失败")
         raise APICodeException(status=response['code'])
 
     data = response.json()['data']
     logger.info(f"album_data: {data}")
     result = []
-    for idx, _ in enumerate(data['list'][:3]):
+    for _ in data['list'][:3]:
         result.append(await process_album_news(_))
     logger.info(f"album_result: {result}")
     return result

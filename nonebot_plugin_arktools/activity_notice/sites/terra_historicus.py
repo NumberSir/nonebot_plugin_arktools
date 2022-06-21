@@ -16,13 +16,13 @@ async def get_comic_news():
 
     data = response.json()
     if data['code'] != 0:
-        logger.error(f"泰拉记事社最新漫画获取失败")
+        logger.error("泰拉记事社最新漫画获取失败")
         raise APICodeException(status=response['code'])
 
     data = response.json()['data']
     logger.info(f"comic_data: {data}")
     result = []
-    for idx, _ in enumerate(data[:3]):
+    for _ in data[:3]:
         result.append(await process_comic_news(_))
     logger.info(f"comic_result: {result}")
     return result
