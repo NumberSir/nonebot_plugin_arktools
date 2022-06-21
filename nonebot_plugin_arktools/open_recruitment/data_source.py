@@ -28,14 +28,14 @@ async def get_recommend_tags(taglist: List[str]):
         operator_info = data['recommendOperatorInfos']
         operators = {}
         for op in operator_info:
-            if op['rarity'] not in operators.keys():
-                operators[op['rarity']] = [op['name']]
-            else:
+            if op['rarity'] in operators:
                 operators[op['rarity']].append(op['name'])
 
+            else:
+                operators[op['rarity']] = [op['name']]
         result += f"\n推荐tag：{'+'.join(tags_info)}\n"
         for rarity in range(1, 7):
-            if rarity in operators.keys():
+            if rarity in operators:
                 result += f"{'★' * rarity}: {', '.join(operators[rarity])}\n"
 
     return result
@@ -43,7 +43,7 @@ async def get_recommend_tags(taglist: List[str]):
 async def preprocess_tags(taglist: List[str]) -> List[str]:
     for idx, tag in enumerate(taglist):
         if tag in ['近卫', '重装', '先锋', '医疗', '辅助', '特种', '术师', '狙击']:
-            taglist[idx] = tag + "干员"
+            taglist[idx] = f"{tag}干员"
         if tag in ["高资", "高姿", "高级"]:
             taglist[idx] = "高级资深干员"
         if tag in ["资深", "资干"]:
