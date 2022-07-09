@@ -26,9 +26,4 @@ SOURCE = {
 
 async def alter_plan():
     weekday = WEEKDAYS[time.strftime("%a", time.localtime())]
-    result = []
-    for name, day in SOURCE.items():
-        if weekday in day:
-            result.append(name)
-
-    return result
+    return [name for name, day in SOURCE.items() if weekday in day]

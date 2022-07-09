@@ -96,3 +96,6 @@ activities_data_path="xxx"  # 新活动的数据文件在本地存储的路径
 >
 > 2022-06-03 v0.4.0
 > - 添加了查询推荐公招标签的功能
+>
+> 2022-06-03 v0.4.1
+> - 修复了发行版和源码不匹配的问题[@issue/4](https://github.com/NumberSir/nonebot_plugin_arktools/issues/4)

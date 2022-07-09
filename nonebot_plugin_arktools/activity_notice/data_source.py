@@ -22,7 +22,6 @@ IMG_PATH = Path(activity_config.activities_img_path)
 
 async def get_activities(*, is_force: bool = False, is_cover: bool = False):
     """获取近期活动"""
-    activity_data = {}
     announcement_url = "https://ak.hypergryph.com/news.html"
     result = None
     for retry in range(5):
@@ -46,11 +45,8 @@ async def get_activities(*, is_force: bool = False, is_cover: bool = False):
     activity_times = dom.xpath(
         "//ol[@class='articleList' and @data-category-key='ACTIVITY']/li/a/span[@class='articleItemDate']/text()"
     )[:3]
-    for idx, time in enumerate(activity_times):
-        activity_data[time] = {
-            "url": f"https://ak.hypergryph.com{activity_urls[idx]}",
-            "title": activity_titles[idx].strip()
-        }
+    activity_data = {time: {"url": f"https://ak.hypergryph.com{activity_urls[idx]}", "title": activity_titles[idx].strip()} for idx, time in enumerate(activity_times)}
+
     if not os.path.exists(DATA_PATH):
         os.makedirs(DATA_PATH)
     if not os.path.exists(DATA_PATH / "activities.json"):
@@ -106,7 +102,7 @@ async def get_latest_info(activity_data: dict, latest: str, *, is_cover: bool = 
             if not browser:
                 return None
             page = await browser.new_page()
-            await page.goto(url, timeout=10000)
+            await page.goto(url, timeout=50000)
             await page.set_viewport_size({"width": 960, "height": 1080})
             await asyncio.sleep(1)
             screenshot = await page.screenshot(full_page=True, type='jpeg', quality=50)

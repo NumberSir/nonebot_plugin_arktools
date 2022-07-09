@@ -7,7 +7,7 @@ with open("README.md", "r", encoding='utf-8') as f:
 
 setuptools.setup(
     name="nonebot_plugin_arktools",
-    version="0.4.0",
+    version="0.4.1",
     author="Number_Sir",
     author_email="Number_Sir@126.com",
     keywords=["pip", "nonebot2", "nonebot", "nonebot_plugin"],

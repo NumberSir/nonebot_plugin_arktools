@@ -1,3 +1,4 @@
+import contextlib
 from typing import Optional
 
 import nonebot
@@ -41,7 +42,5 @@ def install():
     from playwright.__main__ import main
 
     sys.argv = ["", "install", "chromium"]
-    try:
+    with contextlib.suppress(SystemExit):
         main()
-    except SystemExit:
-        pass

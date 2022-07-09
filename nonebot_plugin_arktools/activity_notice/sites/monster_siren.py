@@ -30,7 +30,7 @@ async def get_album_news() -> list:
     data = response.json()['data']
     logger.info(f"album_data: {data}")
     result = []
-    for idx, _ in enumerate(data['list'][:3]):
+    for _ in data['list'][:3]:
         result.append(await process_album_news(_))
     logger.info(f"album_result: {result}")
     return result
