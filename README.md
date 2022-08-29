@@ -81,6 +81,9 @@ operator_save_path="xxx"    # 干员信息查询生成的图片文件在本地�
 <div align="left">
   <img src="https://user-images.githubusercontent.com/52584526/171796407-2cdbdcb7-1aee-465d-9460-5c48400ab5f4.png" width="500" />
 </div>
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/187153116-5caa84db-05d2-4cb4-85a1-898c3e71444e.png" width="500" />
+</div>
 
 ## 感谢
  - __[yuanyan3060](https://github.com/yuanyan3060)__ 的 __[明日方舟常用素材库](https://github.com/yuanyan3060/Arknights-Bot-Resource)__
@@ -107,3 +110,4 @@ operator_save_path="xxx"    # 干员信息查询生成的图片文件在本地�
 > 
 > 2022-08-29 v0.5.0
 > - 添加了查询干员的技能升级材料、专精材料、精英化材料的功能
+
