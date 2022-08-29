@@ -15,6 +15,7 @@ _✨ 基于OneBot适配器的[NoneBot2](https://v2.nonebot.dev/)明日方舟小�
 1. [x] 可以查询今天开放的资源关卡
 2. [x] 可以查询最新的活动信息
 3. [x] 可以查询推荐的公招标签
+4. [x] 可以查询干员的技能升级材料、专精材料、精英化材料
 
 ### 编写中...
 1. [ ] 可以查询某种资源在哪个关卡期望理智最低
@@ -22,8 +23,7 @@ _✨ 基于OneBot适配器的[NoneBot2](https://v2.nonebot.dev/)明日方舟小�
 3. [ ] 查询某干员的基础数据：
    1. [ ] 给定等级、信赖、潜能下的基础面板
    2. [ ] 天赋、特性、技能
-   3. [ ] 干员精英化、技能专精、解锁模组需要的材料
-   4. [ ] 干员种族、势力、身高等基本个人信息
+   3. [ ] 干员种族、势力、身高等基本个人信息
 4. [ ] 定时提醒剿灭 / 蚀刻章 / 合约等活动过期
 
 ## 安装
@@ -48,6 +48,7 @@ pip install nonebot_plugin_arktools
 daily_levels_path="xxx"     # 每日资源关卡的截图文件在本地存储的路径
 activities_img_path="xxx"   # 新活动的截图文件在本地存储的路径
 activities_data_path="xxx"  # 新活动的数据文件在本地存储的路径
+operator_save_path="xxx"    # 干员信息查询生成的图片文件在本地存储的路径
 ...
 ```
 
@@ -65,7 +66,9 @@ activities_data_path="xxx"  # 新活动的数据文件在本地存储的路径
 
 方舟最新活动    ->    查看最新的活动相关信息
 
-公开招募 [标签1 标签2, ...]    ->    查询推荐的公招标签
+公招 [标签1 标签2, ...]    ->    查询推荐的公招标签
+
+干员 [干员名称] -> 查询干员的技能升级材料、专精材料、精英化材料
 ```
 
 ## 图片示例
@@ -79,6 +82,8 @@ activities_data_path="xxx"  # 新活动的数据文件在本地存储的路径
   <img src="https://user-images.githubusercontent.com/52584526/171796407-2cdbdcb7-1aee-465d-9460-5c48400ab5f4.png" width="500" />
 </div>
 
+## 感谢
+ - __[yuanyan3060](https://github.com/yuanyan3060)__ 的 __[明日方舟常用素材库](https://github.com/yuanyan3060/Arknights-Bot-Resource)__
 
 
 ## 更新日志
@@ -99,3 +104,6 @@ activities_data_path="xxx"  # 新活动的数据文件在本地存储的路径
 >
 > 2022-06-03 v0.4.1
 > - 修复了发行版和源码不匹配的问题[@issue/4](https://github.com/NumberSir/nonebot_plugin_arktools/issues/4)
+> 
+> 2022-08-29 v0.5.0
+> - 添加了查询干员的技能升级材料、专精材料、精英化材料的功能
