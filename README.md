@@ -14,7 +14,7 @@ _✨ 基于OneBot适配器的[NoneBot2](https://v2.nonebot.dev/)明日方舟小�
 ### 已实现：
 1. [x] 可以查询今天开放的资源关卡
 2. [x] 可以查询最新的活动信息
-3. [x] 可以查询推荐的公招标签
+3. [x] 可以查询推荐的公招标签(截图识别)
 4. [x] 可以查询干员的技能升级材料、专精材料、精英化材料
 
 ### 编写中...
@@ -49,6 +49,9 @@ daily_levels_path="xxx"     # 每日资源关卡的截图文件在本地存储�
 activities_img_path="xxx"   # 新活动的截图文件在本地存储的路径
 activities_data_path="xxx"  # 新活动的数据文件在本地存储的路径
 operator_save_path="xxx"    # 干员信息查询生成的图片文件在本地存储的路径
+tencent_cloud_secret_id="xxx"  # 腾讯云开发者 SecretId
+tencent_cloud_secret_key="xxx"  # 腾讯云开发者 SecretKey
+recruitment_save_path="xxx"  # 公招查询结果图片缓存路径
 ...
 ```
 
@@ -66,7 +69,8 @@ operator_save_path="xxx"    # 干员信息查询生成的图片文件在本地�
 
 方舟最新活动    ->    查看最新的活动相关信息
 
-公招 [标签1 标签2, ...]    ->    查询推荐的公招标签
+公招[图片]    ->    查询推荐的公招标签
+回复公招图片：公招 -> 同上
 
 干员 [干员名称] -> 查询干员的技能升级材料、专精材料、精英化材料
 ```
@@ -81,29 +85,37 @@ operator_save_path="xxx"    # 干员信息查询生成的图片文件在本地�
 <div align="left">
   <img src="https://user-images.githubusercontent.com/52584526/171796407-2cdbdcb7-1aee-465d-9460-5c48400ab5f4.png" width="500" />
 </div>
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/187153116-5caa84db-05d2-4cb4-85a1-898c3e71444e.png" width="500" />
+</div>
 
 ## 感谢
  - __[yuanyan3060](https://github.com/yuanyan3060)__ 的 __[明日方舟常用素材库](https://github.com/yuanyan3060/Arknights-Bot-Resource)__
+ - __[Kengxxiao](https://github.com/Kengxxiao)__ 的 __[《明日方舟》游戏数据库](https://github.com/Kengxxiao/ArknightsGameData)__
 
 
 ## 更新日志
-> 2022-05-24 v0.1.0
-> - 添加了查询今日开放资源关卡的功能
-> 
-> 2022-05-26 v0.2.0
-> - 添加了查询最新活动信息的功能
+> 2022-09-01 v0.5.1
+> - 重写了查询推荐公招标签的功能[@issue/6](https://github.com/NumberSir/nonebot_plugin_arktools/issues/6)
 >
-> 2022-05-30 v0.2.1
-> - 修复了使用 nb plugin install 命令安装后无法正常工作的问题[@issue/1](https://github.com/NumberSir/nonebot_plugin_arktools/issues/1)
-> 
-> 2022-05-30 v0.3.0
-> - 向下兼容到 Python 3.7.3 版本[@issue/2](https://github.com/NumberSir/nonebot_plugin_arktools/issues/2)
->
-> 2022-06-03 v0.4.0
-> - 添加了查询推荐公招标签的功能
+> 2022-08-29 v0.5.0
+> - 添加了查询干员的技能升级材料、专精材料、精英化材料的功能
 >
 > 2022-06-03 v0.4.1
 > - 修复了发行版和源码不匹配的问题[@issue/4](https://github.com/NumberSir/nonebot_plugin_arktools/issues/4)
 > 
-> 2022-08-29 v0.5.0
-> - 添加了查询干员的技能升级材料、专精材料、精英化材料的功能
+> 2022-06-03 v0.4.0
+> - 添加了查询推荐公招标签的功能
+>
+> 2022-05-30 v0.3.0
+> - 向下兼容到 Python 3.7.3 版本[@issue/2](https://github.com/NumberSir/nonebot_plugin_arktools/issues/2)
+>
+> 2022-05-30 v0.2.1
+> - 修复了使用 nb plugin install 命令安装后无法正常工作的问题[@issue/1](https://github.com/NumberSir/nonebot_plugin_arktools/issues/1)
+> 
+> 2022-05-26 v0.2.0
+> - 添加了查询最新活动信息的功能
+>
+> 2022-05-24 v0.1.0
+> - 添加了查询今日开放资源关卡的功能
+
