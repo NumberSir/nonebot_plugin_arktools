@@ -49,7 +49,7 @@ daily_levels_path="xxx"     # 每日资源关卡的截图文件在本地存储�
 activities_img_path="xxx"   # 新活动的截图文件在本地存储的路径
 activities_data_path="xxx"  # 新活动的数据文件在本地存储的路径
 operator_save_path="xxx"    # 干员信息查询生成的图片文件在本地存储的路径
-tencent_cloud_secret_id="xxx"  # 腾讯云开发者 SecretId
+tencent_cloud_secret_id="xxx"  # 腾讯云开发者 SecretId，见腾讯云相关文档 - https://console.cloud.tencent.com/
 tencent_cloud_secret_key="xxx"  # 腾讯云开发者 SecretKey
 recruitment_save_path="xxx"  # 公招查询结果图片缓存路径
 ...
