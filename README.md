@@ -82,9 +82,17 @@ recruitment_save_path="xxx"  # 公招查询结果图片缓存路径
 <div align="left">
   <img src="https://user-images.githubusercontent.com/52584526/170831808-5b1bc7b4-3bea-45f5-8565-cc8b5a8372e3.png" width="500" />
 </div>
+
 <div align="left">
-  <img src="https://user-images.githubusercontent.com/52584526/171796407-2cdbdcb7-1aee-465d-9460-5c48400ab5f4.png" width="500" />
+  <img src="https://user-images.githubusercontent.com/52584526/187737788-6a44179a-e76d-4c3b-97a1-d95c1a9ca35b.png" width="500" />
 </div>
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/187737797-5eb85331-cf3d-449e-b404-4c86eda41613.png" width="500" />
+</div>
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/187737802-866139c4-a556-475e-9018-e35cf64b1f29.png" width="500" />
+</div>
+
 <div align="left">
   <img src="https://user-images.githubusercontent.com/52584526/187153116-5caa84db-05d2-4cb4-85a1-898c3e71444e.png" width="500" />
 </div>
