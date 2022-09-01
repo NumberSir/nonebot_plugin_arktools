@@ -49,8 +49,8 @@ daily_levels_path="xxx"     # 每日资源关卡的截图文件在本地存储�
 activities_img_path="xxx"   # 新活动的截图文件在本地存储的路径
 activities_data_path="xxx"  # 新活动的数据文件在本地存储的路径
 operator_save_path="xxx"    # 干员信息查询生成的图片文件在本地存储的路径
-tencent_cloud_secret_id="xxx"  # 腾讯云开发者 SecretId，见腾讯云相关文档 - https://console.cloud.tencent.com/
-tencent_cloud_secret_key="xxx"  # 腾讯云开发者 SecretKey
+tencent_cloud_secret_id="xxx"  # 腾讯云开发者 SecretId，这两项在 https://console.cloud.tencent.com/cam/capi 可以创建并查询
+tencent_cloud_secret_key="xxx"  # 腾讯云开发者 SecretKey，另需开通 OCR 服务，见 https://console.cloud.tencent.com/ocr/overview
 recruitment_save_path="xxx"  # 公招查询结果图片缓存路径
 ...
 ```
@@ -103,6 +103,9 @@ recruitment_save_path="xxx"  # 公招查询结果图片缓存路径
 
 
 ## 更新日志
+> 2022-09-01 v0.5.2
+> - 修复公招保存图片出错和缺少文件的问题[@issue/7](https://github.com/NumberSir/nonebot_plugin_arktools/issues/7)
+>
 > 2022-09-01 v0.5.1
 > - 重写了查询推荐公招标签的功能[@issue/6](https://github.com/NumberSir/nonebot_plugin_arktools/issues/6)
 >
