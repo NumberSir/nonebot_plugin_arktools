@@ -275,6 +275,7 @@ def build_image(result_list: list) -> Image:
 
     draw.line(xy=(1001 - 2, 0, 1001 - 2, h - 2), fill=(190, 190, 190, 255), width=2)
     file = SAVE_PATH / "temp.png"
+    None if os.path.exists(SAVE_PATH) else os.mkdir(SAVE_PATH)
     main_background.save(file)
     return file
 
