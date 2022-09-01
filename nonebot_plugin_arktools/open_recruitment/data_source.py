@@ -1,3 +1,4 @@
+import os
 from .config import Config
 from nonebot import get_driver
 from nonebot import logger
