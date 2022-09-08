@@ -45,7 +45,7 @@ pip install nonebot_plugin_arktools
 ## 如何使用
 
 ### 启动注意
- - 每次启动并连接到客户端后会从 __[yuanyan3060](https://github.com/yuanyan3060)__ 的 __[明日方舟常用素材库](https://github.com/yuanyan3060/Arknights-Bot-Resource)__ 下载使用插件必需的文本及图片资源到本地，根据网络情况不同可能耗时 20~30 分钟不等
+ - 每次启动并连接到客户端后会从 __[yuanyan3060](https://github.com/yuanyan3060)__ 的 __[明日方舟常用素材库](https://github.com/yuanyan3060/Arknights-Bot-Resource)__ 下载使用插件必需的文本及图片资源到本地，已经下载过的文件不会重复下载。下载根据网络情况不同可能耗时 20~30 分钟不等
  - 每天凌晨 4:30 会自动检测素材是否需要更新，若有则会自动下载更新的素材
  - 如需手动更新，请用命令 __“更新方舟游戏数据”__ 进行更新
  - 如果自动下载失败，请手动下载发行版中的 __“`operator_info.zip`”__ 压缩文件，解压到 __“`nonebot_plugin_arktools/_data`”__ 文件夹下，正确放置的文件夹结构应为：
