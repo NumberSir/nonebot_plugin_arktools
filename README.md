@@ -126,6 +126,7 @@ recruitment_save_path="xxx"  # 公招查询结果图片缓存路径
 ## 更新日志
 > 2022-09-01 v0.5.4
 > - 修改资源获取方式为启动 nonebot 后下载到本地
+> - 修复了检测路径缺失的问题[@issue/8](https://github.com/NumberSir/nonebot_plugin_arktools/issues/8)
 >
 > 2022-09-01 v0.5.3
 > - 修复未导入 os 模块的问题
