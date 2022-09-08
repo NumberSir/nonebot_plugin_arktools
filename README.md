@@ -6,7 +6,7 @@
   
 # Nonebot_Plugin_ArkTools
   
-_✨ 基于OneBot适配器的[NoneBot2](https://v2.nonebot.dev/)明日方舟小工具箱插件 ✨_
+_✨ 基于 OneBot 适配器的 [NoneBot2](https://v2.nonebot.dev/) 明日方舟小工具箱插件 ✨_
   
 </div>
 
@@ -44,6 +44,23 @@ pip install nonebot_plugin_arktools
 
 ## 如何使用
 
+### 启动注意
+ - 每次启动并连接到客户端后会从 __[yuanyan3060](https://github.com/yuanyan3060)__ 的 __[明日方舟常用素材库](https://github.com/yuanyan3060/Arknights-Bot-Resource)__ 下载使用插件必需的文本及图片资源到本地，根据网络情况不同可能耗时 20~30 分钟不等
+ - 每天凌晨 4:30 会自动检测素材是否需要更新，若有则会自动下载更新的素材
+ - 如需手动更新，请用命令 __“更新方舟游戏数据”__ 进行更新
+ - 如果自动下载失败，请手动下载发行版中的 __“`operator_info.zip`”__ 压缩文件，解压到 __“`nonebot_plugin_arktools/_data`”__ 文件夹下，正确放置的文件夹结构应为：
+```txt
+nonebot_plugin_arktools
+├── _data
+│   └── operator_info
+│       ├── font
+│       ├── image
+│       └── json
+├── _apis
+├── ...
+...
+```
+
 ### .env 配置项
 
 ```ini
@@ -70,6 +87,8 @@ recruitment_save_path="xxx"  # 公招查询结果图片缓存路径
 更新方舟今日资源    ->    手动更新今天开放的资源关卡
 
 方舟最新活动    ->    查看最新的活动相关信息
+
+更新方舟游戏数据   ->   更新至最新的游戏素材，以便公招识别与干员查询使用
 
 公招[图片]    ->    查询推荐的公招标签
 回复公招图片：公招 -> 同上
@@ -105,6 +124,12 @@ recruitment_save_path="xxx"  # 公招查询结果图片缓存路径
 
 
 ## 更新日志
+> 2022-09-01 v0.5.4
+> - 修改资源获取方式为启动 nonebot 后下载到本地
+>
+> 2022-09-01 v0.5.3
+> - 修复未导入 os 模块的问题
+>
 > 2022-09-01 v0.5.2
 > - 修复公招保存图片出错和缺少文件的问题[@issue/7](https://github.com/NumberSir/nonebot_plugin_arktools/issues/7)
 >

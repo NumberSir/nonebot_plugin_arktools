@@ -19,7 +19,7 @@ FONT_PATH = Path(__file__).parent.parent / "_data" / "operator_info" / "font"
 
 def ocr(image_url: str) -> set:
     """调用腾讯云进行 OCR 识别公招标签"""
-    with open(Path().parent.parent / "_data" / "operator_info" / "json" / "gacha_table.json", "r", encoding="utf-8") as f:
+    with open(Path(__file__).parent.parent / "_data" / "operator_info" / "json" / "gacha_table.json", "r", encoding="utf-8") as f:
         TAGS = json.load(f)
     TAGS = {_["tagName"] for _ in TAGS["gachaTags"]}
     try:
@@ -56,13 +56,13 @@ class Operator:
 def load_operator_data() -> dict:
     """读取干员基本信息：职业、位置、性别、标签、稀有度"""
     operators = {}
-    with open(Path().parent / "json" / "character_table.json", "r", encoding="utf-8") as f:
+    with open(Path(__file__).parent.parent / "_data" / "operator_info" / "json" / "character_table.json", "r", encoding="utf-8") as f:
         operator_basic_info: dict = json.load(f)
 
-    with open(Path().parent / "json" / "handbook_info_table.json", "r", encoding="utf-8") as f:
+    with open(Path(__file__).parent.parent / "_data" / "operator_info" / "json" / "handbook_info_table.json", "r", encoding="utf-8") as f:
         operator_data_info: dict = json.load(f)
 
-    with open(Path().parent / "json" / "gacha_table.json", "r", encoding="utf-8") as f:
+    with open(Path(__file__).parent.parent / "_data" / "operator_info" / "json" / "gacha_table.json", "r", encoding="utf-8") as f:
         operator_obtainable: dict = json.load(f)
 
     for code, info in operator_basic_info.items():
@@ -109,7 +109,7 @@ def get_rare_operators(tags: set) -> list:
     rarity = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4}
     general = {}
 
-    with open(Path().parent / "json" / "recruitment_tags.json", "r", encoding="utf-8") as f:
+    with open(Path(__file__).parent.parent / "_data" / "operator_info" / "json" / "recruitment_tags.json", "r", encoding="utf-8") as f:
         tags_cate = json.load(f)
 
     operators = load_operator_data()
