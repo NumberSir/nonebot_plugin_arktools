@@ -12,6 +12,8 @@ _✨ 基于 OneBot 适配器的 [NoneBot2](https://v2.nonebot.dev/) 明日方舟
 
 [![OSCS Status](https://www.oscs1024.com/platform/badge/NumberSir/nonebot_plugin_arktools.svg?size=small)](https://www.oscs1024.com/project/NumberSir/nonebot_plugin_arktools?ref=badge_small)
 
+本人python小萌新，插件有不完善和可以改进之处欢迎各位多提pr和issue
+
 ## 功能
 ### 已实现：
 1. [x] 可以查询今天开放的资源关卡
