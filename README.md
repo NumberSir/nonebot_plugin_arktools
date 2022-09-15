@@ -12,6 +12,8 @@ _✨ 基于 OneBot 适配器的 [NoneBot2](https://v2.nonebot.dev/) 明日方舟
 
 [![OSCS Status](https://www.oscs1024.com/platform/badge/NumberSir/nonebot_plugin_arktools.svg?size=small)](https://www.oscs1024.com/project/NumberSir/nonebot_plugin_arktools?ref=badge_small)
 
+本人python小萌新，插件有不完善和可以改进之处欢迎各位多提pr和issue
+
 ## 功能
 ### 已实现：
 1. [x] 可以查询今天开放的资源关卡
@@ -45,7 +47,7 @@ pip install nonebot_plugin_arktools
 ## 如何使用
 
 ### 启动注意
- - 每次启动并连接到客户端后会从 __[yuanyan3060](https://github.com/yuanyan3060)__ 的 __[明日方舟常用素材库](https://github.com/yuanyan3060/Arknights-Bot-Resource)__ 下载使用插件必需的文本及图片资源到本地，根据网络情况不同可能耗时 20~30 分钟不等
+ - 每次启动并连接到客户端后会从 __[yuanyan3060](https://github.com/yuanyan3060)__ 的 __[明日方舟常用素材库](https://github.com/yuanyan3060/Arknights-Bot-Resource)__ 下载使用插件必需的文本及图片资源到本地，已经下载过的文件不会重复下载。下载根据网络情况不同可能耗时 20~30 分钟不等
  - 每天凌晨 4:30 会自动检测素材是否需要更新，若有则会自动下载更新的素材
  - 如需手动更新，请用命令 __“更新方舟游戏数据”__ 进行更新
  - 如果自动下载失败，请手动下载发行版中的 __“`operator_info.zip`”__ 压缩文件，解压到 __“`nonebot_plugin_arktools/_data`”__ 文件夹下，正确放置的文件夹结构应为：
@@ -126,6 +128,7 @@ recruitment_save_path="xxx"  # 公招查询结果图片缓存路径
 ## 更新日志
 > 2022-09-01 v0.5.4
 > - 修改资源获取方式为启动 nonebot 后下载到本地
+> - 修复了检测路径缺失的问题[@issue/8](https://github.com/NumberSir/nonebot_plugin_arktools/issues/8)
 >
 > 2022-09-01 v0.5.3
 > - 修复未导入 os 模块的问题
