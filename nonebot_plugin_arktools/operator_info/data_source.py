@@ -160,7 +160,7 @@ class BuildOperatorImage:
         self.result: Image  # 整合部分
 
     def build_whole_image(self) -> Path:
-        None if os.path.exists(SAVE_PATH) else os.mkdir(SAVE_PATH)
+        None if os.path.exists(SAVE_PATH) else os.makedirs(SAVE_PATH)
         file = SAVE_PATH / f"{self.operator.code}.png"
 
         all_skills_img = self._build_all_skills()  # 1-7

@@ -141,9 +141,6 @@ async def download_game_data():
 
                 elif file.split("/")[-1] in JSON_FILES:
                     name = file.split("/")[-1]
-                    if (Path(__file__).parent.parent / "_data" / "operator_info" / "json" / name).exists():
-                        logger.info(f"跳过 {file}")
-                        continue
                     content = (await client.get(url=f"https://ghproxy.com/https://raw.githubusercontent.com/yuanyan3060/Arknights-Bot-Resource/main/{quote(file)}")).content
                     async with open(Path(__file__).parent.parent / "_data" / "operator_info" / "json" / name, "wb") as fp:
                         await fp.write(content)

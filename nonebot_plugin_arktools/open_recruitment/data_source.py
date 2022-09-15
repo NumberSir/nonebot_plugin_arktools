@@ -235,7 +235,7 @@ def build_image(result_list: list) -> Image:
 
         for op_idx, op in enumerate(data["operators"]):
             op_background = Image.new(mode="RGBA", size=(128, 164), color=(0, 0, 0, 0))  # 干员头图+名称
-            avatar = Image.open(Path().parent / "avatar" / f"{op[1]}.png").convert("RGBA").resize((128, 128))  # 头像
+            avatar = Image.open(Path(__file__).parent.parent / "_data" / "operator_info" / "image" / "avatar" / f"{op[1]}.png").convert("RGBA").resize((128, 128))  # 头像
             name = op[0]
             op_background.paste(im=avatar, mask=avatar.split()[3])
             text_border(text=op[0], draw=Draw(op_background), x=64, y=150, anchor="mm", font=font, shadow_colour=(0, 0, 0, 255), fill_colour=(255, 255, 255, 255))
@@ -276,7 +276,7 @@ def build_image(result_list: list) -> Image:
 
     draw.line(xy=(1001 - 2, 0, 1001 - 2, h - 2), fill=(190, 190, 190, 255), width=2)
     file = SAVE_PATH / "temp.png"
-    None if os.path.exists(SAVE_PATH) else os.mkdir(SAVE_PATH)
+    None if os.path.exists(SAVE_PATH) else os.makedirs(SAVE_PATH)
     main_background.save(file)
     return file
 
