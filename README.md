@@ -135,8 +135,8 @@ recruitment_save_path="xxx"  # 公招查询结果图片缓存路径
 
 ## 更新日志
 > 2022-09-15 v0.5.5
-> 修复了json文件不会覆盖下载的问题
-> 修复了公招识别读取头像路径的问题[@issue/11](https://github.com/NumberSir/nonebot_plugin_arktools/issues/11)
+> - 修复了json文件不会覆盖下载的问题
+> - 修复了公招识别读取头像路径的问题[@issue/11](https://github.com/NumberSir/nonebot_plugin_arktools/issues/11)
 >
 > 2022-09-01 v0.5.4
 > - 修改资源获取方式为启动 nonebot 后下载到本地
