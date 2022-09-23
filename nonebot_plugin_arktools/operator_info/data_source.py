@@ -15,8 +15,7 @@ TEST_CHARACTER_NAME = "艾雅法拉"
 JSON_PATH = Path(__file__).parent.parent / "_data" / "operator_info" / "json"
 IMAGE_PATH = Path(__file__).parent.parent / "_data" / "operator_info" / "image"
 FONT_PATH = Path(__file__).parent.parent / "_data" / "operator_info" / "font"
-SAVE_PATH = Path(operator_config.operator_save_path)
-
+SAVE_PATH = Path(operator_config.operator_save_path).absolute()
 
 class OperatorInfo:
     """小类，用来获取干员绘图必须的信息"""
@@ -32,6 +31,7 @@ class OperatorInfo:
         self._get_operator_all_skills_materials()
         self._get_operator_skills_materials()
         self._get_operator_evolve_materials()
+        self._get_operator_equip_materials()
         return self.operator_result_info
 
     def _get_operator_basic_info(self, name: str):
@@ -106,9 +106,32 @@ class OperatorInfo:
             evolve_materials[2]["4001"] = 180000  # 龙门币
         self.operator_result_info["evolve_materials"] = evolve_materials
 
+    def _get_operator_equip_materials(self):
+        """获取干员模组升级材料"""
+        equip_materials = {}
+        with open(JSON_PATH / "uniequip_table.json", "r", encoding="utf-8") as f:
+            data: dict = json.load(f)
+        code = self.operator_result_info["operator_code"]
+        if code not in data["charEquip"]:
+            self.operator_result_info["equip_materials"] = equip_materials
+            return
+        all_equips = [e for e in data["charEquip"][code] if "001" not in e]
+        for e in all_equips:
+            equip_materials[data["equipDict"][e]["typeIcon"].upper()] = [
+                {c["id"]: c["count"] for c in cost}
+                for _, cost in data["equipDict"][e]["itemCost"].items()
+            ]
+        self.operator_result_info["equip_materials"] = equip_materials
+
     @staticmethod
     def map_skill_code2name(skill_code: str) -> str:
         with open(JSON_PATH / "skill_table.json", "r", encoding="utf-8") as f:
+            data: dict = json.load(f)
+        return data[skill_code]["levels"][0]["name"]
+
+    @staticmethod
+    def map_equip_code2name(skill_code: str) -> str:
+        with open(JSON_PATH / "uniequip_table.json", "r", encoding="utf-8") as f:
             data: dict = json.load(f)
         return data[skill_code]["levels"][0]["name"]
 
@@ -136,6 +159,10 @@ class OperatorInfo:
     def skills(self) -> dict:
         return self.info["skills_materials"]
 
+    @property
+    def equips(self) -> dict:
+        return self.info["equip_materials"]
+
 
 class BuildOperatorImage:
     """绘图"""
@@ -149,6 +176,7 @@ class BuildOperatorImage:
         self.is_skills: bool = operator.rarity > 2  # 是否有技能专精(1, 2, 3星无)
         self.is_evolve_1: bool = self.is_all_skills  # 能否精一(1, 2星无)
         self.is_evolve_2: bool = self.is_skills  # 能否精二2(1, 2, 3星无)
+        self.is_equip: bool = bool(self.operator.operator_result_info["equip_materials"])  # 有无模组
 
         self.background: Image  # 背景
         self.avatar: Image  # 干员头图
@@ -167,43 +195,121 @@ class BuildOperatorImage:
         skills_img = self._build_skills()  # 专精
         evolve_img = self._build_evolve()  # 精英化
         skin_img = self._build_skin()  # 立绘
+        equip_img = self._build_equip()
 
-        main_background = Image.new(mode="RGBA", size=(1632, 744), color=(100, 100, 100, 200))
-        Draw(main_background).rectangle(xy=(0, 0, 1632, 744), outline=(10, 10, 10), width=4)  # 最外围边框
+        main_background = Image.new(mode="RGBA", size=(1904, 768), color=(100, 100, 100, 200))
+        Draw(main_background).rectangle(xy=(0, 0, 1904, 768), outline=(10, 10, 10), width=4)  # 最外围边框
 
         if self.operator.rarity < 2:  # 只有精一立绘
-            main_background.paste(im=skin_img, box=(-140, 0), mask=skin_img.split()[3])
+            main_background.paste(im=skin_img, box=(-160, 0), mask=skin_img.split()[3])
         else:
-            main_background.paste(im=skin_img, box=(-140, -140), mask=skin_img.split()[3])
-        main_background.paste(im=all_skills_img, box=(528, 48), mask=all_skills_img.split()[3])
-        main_background.paste(im=skills_img, box=(528, 288), mask=skills_img.split()[3])
-        main_background.paste(im=evolve_img, box=(48, 480), mask=evolve_img.split()[3])
+            main_background.paste(im=skin_img, box=(-160, -140), mask=skin_img.split()[3])
+        main_background.paste(im=all_skills_img, box=(800, 48), mask=all_skills_img.split()[3])  # 右上角
+        main_background.paste(im=skills_img, box=(800, 312), mask=skills_img.split()[3])  # 右下角
+        main_background.paste(im=evolve_img, box=(320, 48), mask=evolve_img.split()[3])  # 左上角
+        main_background.paste(im=equip_img, box=(48, 312), mask=equip_img.split()[3])  # 左下角
 
         with contextlib.suppress(Exception):
             main_background.save(file)
         return file
 
+    def _build_equip(self) -> Image:
+        """模组升级部分"""
+        font_en = ImageFont.truetype(self.font_file_en, 24)
+        font_zh = ImageFont.truetype(self.font_file_zh, 24)
+        main_background = Image.new(mode="RGBA", size=(704, 408), color=(235, 235, 235, 160))  # 底图
+        if not self.is_equip:  # 没有模组
+            font_zh = ImageFont.truetype(self.font_file_zh, 48)
+            Draw(main_background).text(xy=(352, 216), anchor="ms", align="center", text="该干员无模组", font=font_zh, fill=(255, 255, 255, 255))
+            return main_background
+
+        img_head_shadow = Image.new(mode="RGBA", size=(704, 24), color=(175, 175, 175, 200))  # 顶部阴影
+        main_background.paste(im=img_head_shadow, box=(0, 0), mask=img_head_shadow.split()[3])
+
+        equips = self.operator.equips
+        main_backgrounds = []
+        for equip, data in equips.items():  # 对每个模组
+            equip_main_backgrounds = Image.new(mode="RGBA", size=(352, 384), color=(235, 235, 235, 160))  # 每个模组的底图
+            icon_shadow = Image.new(mode="RGBA", size=(96, 96), color=(205, 205, 205, 200))  # 左侧阴影
+            equip_main_backgrounds.paste(im=icon_shadow, box=(0, 0), mask=icon_shadow.split()[3])
+            # equip_icon = self.get_equip_icon(equip).resize(size=(96, 96))  # TODO 模组图标
+            # equip_main_backgrounds.paste(im=equip_icon, box=(0, 0))
+            equip_name = equip  # 模组名
+            draw = Draw(equip_main_backgrounds)
+            self.text_border(text=equip_name, draw=draw, x=224, y=60, font=font_zh, shadow_colour=(0, 0, 0, 255), fill_colour=(255, 255, 255, 255))
+
+            backgrounds = []
+            for idx, level in enumerate(data):  # 对每层专精
+                background = Image.new(mode="RGBA", size=(352, 96), color=(235, 235, 235, 160))  # 小底图
+                text_shadow = Image.new(mode="RGBA", size=(96, 96), color=(205, 205, 205, 200))  # 左侧阴影
+                background.paste(im=text_shadow, box=(0, 0), mask=text_shadow.split()[3])
+
+                level_icon = Image.open(IMAGE_PATH / "equip" / f"equip_lvl{idx + 1}.png", mode="r").convert("RGBA").resize(size=(96, 96))  # 专精图标
+                background.paste(im=level_icon, box=(0, 0), mask=level_icon.split()[3])
+
+                item_count = 0
+                for mat, count in level.items():
+                    icon = self.get_material_icon(mat).resize(size=(64, 64))  # 材料图标大小
+                    if count >= 10000:
+                        count = f"{count / 10000:.0f}w"
+                        font = ImageFont.truetype(self.font_file_en, 14)
+                        self.text_border(text=str(count), draw=Draw(icon), x=45, y=52, font=font, shadow_colour=(255, 255, 255, 255), fill_colour=(0, 0, 0, 255))
+                    else:
+                        self.text_border(text=str(count), draw=Draw(icon), x=45, y=57, font=font_en, shadow_colour=(255, 255, 255, 255), fill_colour=(0, 0, 0, 255))
+                    background.paste(im=icon, box=(112 + item_count, 16), mask=icon.split()[3])
+                    item_count += 80
+                backgrounds.append(background)
+
+            # 粘到大图上
+            for idx, bg in enumerate(backgrounds):
+                equip_main_backgrounds.paste(im=bg, box=(0, (idx + 1) * 96))
+            main_backgrounds.append(equip_main_backgrounds)
+
+        for idx, bg in enumerate(main_backgrounds):
+            main_background.paste(im=bg, box=(idx * 352, 24))
+        font_zh = ImageFont.truetype(self.font_file_zh, 16)
+        # Draw(main_background).text(xy=(528, 20), anchor="ms", align="center", text="技 能 专 精", font=font_zh, fill=(255, 255, 255, 255))  # 最顶部的字
+        self.text_border(text="模 组 升 级", draw=Draw(main_background), x=352, y=20, font=font_zh, shadow_colour=(0, 0, 0, 255), fill_colour=(255, 255, 255, 255))  # 左侧文字
+
+        main_draw =Draw(main_background)
+        main_draw.line(xy=(0, 0, 702, 0), width=4, fill=(50, 50, 50))
+        main_draw.line(xy=(0, 0, 0, 408), width=4, fill=(50, 50, 50))
+        main_draw.line(xy=(702, 0, 702, 408), width=4, fill=(50, 50, 50))
+        main_draw.line(xy=(0, 406, 704, 406), width=4, fill=(50, 50, 50))
+
+        main_draw.line(xy=(0, 24, 704, 24), width=2, fill=(50, 50, 50))
+
+        main_draw.line(xy=(0, 120, 704, 120), width=2, fill=(50, 50, 50))
+        main_draw.line(xy=(0, 216, 704, 216), width=2, fill=(50, 50, 50))
+        main_draw.line(xy=(0, 312, 704, 312), width=2, fill=(50, 50, 50))
+
+        main_draw.line(xy=(96, 24, 96, 408), width=2, fill=(50, 50, 50))
+        main_draw.line(xy=(352, 24, 352, 408), width=2, fill=(50, 50, 50))
+        main_draw.line(xy=(448, 24, 448, 408), width=2, fill=(50, 50, 50))
+        main_draw.line(xy=(704, 24, 704, 408), width=2, fill=(50, 50, 50))
+        return main_background
+
     def _build_skin(self) -> Image:
         """立绘，优先用精二"""
-        return Image.open(IMAGE_PATH / "skin" / self.get_operator_skin()).convert(mode="RGBA")
+        return Image.open(IMAGE_PATH / "skin" / self.get_operator_skin()).convert(mode="RGBA").resize((1176, 1176))
 
     def _build_all_skills(self) -> Image:
         """绘制 1-7 部分"""
         font_en = ImageFont.truetype(self.font_file_en, 24)
-        main_background = Image.new(mode="RGBA", size=(1056, 216), color=(235, 235, 235, 100))  # 底图
+        main_background = Image.new(mode="RGBA", size=(1056, 216), color=(235, 235, 235, 160))  # 底图
         if not self.is_all_skills:  # 没有技能升级，如一星二星
             font_zh = ImageFont.truetype(self.font_file_zh, 48)
             Draw(main_background).text(xy=(528, 132), anchor="ms", align="center", text="该干员无技能升级", font=font_zh, fill=(255, 255, 255, 255))
             return main_background
 
-        img_head_shadow = Image.new(mode="RGBA", size=(1056, 24), color=(175, 175, 175, 160))  # 顶部阴影
+        img_head_shadow = Image.new(mode="RGBA", size=(1056, 24), color=(175, 175, 175, 200))  # 顶部阴影
         main_background.paste(im=img_head_shadow, box=(0, 0), mask=img_head_shadow.split()[3])
 
         all_skills = self.operator.all_skills
         backgrounds = []
         for lvl, skill in all_skills.items():
-            background = Image.new(mode="RGBA", size=(352, 96), color=(235, 235, 235, 100))  # 底图
-            text_shadow = Image.new(mode="RGBA", size=(96, 96), color=(205, 205, 205, 130))  # 左侧阴影
+            background = Image.new(mode="RGBA", size=(352, 96), color=(235, 235, 235, 160))  # 底图
+            text_shadow = Image.new(mode="RGBA", size=(96, 96), color=(205, 205, 205, 200))  # 左侧阴影
             background.paste(im=text_shadow, box=(0, 0), mask=text_shadow.split()[3])
             self.text_border(text=f"{lvl}~{lvl + 1}", draw=Draw(background), x=48, y=60, font=font_en, shadow_colour=(0, 0, 0, 255), fill_colour=(255, 255, 255, 255))  # 顶部文字
             # Draw(background).text(xy=(48, 60), anchor="ms", align="center", text=f"{lvl}~{lvl + 1}", font=font_en, fill=(255, 255, 255, 255))  # 左侧文字
@@ -246,20 +352,20 @@ class BuildOperatorImage:
         """绘制技能专精部分"""
         font_en = ImageFont.truetype(self.font_file_en, 24)
         font_zh = ImageFont.truetype(self.font_file_zh, 24)
-        main_background = Image.new(mode="RGBA", size=(1056, 408), color=(235, 235, 235, 100))  # 底图
+        main_background = Image.new(mode="RGBA", size=(1056, 408), color=(235, 235, 235, 160))  # 底图
         if not self.is_skills:  # 没有技能升专精，如一星二星三星
             font_zh = ImageFont.truetype(self.font_file_zh, 48)
             Draw(main_background).text(xy=(528, 216), anchor="ms", align="center", text="该干员无技能专精", font=font_zh, fill=(255, 255, 255, 255))
             return main_background
 
-        img_head_shadow = Image.new(mode="RGBA", size=(1056, 24), color=(175, 175, 175, 160))  # 顶部阴影
+        img_head_shadow = Image.new(mode="RGBA", size=(1056, 24), color=(175, 175, 175, 200))  # 顶部阴影
         main_background.paste(im=img_head_shadow, box=(0, 0), mask=img_head_shadow.split()[3])
 
         skills = self.operator.skills
         main_backgrounds = []
         for skill, data in skills.items():  # 对每个技能
-            skill_main_backgrounds = Image.new(mode="RGBA", size=(352, 384), color=(235, 235, 235, 100))  # 每个技能的底图
-            icon_shadow = Image.new(mode="RGBA", size=(96, 96), color=(205, 205, 205, 130))  # 左侧阴影
+            skill_main_backgrounds = Image.new(mode="RGBA", size=(352, 384), color=(235, 235, 235, 160))  # 每个技能的底图
+            icon_shadow = Image.new(mode="RGBA", size=(96, 96), color=(205, 205, 205, 200))  # 左侧阴影
             skill_main_backgrounds.paste(im=icon_shadow, box=(0, 0), mask=icon_shadow.split()[3])
             skill_icon = self.get_skill_icon(skill).resize(size=(96, 96))  # 技能图标
             skill_main_backgrounds.paste(im=skill_icon, box=(0, 0))
@@ -269,8 +375,8 @@ class BuildOperatorImage:
 
             backgrounds = []
             for idx, level in enumerate(data):  # 对每层专精
-                background = Image.new(mode="RGBA", size=(352, 96), color=(235, 235, 235, 100))  # 小底图
-                text_shadow = Image.new(mode="RGBA", size=(96, 96), color=(205, 205, 205, 130))  # 左侧阴影
+                background = Image.new(mode="RGBA", size=(352, 96), color=(235, 235, 235, 160))  # 小底图
+                text_shadow = Image.new(mode="RGBA", size=(96, 96), color=(205, 205, 205, 200))  # 左侧阴影
                 background.paste(im=text_shadow, box=(0, 0), mask=text_shadow.split()[3])
 
                 level_icon = Image.open(IMAGE_PATH / "skill" / f"skill_lvl{idx + 1}.png", mode="r").convert("RGBA").resize(size=(96, 96))  # 专精图标
@@ -318,23 +424,31 @@ class BuildOperatorImage:
         """绘制精英化部分"""
         font_en = ImageFont.truetype(self.font_file_en, 24)
         font_zh = ImageFont.truetype(self.font_file_zh, 24)
-        main_background = Image.new(mode="RGBA", size=(432, 216), color=(235, 235, 235, 100))  # 底图
+        main_background = Image.new(mode="RGBA", size=(432, 216), color=(235, 235, 235, 160))  # 底图
         if not self.is_evolve_1:  # 没有技能升专精，如一星二星三星
             font_zh = ImageFont.truetype(self.font_file_zh, 48)
             Draw(main_background).text(xy=(216, 132), anchor="ms", align="center", text="该干员无法精英化", font=font_zh, fill=(255, 255, 255, 255))
             return main_background
 
-        img_head_shadow = Image.new(mode="RGBA", size=(432, 24), color=(175, 175, 175, 160))  # 顶部阴影
+        img_head_shadow = Image.new(mode="RGBA", size=(432, 24), color=(175, 175, 175, 200))  # 顶部阴影
         main_background.paste(im=img_head_shadow, box=(0, 0), mask=img_head_shadow.split()[3])
 
         evolve = self.operator.evolve
         backgrounds = []
         for lvl, data in evolve.items():
-            background = Image.new(mode="RGBA", size=(432, 96), color=(235, 235, 235, 100))  # 底图
-            text_shadow = Image.new(mode="RGBA", size=(96, 96), color=(205, 205, 205, 130))  # 左侧阴影
+            background = Image.new(mode="RGBA", size=(432, 96), color=(235, 235, 235, 160))  # 底图
+            text_shadow = Image.new(mode="RGBA", size=(96, 96), color=(205, 205, 205, 200))  # 左侧阴影
             background.paste(im=text_shadow, box=(0, 0), mask=text_shadow.split()[3])
-            draw = Draw(background)
-            self.text_border(text=f"精 {lvl}", draw=draw, x=48, y=60, font=font_zh, shadow_colour=(0, 0, 0, 255), fill_colour=(255, 255, 255, 255))
+            # draw = Draw(background)
+            level_icon = Image.open(IMAGE_PATH / "elite" / f"elite{lvl}.png", mode="r").convert("RGBA")  # 专精图标
+            if lvl == 1:
+                level_icon = level_icon.resize(size=(96, 63))
+                background.paste(im=level_icon, box=(0, 16), mask=level_icon.split()[3])
+            elif lvl == 2:
+                level_icon = level_icon.resize(size=(96, 80))
+                background.paste(im=level_icon, box=(0, 8), mask=level_icon.split()[3])
+            # background.paste(im=level_icon, box=(0, 0), mask=level_icon.split()[3])
+            # self.text_border(text=f"精 {lvl}", draw=draw, x=48, y=60, font=font_zh, shadow_colour=(0, 0, 0, 255), fill_colour=(255, 255, 255, 255))
 
             item_count = 0
             for mat, count in data.items():

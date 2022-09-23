@@ -13,14 +13,16 @@ from urllib.parse import quote
 
 
 IMAGE_DIRS = {
-    "avatar", "item", "skill", "skin"
+    "avatar", "item", "skill", "skin",
+    "elite", "equip"
 }
 JSON_FILES = {
     "character_table.json",
     "gacha_table.json",
     "handbook_info_table.json",
     "item_table.json",
-    "skill_table.json"
+    "skill_table.json",
+    "uniequip_table.json"
 }
 
 
@@ -127,6 +129,16 @@ async def download_game_data():
             for lvl in {"skill_lvl1", "skill_lvl2", "skill_lvl3"}:
                 lvl_cont = (await client.get(url=f"https://ghproxy.com/https://raw.githubusercontent.com/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/_data/operator_info/image/skill/{lvl}.png")).content
                 async with open(Path(__file__).parent.parent / "_data" / "operator_info" / "image" / "skill" / f"{lvl}.png", "wb") as fp:
+                    await fp.write(lvl_cont)
+
+            for lvl in {"elite1", "elite2"}:
+                lvl_cont = (await client.get(url=f"https://ghproxy.com/https://raw.githubusercontent.com/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/_data/operator_info/image/elite/{lvl}.png")).content
+                async with open(Path(__file__).parent.parent / "_data" / "operator_info" / "image" / "elite" / f"{lvl}.png", "wb") as fp:
+                    await fp.write(lvl_cont)
+
+            for lvl in {"equip_lvl1", "equip_lvl2", "equip_lvl3"}:
+                lvl_cont = (await client.get(url=f"https://ghproxy.com/https://raw.githubusercontent.com/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/_data/operator_info/image/equip/{lvl}.png")).content
+                async with open(Path(__file__).parent.parent / "_data" / "operator_info" / "image" / "equip" / f"{lvl}.png", "wb") as fp:
                     await fp.write(lvl_cont)
 
             for file in all_files:
