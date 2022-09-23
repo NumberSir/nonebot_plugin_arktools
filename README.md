@@ -20,6 +20,7 @@ _✨ 基于 OneBot 适配器的 [NoneBot2](https://v2.nonebot.dev/) 明日方舟
 2. [x] 可以查询最新的活动信息
 3. [x] 可以查询推荐的公招标签(截图识别)
 4. [x] 可以查询干员的技能升级材料、专精材料、精英化材料
+5. [x] 可以通过网易云音乐点歌塞壬唱片中的音乐
 
 ### 编写中...
 1. [ ] 可以查询某种资源在哪个关卡期望理智最低
@@ -95,7 +96,9 @@ recruitment_save_path="xxx"  # 公招查询结果图片缓存路径
 公招[图片]    ->    查询推荐的公招标签
 回复公招图片：公招 -> 同上
 
-干员 [干员名称] -> 查询干员的技能升级材料、专精材料、精英化材料
+干员 [干员名称] ->   查询干员的技能升级材料、专精材料、精英化材料
+
+塞壬点歌 [歌名]  ->   以网易云音乐小卡片的形式发送歌曲（其实不是塞壬唱片的歌也可以）
 ```
 
 ## 图片示例
@@ -120,12 +123,21 @@ recruitment_save_path="xxx"  # 公招查询结果图片缓存路径
   <img src="https://user-images.githubusercontent.com/52584526/187153116-5caa84db-05d2-4cb4-85a1-898c3e71444e.png" width="500" />
 </div>
 
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/190354714-c255aeae-a04b-465d-b23f-199c6b211b77.png" width="500" />
+</div>
+
+
 ## 感谢
  - __[yuanyan3060](https://github.com/yuanyan3060)__ 的 __[明日方舟常用素材库](https://github.com/yuanyan3060/Arknights-Bot-Resource)__
  - __[Kengxxiao](https://github.com/Kengxxiao)__ 的 __[《明日方舟》游戏数据库](https://github.com/Kengxxiao/ArknightsGameData)__
 
 
 ## 更新日志
+> 2022-09-15 v0.5.5
+> - 修复了json文件不会覆盖下载的问题
+> - 修复了公招识别读取头像路径的问题[@issue/11](https://github.com/NumberSir/nonebot_plugin_arktools/issues/11)
+>
 > 2022-09-01 v0.5.4
 > - 修改资源获取方式为启动 nonebot 后下载到本地
 > - 修复了检测路径缺失的问题[@issue/8](https://github.com/NumberSir/nonebot_plugin_arktools/issues/8)
