@@ -19,7 +19,7 @@ my_san = on_command("我的理智", aliases={"查看理智"})
 @san_recover.handle()
 async def _(event: GroupMessageEvent, arg: Message = CommandArg()):
     # sourcery skip: dict-assign-update-to-union
-    None if (Path(__file__).parent.parent.absolute() / "_data").exists() else os.makedirs(Path(__file__).parent.parent.absolute() / "_data")
+    None if (Path(__file__).parent.parent.absolute() / "_data" / "operator_info").exists() else os.makedirs( Path(__file__).parent.parent.absolute() / "_data" / "operator_info")
     tmp_file = (Path(__file__).parent.parent.absolute() / "_data" / "san_check.json")
     start_time = int(time.time())
     arg: list = arg.extract_plain_text().strip().split()
@@ -55,6 +55,7 @@ async def _(event: GroupMessageEvent):
     # sourcery skip: dict-assign-update-to-union
     uid = event.user_id
     now = int(time.time())
+    None if (Path(__file__).parent.parent.absolute() / "_data" / "operator_info").exists() else os.makedirs( Path(__file__).parent.parent.absolute() / "_data" / "operator_info")
     tmp_file = (Path(__file__).parent.parent.absolute() / "_data" / "san_check.json")
     if not tmp_file.exists():
         await my_san.finish("小笨蛋，你还没有设置过理智提醒哦！", at_sender=True)
@@ -85,6 +86,7 @@ async def _():
 
     now = time.time()
     data = None
+    None if (Path(__file__).parent.parent.absolute() / "_data" / "operator_info").exists() else os.makedirs( Path(__file__).parent.parent.absolute() / "_data" / "operator_info")
     tmp_file = (Path(__file__).parent.parent.absolute() / "_data" / "san_check.json")
     async with aiofiles.open(tmp_file, "r", encoding="utf-8") as fp:
         with contextlib.suppress(json.JSONDecodeError):
