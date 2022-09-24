@@ -110,19 +110,11 @@ recruitment_save_path="xxx"  # 公招查询结果图片缓存路径
 </div>
 
 <div align="left">
-  <img src="https://user-images.githubusercontent.com/52584526/187737788-6a44179a-e76d-4c3b-97a1-d95c1a9ca35b.png" width="500" />
+  <img src="https://user-images.githubusercontent.com/52584526/192089248-793af945-0428-4bea-befc-97dc751d7d54.png" width="500" />
 </div>
 <div align="left">
-  <img src="https://user-images.githubusercontent.com/52584526/187737797-5eb85331-cf3d-449e-b404-4c86eda41613.png" width="500" />
+  <img src="https://user-images.githubusercontent.com/52584526/192089297-9dcd4b6b-b2ef-444c-a2a2-ac82ca6a28b8.png" width="500" />
 </div>
-<div align="left">
-  <img src="https://user-images.githubusercontent.com/52584526/187737802-866139c4-a556-475e-9018-e35cf64b1f29.png" width="500" />
-</div>
-
-<div align="left">
-  <img src="https://user-images.githubusercontent.com/52584526/187153116-5caa84db-05d2-4cb4-85a1-898c3e71444e.png" width="500" />
-</div>
-
 <div align="left">
   <img src="https://user-images.githubusercontent.com/52584526/190354714-c255aeae-a04b-465d-b23f-199c6b211b77.png" width="500" />
 </div>
@@ -131,12 +123,15 @@ recruitment_save_path="xxx"  # 公招查询结果图片缓存路径
 ## 感谢
  - __[yuanyan3060](https://github.com/yuanyan3060)__ 的 __[明日方舟常用素材库](https://github.com/yuanyan3060/Arknights-Bot-Resource)__
  - __[Kengxxiao](https://github.com/Kengxxiao)__ 的 __[《明日方舟》游戏数据库](https://github.com/Kengxxiao/ArknightsGameData)__
+ - __[AmiyaBot](https://github.com/AmiyaBot)__ 的 __[Amiya-bot](https://github.com/AmiyaBot/Amiya-Bot)__
 
 
 ## 更新日志
 > 2022-09-24 v0.5.7
-> - 修复干员公招查询算法问题
-> - 修复干员公招查询作图问题
+> - 修复干员公招查询算法问题[@issue/13](https://github.com/NumberSir/nonebot_plugin_arktools/issues/13)
+> - 修复干员公招查询作图重叠问题
+> - 修复文件不存在报错问题[@issue/15](https://github.com/NumberSir/nonebot_plugin_arktools/issues/15)
+> - 优化公招查询结果
 > 
 > 2022-09-23 v0.5.6
 > - 干员查询添加模组材料查询
