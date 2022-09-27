@@ -19,6 +19,29 @@ SAVE_PATH = Path(recruit_config.recruitment_save_path)
 FONT_PATH = Path(__file__).parent.parent / "_data" / "operator_info" / "font"
 
 
+def process_word_tags(tags: list):
+    """处理文字标签"""
+    for idx, tag in enumerate(tags):
+        if tag in {"高资", "高干", "高级"}:
+            tags[idx] = "高级资深干员"
+        elif tag in {"资深", "资干"}:
+            tags[idx] = "资深干员"
+        elif tag in {"机械", "支机"}:
+            tags[idx] = "支援机械"
+        elif tag in {"近战", "远程"}:
+            tags[idx] = f"{tags[idx]}位"
+        elif tag in {"回费", "费回", "回复", "恢复"}:
+            tags[idx] = "费用回复"
+        elif tags[idx] in {"快活", "复活", "快速"}:
+            tags[idx] = "快速复活"
+        elif "术士" in tag:
+            tags[idx] = tag.replace("术士", "术师")
+        elif tag in {"近卫", "狙击", "重装", "医疗", "辅助", "术师", "特种", "先锋", "男性", "女性"}:
+            tags[idx] = f"{tags[idx]}干员"
+    return tags
+
+
+
 def ocr(image_url: str) -> set:
     """调用腾讯云进行 OCR 识别公招标签"""
     with open(Path(__file__).parent.parent / "_data" / "operator_info" / "json" / "gacha_table.json", "r", encoding="utf-8") as f:

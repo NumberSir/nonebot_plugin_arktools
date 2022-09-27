@@ -88,6 +88,8 @@ async def _():
     data = None
     None if (Path(__file__).parent.parent.absolute() / "_data" / "operator_info").exists() else os.makedirs( Path(__file__).parent.parent.absolute() / "_data" / "operator_info")
     tmp_file = (Path(__file__).parent.parent.absolute() / "_data" / "san_check.json")
+    if not tmp_file.exists():
+        return
     async with aiofiles.open(tmp_file, "r", encoding="utf-8") as fp:
         with contextlib.suppress(json.JSONDecodeError):
             data = json.loads(await fp.read())

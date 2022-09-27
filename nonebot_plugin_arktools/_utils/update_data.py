@@ -11,6 +11,9 @@ from nonebot import logger
 from nonebot import get_driver
 from urllib.parse import quote
 
+from nonebot.params import CommandArg
+from nonebot.adapters.onebot.v11 import Message
+
 
 IMAGE_DIRS = {
     "avatar", "item", "skill", "skin",
@@ -46,8 +49,11 @@ async def _():
 
 
 @update.handle()
-async def _():
+async def _(arg: Message = CommandArg()):
+    arg = arg.extract_plain_text().strip()
     flag, version = await is_game_data_update()
+    if arg and arg == "-f":  # 强制更新
+        flag = True
     if flag:
         await update.send("开始更新方舟游戏数据，视网络情况可能需要20~30分钟，如果中途出错可以重新输入指令从断点处继续下载")
         try:
@@ -125,38 +131,42 @@ async def download_game_data():
                 font_cont = (await client.get(url=f"https://ghproxy.com/https://raw.githubusercontent.com/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/_data/operator_info/font/{font}")).content
                 async with open(Path(__file__).parent.parent / "_data" / "operator_info" / "font" / font, "wb") as fp:
                     await fp.write(font_cont)
+                    logger.info(f"字体下载完成 {font}")
 
             for lvl in {"skill_lvl1", "skill_lvl2", "skill_lvl3"}:
                 lvl_cont = (await client.get(url=f"https://ghproxy.com/https://raw.githubusercontent.com/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/_data/operator_info/image/skill/{lvl}.png")).content
                 async with open(Path(__file__).parent.parent / "_data" / "operator_info" / "image" / "skill" / f"{lvl}.png", "wb") as fp:
                     await fp.write(lvl_cont)
+                    logger.info(f"技能专精图标下载完成 {lvl}")
 
             for lvl in {"elite1", "elite2"}:
                 lvl_cont = (await client.get(url=f"https://ghproxy.com/https://raw.githubusercontent.com/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/_data/operator_info/image/elite/{lvl}.png")).content
                 async with open(Path(__file__).parent.parent / "_data" / "operator_info" / "image" / "elite" / f"{lvl}.png", "wb") as fp:
                     await fp.write(lvl_cont)
+                    logger.info(f"精英化图标下载完成 {lvl}")
 
             for lvl in {"equip_lvl1", "equip_lvl2", "equip_lvl3"}:
                 lvl_cont = (await client.get(url=f"https://ghproxy.com/https://raw.githubusercontent.com/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/_data/operator_info/image/equip/{lvl}.png")).content
                 async with open(Path(__file__).parent.parent / "_data" / "operator_info" / "image" / "equip" / f"{lvl}.png", "wb") as fp:
                     await fp.write(lvl_cont)
+                    logger.info(f"模组图标下载完成 {lvl}")
 
             for file in all_files:
                 if file.split("/")[0] in IMAGE_DIRS:
                     if (Path(__file__).parent.parent / "_data" / "operator_info" / "image" / file).exists():
-                        logger.info(f"跳过 {file}")
+                        logger.info(f"跳过图片 {file}")
                         continue
                     content = (await client.get(url=f"https://raw.githubusercontent.com/yuanyan3060/Arknights-Bot-Resource/main/{quote(file)}")).content
                     async with open(Path(__file__).parent.parent / "_data" / "operator_info" / "image" / file, "wb") as fp:
                         await fp.write(content)
-                        logger.info(f"下载完成 {file}")
+                        logger.info(f"图片下载完成 {file}")
 
                 elif file.split("/")[-1] in JSON_FILES:
                     name = file.split("/")[-1]
                     content = (await client.get(url=f"https://ghproxy.com/https://raw.githubusercontent.com/yuanyan3060/Arknights-Bot-Resource/main/{quote(file)}")).content
                     async with open(Path(__file__).parent.parent / "_data" / "operator_info" / "json" / name, "wb") as fp:
                         await fp.write(content)
-                        logger.info(f"下载完成 {file}")
+                        logger.info(f"json下载完成 {file}")
                 continue
     except Exception as e:
         logger.warning(f"更新方舟游戏数据出错: {e}")
