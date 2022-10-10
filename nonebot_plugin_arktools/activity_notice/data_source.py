@@ -56,9 +56,7 @@ async def get_activities(*, is_force: bool = False, is_cover: bool = False):
     if update_flag or is_force:
         latest = activity_times[0]
         msg = await get_latest_info(activity_data, latest, is_cover=is_cover)
-        if msg:
-            return msg
-        return None
+        return msg or None
     return None
 
 
