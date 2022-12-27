@@ -33,7 +33,7 @@ async def _(state: T_State, matcher: Matcher, event: GroupMessageEvent):
 async def _(state: T_State, rec: Union[Message, str] = Arg()):
 
     if state.get("recruit", None) == "str":  # 文字输入
-        tags = set(await process_word_tags(rec.split()))
+        tags = set(process_word_tags(rec.split()))
     else:
         if isinstance(rec, Message):
             img_url = rec["image"][0].data.get("url", "")
