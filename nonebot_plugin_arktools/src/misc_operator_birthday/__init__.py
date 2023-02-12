@@ -36,7 +36,7 @@ async def _():
     for idx, cht in enumerate(results):
         cht_bg = Image.new("RGBA", (128, 128+24), (150, 150, 150, 150))
         icon = cht.avatar.convert("RGBA").resize((128, 128))
-        cht_bg.paste(im=icon, box=(24, 24), mask=icon.split()[3])
+        cht_bg.paste(im=icon, box=(0, 0), mask=icon.split()[3])
         text_border(
             cht.name,
             Draw(cht_bg),
@@ -47,7 +47,7 @@ async def _():
             fill_colour=(255, 255, 255, 255),
             shadow_colour=(0, 0, 0, 255)
         )
-        main_background.paste(cht_bg, (24+idx*(128+16), 24))
+        main_background.paste(cht_bg, (24+idx*(128+16), 24), mask=cht_bg.split()[3])
 
     output = BytesIO()
     main_background.save(output, format="png")

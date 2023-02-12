@@ -28,6 +28,7 @@ async def _(event: GroupMessageEvent, args: Message = CommandArg()):
             )
         else:
             await UserSanityModel.filter(gid=gid, uid=uid).update(
+                record_san=0, notify_san=135,
                 record_time=now, notify_time=notify_time, status=1
             )
     elif len(args) == 2:
@@ -44,7 +45,10 @@ async def _(event: GroupMessageEvent, args: Message = CommandArg()):
                 record_san=record_san, notify_san=notify_san,
                 record_time=now, notify_time=notify_time, status=1
             )
+    else:
+        await add_notify.finish("小笨蛋，命令的格式是：“理智提醒 [当前理智] [回满理智]” 或 “理智提醒” 哦！", at_sender=True)
 
+    await add_notify.finish(f"记录成功！将在 {notify_time.__str__()[:-7]} 提醒博士哦！", at_sender=True)
 
 @check_notify.handle()
 async def _(event: GroupMessageEvent):

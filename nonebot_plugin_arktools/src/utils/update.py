@@ -218,6 +218,8 @@ async def download_extra_files(client: httpx.AsyncClient):
         f"{BASE_URL}/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/data/guess_character/wrong.png",
     ]
     logger.info("##### EXTRA FILES DOWNLOAD BEGIN")
+    await aos.makedirs(pcfg.arknights_data_path / "fonts", exist_ok=True)
+    await aos.makedirs(pcfg.arknights_data_path / "guess_character", exist_ok=True)
     for url in urls:
         path = url.split("data/")[-1]
         if (pcfg.arknights_data_path / path).exists():
@@ -231,7 +233,7 @@ async def download_extra_files(client: httpx.AsyncClient):
 
 @driver.on_startup
 async def _init_game_files():
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=100) as client:
         await download_extra_files(client)
         logger.info("检查方舟游戏素材版本中 ...")
         if not await ArknightsGameData(client).is_update_needed():
