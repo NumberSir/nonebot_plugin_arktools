@@ -49,10 +49,11 @@ async def _():
 
 
 __plugin_meta__ = PluginMetadata(
-    name="更新游戏数据",
-    description="更新游戏素材、更新本地数据库",
+    name="杂项",
+    description="查看指令列表、更新游戏素材、更新本地数据库",
     usage=(
         "命令:"
+        "\n    方舟帮助 => 查看指令列表"
         "\n    更新方舟素材 => 从Github下载游戏素材(json数据与图片)"
         "\n    更新方舟数据库 => 更新本地sqlite数据库"
     ),
