@@ -115,10 +115,19 @@ class Character:
         if position is not None:
             flags["position"] = "MELEE" if position in {"近战位", "近战"} else "RANGED"
         data = await CharacterModel.exclude(**flags_ex).filter(**flags).all()
-        return [
-            await Character().init(id_=d.charId, data=d.__dict__)
-            for d in data
-        ] if data else []
+        if not data:
+            return []
+
+        result = []
+        for d in data:
+            cht = await Character().init(id_=d.charId, data=d.__dict__)
+            result.append(cht)
+        return result
+
+        # return [
+        #     await Character().init(id_=d.charId, data=d.__dict__)
+        #     for d in data
+        # ] if data else []
 
     @property
     def id(self) -> str:
@@ -300,10 +309,19 @@ class Character:
         ]
 
     async def get_skills(self) -> List["Skill"]:
-        return [
-            await Skill().init(id_=s["skillId"], cht=self, extra_data=s)
-            for s in self._data["skills"]
-        ] if self._data["skills"] else []
+        if not self._data["skills"]:
+            return []
+
+        result = []
+        for s in self._data["skills"]:
+            skill = await Skill().init(id_=s["skillId"], cht=self, extra_data=s)
+            result.append(skill)
+        return result
+
+        # return [
+        #     await Skill().init(id_=s["skillId"], cht=self, extra_data=s)
+        #     for s in self._data["skills"]
+        # ] if self._data["skills"] else []
 
     @property
     def talents(self) -> List["CharacterTalent"]:
@@ -338,10 +356,19 @@ class Character:
     async def get_equips(self) -> List["Equip"]:
         """干员有的模组"""
         data = await EquipModel.filter(character=self._id, uniEquipIcon__not="original")
-        return [
-            await Equip().init(id_=d.__dict__["uniEquipId"], data=d.__dict__)
-            for d in data
-        ] if data else []
+        if not data:
+            return []
+
+        result = []
+        for d in data:
+            equip = await Equip().init(id_=d.__dict__["uniEquipId"], data=d.__dict__)
+            result.append(equip)
+        return result
+
+        # return [
+        #     await Equip().init(id_=d.__dict__["uniEquipId"], data=d.__dict__)
+        #     for d in data
+        # ] if data else []
 
     async def get_handbook_info(self) -> "HandbookInfo":
         """干员的档案"""
@@ -662,16 +689,28 @@ class CharacterPhase:
 
     async def get_elite_cost(self) -> List["Item"]:
         """升级到这一阶段需要材料"""
-        return (
-            [
-                await Item().init(id_=i["id"], count=i["count"])
-                for i in self._data["evolveCost"]
-            ] if self._data["evolveCost"] else []
-        ) + [
-            await Item().init(
-                id_="4001",
-                count=(await ConstanceModel.first()).__dict__["evolveGoldCost"][(await self.get_character()).rarity][self.level-1])  # 龙门币
+        cash = [
+            await Item().init(id_="4001", count=(await ConstanceModel.first()).__dict__["evolveGoldCost"][(await self.get_character()).rarity][self.level-1])  # 龙门币
         ]
+        if not self._data["evolveCost"]:
+            return cash
+
+        result = []
+        for i in self._data["evolveCost"]:
+            item = await Item().init(id_=i["id"], count=i["count"])
+            result.append(item)
+        return result + cash
+
+        # return (
+        #     [
+        #         await Item().init(id_=i["id"], count=i["count"])
+        #         for i in self._data["evolveCost"]
+        #     ] if self._data["evolveCost"] else []
+        # ) + [
+        #     await Item().init(
+        #         id_="4001",
+        #         count=(await ConstanceModel.first()).__dict__["evolveGoldCost"][(await self.get_character()).rarity][self.level-1])  # 龙门币
+        # ]
 
 
 class CharacterTalent:
@@ -812,10 +851,17 @@ class CharacterAllSkill:
 
     async def get_cost(self) -> List["Item"]:
         """升级材料"""
-        return [
-            await Item().init(id_=d["id"], count=d["count"])
-            for d in self._data["lvlUpCost"]
-        ]
+        result = []
+        for d in self._data["lvlUpCost"]:
+            item = await Item().init(id_=d["id"], count=d["count"])
+            result.append(item)
+
+        return result
+
+        # return [
+        #     await Item().init(id_=d["id"], count=d["count"])
+        #     for d in self._data["lvlUpCost"]
+        # ]
 
 
 ##### HANDBOOK #####
@@ -1053,10 +1099,16 @@ class SkillLevelUpCondition:
 
     async def get_cost(self) -> List["Item"]:
         """专精耗材"""
-        return [
-            await Item().init(id_=i["id"], count=i["count"])
-            for i in self._data["levelUpCost"]
-        ]
+        result = []
+        for i in self._data["levelUpCost"]:
+            item = await Item().init(id_=i["id"], count=i["count"])
+            result.append(item)
+        return result
+
+        # return [
+        #     await Item().init(id_=i["id"], count=i["count"])
+        #     for i in self._data["levelUpCost"]
+        # ]
 
 
 class SkillLevel:
@@ -1317,10 +1369,19 @@ class Item:
 
     async def get_building_product_list(self) -> List["WorkshopFormula"]:
         """制造所"""
-        return [
-            await WorkshopFormula().init(id_=_["formulaId"])
-            for _ in self._data["buildingProductList"]
-        ] if self._data["buildingProductList"] else []
+        if not self._data["buildingProductList"]:
+            return []
+
+        result = []
+        for _ in self._data["buildingProductList"]:
+            formula = await WorkshopFormula().init(id_=_["formulaId"])
+            result.append(formula)
+        return result
+
+        # return [
+        #     await WorkshopFormula().init(id_=_["formulaId"])
+        #     for _ in self._data["buildingProductList"]
+        # ] if self._data["buildingProductList"] else []
     
     # 不在 arknights_item_table 中的：
     @property
@@ -1404,17 +1465,37 @@ class WorkshopFormula:
 
     async def get_extra_outcome_group(self) -> List["Item"]:
         """额外产物及产率"""
-        return [
-            await Item().init(id_=_["itemId"], count=_["itemCount"], weight=_["weight"])
-            for _ in self._data["extraOutcomeGroup"]
-        ] if self._data["extraOutcomeGroup"] else []
+        if not self._data["extraOutcomeGroup"]:
+            return []
+
+        result = []
+        for _ in self._data["extraOutcomeGroup"]:
+            item = await Item().init(id_=_["itemId"], count=_["itemCount"], weight=_["weight"])
+            result.append(item)
+
+        return result
+
+        # return [
+        #     await Item().init(id_=_["itemId"], count=_["itemCount"], weight=_["weight"])
+        #     for _ in self._data["extraOutcomeGroup"]
+        # ] if self._data["extraOutcomeGroup"] else []
 
     async def get_costs(self) -> List["Item"]:
         """消耗物品"""
-        return [
-            await Item().init(id_=_["id"], count=_["count"])
-            for _ in self._data["costs"]
-        ] if self._data["costs"] else []
+        if not self._data["costs"]:
+            return []
+
+        result = []
+        for _ in self._data["costs"]:
+            item = await Item().init(id_=_["id"], count=_["count"])
+            result.append(item)
+
+        return result
+
+        # return [
+        #     await Item().init(id_=_["id"], count=_["count"])
+        #     for _ in self._data["costs"]
+        # ] if self._data["costs"] else []
 
     @property
     def require_rooms(self) -> List["Room"]:
@@ -1504,12 +1585,25 @@ class Equip:
 
     async def get_item_cost(self) -> Dict[int, List["Item"]]:
         """解锁物品"""
-        return {
-            idx: [
-                await Item().init(id_=i["id"], count=i["count"])
-                for i in d
-            ] for idx, d in enumerate(self._data["itemCost"].values())
-        } if self._data["itemCost"] else {}
+        if not self._data["itemCost"]:
+            return {}
+
+        result = {}
+        for idx, d in enumerate(self._data["itemCost"].values()):
+            costs = []
+            for i in d:
+                item = await Item().init(id_=i["id"], count=i["count"])
+                costs.append(item)
+            result[idx] = costs
+        return result
+
+        # 很怪，用下方法无法通过nb发布检查：SyntaxError: asynchronous comprehension outside of an asynchronous function
+        # return {
+        #     idx: [
+        #         await Item().init(id_=i["id"], count=i["count"])
+        #         for i in d
+        #     ] for idx, d in enumerate(self._data["itemCost"].values())
+        # } if self._data["itemCost"] else {}
 
     # 不在 arknights_equip_table 中的:
     def rank(self, lvl: int = 0):
