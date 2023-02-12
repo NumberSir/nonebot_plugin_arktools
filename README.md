@@ -78,7 +78,7 @@ nonebot_plugin_arktools
 ...
 ```
 
-### .env 配置项
+### .env.env 配置项 __(必填)__
 
 ```ini
 # 具体见 https://console.bce.baidu.com/ai/?fromai=1#/ai/ocr/app/list
