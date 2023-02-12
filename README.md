@@ -14,8 +14,15 @@ _✨ 基于 OneBot 适配器的 [NoneBot2](https://v2.nonebot.dev/) 明日方舟
 
 本人python小萌新，插件有不完善和可以改进之处欢迎各位多提pr和issue
 
-## 功能
-### 已实现：
+- [功能](#功能)
+- [安装](#安装)
+- [使用](#如何使用)
+- [示例](#图片示例)
+- [感谢](#感谢)
+- [更新日志](#更新日志)
+
+# 功能
+## 已实现：
 1. [x] 可以查询推荐的公招标签(截图识别/手动输文字)
 2. [x] 可以查询干员的技能升级材料、专精材料、精英化材料、模组升级材料
 3. [x] 可以通过网易云点歌，以卡片形式发送
@@ -23,7 +30,7 @@ _✨ 基于 OneBot 适配器的 [NoneBot2](https://v2.nonebot.dev/) 明日方舟
 5. [x] 可以查看生日为今天的干员
 6. [x] 可以记录当前理智，等回复满后提醒
 
-### 编写中...
+## 编写中...
 1. [ ] 可以查询某种资源在哪个关卡期望理智最低
 2. [ ] 根据当前有的资源和需要的资源种类、数量测算最优推图计划
 3. [ ] 查询某干员的基础数据：
@@ -32,23 +39,18 @@ _✨ 基于 OneBot 适配器的 [NoneBot2](https://v2.nonebot.dev/) 明日方舟
    3. [ ] 干员种族、势力、身高等基本个人信息
 4. [ ] 定时提醒剿灭 / 蚀刻章 / 合约等活动过期
 
-## 安装
-
+# 安装
 - 使用 nb-cli
-
 ```
 nb plugin install nonebot_plugin_arktools
 ```
-
 - 使用 pip
-
 ```
 pip install -U nonebot_plugin_arktools
 ```
 
-## 如何使用
-
-### 启动注意
+# 如何使用
+## 启动注意
  - 每次启动并连接到客户端后会从 __[明日方舟常用素材库](https://github.com/yuanyan3060/Arknights-Bot-Resource)__(__[yuanyan3060](https://github.com/yuanyan3060)__), __[《明日方舟》游戏数据库](https://github.com/Kengxxiao/ArknightsGameData)__(__[Kengxxiao](https://github.com/Kengxxiao)__), __[Arknight-Images](https://github.com/Aceship/Arknight-Images)__(__[Aceship](https://github.com/Aceship)__) 下载使用插件必需的文本及图片资源到本地，已经下载过的文件不会重复下载。下载根据网络情况不同可能耗时 5 分钟左右
  - 如需手动更新，请用命令 __“更新方舟素材”__ 进行更新
  - 如果自动下载失败，请手动下载发行版中的 __“`data.zip`”__ 压缩文件，解压到 __“`nonebot_plugin_arktools/data`”__ 文件夹下，正确放置的文件夹结构应为：
@@ -78,7 +80,7 @@ nonebot_plugin_arktools
 ...
 ```
 
-### .env.env 配置项 __(必填)__
+## .env.env 配置项【必填】
 
 ```ini
 # 具体见 https://console.bce.baidu.com/ai/?fromai=1#/ai/ocr/app/list
@@ -86,11 +88,13 @@ arknights_baidu_app_id="xxx"    # 百度 OCR APP ID
 arknights_baidu_api_key="xxx"   # 百度 OCR API KEY
 ...
 ```
-
 各配置项的含义如上。
 
-### 指令
+## 指令
+<details>
+<summary>详细指令</summary>
 
+### 详细指令
 使用以下指令触发，需加上指令前缀
 ```text
 格式：
@@ -98,14 +102,12 @@ arknights_baidu_api_key="xxx"   # 百度 OCR API KEY
 [] 代表参数
 xxx/yyy 代表 xxx 或 yyy
 ```
-
 杂项
 ```text
 方舟帮助 / arkhelp   => 查看指令列表
 更新方舟素材          => 手动更新游戏数据(json)与图片
 更新方舟数据库        => 手动更新数据库
 ```
-
 猜干员
 ```text
 猜干员    => 开始新游戏
@@ -113,37 +115,37 @@ xxx/yyy 代表 xxx 或 yyy
 提示      => 查看答案干员的信息
 结束      => 结束当前局游戏
 ```
-
 今日干员
 ```text
 今日干员 => 查看今天过生日的干员
 ```
-
 塞壬点歌
 ```text
 塞壬点歌 [关键字] => 网易云点歌，以卡片形式发到群内
 ```
-
 干员信息
 ```text
 干员 [干员名] => 查看干员的精英化、技能升级、技能专精、模组解锁需要的材料
 ```
-
 公开招募
 ```text
 公招 [公招界面截图]          => 查看标签组合及可能出现的干员
 回复截图：公招               => 同上
 公招 [标签1] [标签2] ...    => 同上
 ```
-
 理智提醒
 ```text
 理智提醒                    => 默认记当前理智为0，回满到135时提醒"
 理智提醒 [当前理智] [回满理智] => 同上，不过手动指定当前理智与回满理智"
 理智查看                    => 查看距离理智回满还有多久，以及当期理智为多少"
 ```
+</details>
 
-## 图片示例
+# 图片示例
+<details>
+<summary>图片们</summary>
+
+## 图片们
 <div align="left">
   <img src="https://user-images.githubusercontent.com/52584526/218328291-2324ea20-74c4-4182-81ed-4b74950c3ef9.png" width="500" />
 </div>
@@ -183,9 +185,10 @@ xxx/yyy 代表 xxx 或 yyy
 <div align="left">
   <img src="https://user-images.githubusercontent.com/52584526/218328361-95ae9117-cd5e-4295-982c-9498e0b880fb.png" width="500" />
 </div>
+</details>
 
 
-## 感谢
+# 感谢
  - __[yuanyan3060](https://github.com/yuanyan3060)__ 的 __[明日方舟常用素材库](https://github.com/yuanyan3060/Arknights-Bot-Resource)__
  - __[Kengxxiao](https://github.com/Kengxxiao)__ 的 __[《明日方舟》游戏数据库](https://github.com/Kengxxiao/ArknightsGameData)__
  - __[Aceship](https://github.com/Aceship)__ 的 __[Arknight-Images](https://github.com/Aceship/Arknight-Images)__
@@ -193,7 +196,7 @@ xxx/yyy 代表 xxx 或 yyy
  - __[Strelizia02](https://github.com/Strelizia02)__ 的 __[AngelinaBot](https://github.com/Strelizia02/AngelinaBot)__
 
 
-## 更新日志
+# 更新日志
 > 2023-02-13 v1.0.0
 > - 重构插件目录结构
 > - 优化原有功能实现：干员信息、公招查询、理智提醒、塞壬点歌 [@issue/19](https://github.com/NumberSir/nonebot_plugin_arktools/issues/19) [@issue/21](https://github.com/NumberSir/nonebot_plugin_arktools/issues/21)
