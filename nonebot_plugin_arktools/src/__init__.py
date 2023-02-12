@@ -8,3 +8,4 @@ from .tool_operator_info import *  # 干员信息
 from .tool_sanity_notify import *  # 理智回复
 
 from .utils import *
+from .help import *
