@@ -145,7 +145,43 @@ xxx/yyy 代表 xxx 或 yyy
 
 ## 图片示例
 <div align="left">
-  <img src="https://user-images.githubusercontent.com/52584526/170930067-8b80374b-a454-4920-bc41-a15137b86118.png" width="500" />
+  <img src="https://user-images.githubusercontent.com/52584526/218328291-2324ea20-74c4-4182-81ed-4b74950c3ef9.png" width="500" />
+</div>
+
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/218328307-f71e08ff-2370-4fb9-8898-c76f7e06a168.png" width="500" />
+</div>
+
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/218328316-9259d9e6-6c2f-40e9-87bd-cee68da240e2.png" width="500" />
+</div>
+
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/218328320-9ee76c53-dcf2-4245-b302-ea1df7927772.png" width="500" />
+</div>
+
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/218328326-0fc07fc7-0aa9-42b9-83e1-6eb490f4cff2.png" width="500" />
+</div>
+
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/218328333-770d08e6-76c6-4087-9d62-75e302ca5f66.png" width="500" />
+</div>
+
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/218328340-ce4ade0d-d00d-4520-8632-544940a1cc96.png" width="500" />
+</div>
+
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/218328344-2b9b0cda-3894-451b-9ea0-d7aeec7d200c.png" width="500" />
+</div>
+
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/218328356-a8a511c4-fa62-481b-af92-71052a087670.png" width="500" />
+</div>
+
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/218328361-95ae9117-cd5e-4295-982c-9498e0b880fb.png" width="500" />
 </div>
 
 
@@ -158,7 +194,7 @@ xxx/yyy 代表 xxx 或 yyy
 
 
 ## 更新日志
-> 2023-02-13 v1.0.0-beta2
+> 2023-02-13 v1.0.0-beta3
 > - 重构插件目录结构
 > - 优化原有功能实现：干员信息、公招查询、理智提醒、塞壬点歌 [@issue/19](https://github.com/NumberSir/nonebot_plugin_arktools/issues/19) [@issue/21](https://github.com/NumberSir/nonebot_plugin_arktools/issues/21)
 >   - 公招查询的截图识别改为 [百度 OCR](https://ai.baidu.com/tech/ocr) (腾讯 OCR 太拉了，识别不出烫金的高资和资深)
