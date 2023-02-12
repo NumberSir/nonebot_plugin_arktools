@@ -7,7 +7,7 @@ with open("README.md", "r", encoding='utf-8') as f:
 
 setuptools.setup(
     name="nonebot_plugin_arktools",
-    version="0.5.8",
+    version="1.0.0-beta2",
     author="Number_Sir",
     author_email="Number_Sir@126.com",
     keywords=["pip", "nonebot2", "nonebot", "nonebot_plugin"],
@@ -24,14 +24,15 @@ setuptools.setup(
     include_package_data=True,
     platforms="any",
     install_requires=[
-        'nonebot-adapter-onebot>=2.0.0-beta.1',
-        'nonebot2>=2.0.0-beta.1',
-        'httpx>=0.22.0',
-        'pillow>=8.2.0',
-        'playwright>=1.22.0',
-        'lxml>=4.8.0',
-        'tencentcloud-sdk-python>=3.0.675',
-        'aiofiles>=22.1.0'
+        'nonebot-adapter-onebot>=2.2.0',
+        'nonebot2>=2.0.0rc2',
+        'nonebot-plugin-apscheduler>=0.2.0',
+        'nonebot-plugin-imageutils>=0.1.14',
+
+        'httpx>=0.23.1',
+        'aiofiles>=0.8.0',
+        'tortoise-orm>=0.19.3',
+        'lxml>=4.9.2'
     ],
-    python_requires=">=3.7.3"
+    python_requires=">=3.8"
 )

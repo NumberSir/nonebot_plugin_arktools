@@ -16,11 +16,12 @@ _✨ 基于 OneBot 适配器的 [NoneBot2](https://v2.nonebot.dev/) 明日方舟
 
 ## 功能
 ### 已实现：
-1. [x] 可以查询今天开放的资源关卡
-2. [x] 可以查询最新的活动信息
-3. [x] 可以查询推荐的公招标签(截图识别)
-4. [x] 可以查询干员的技能升级材料、专精材料、精英化材料、模组升级材料
-5. [x] 可以通过网易云音乐点歌塞壬唱片中的音乐
+1. [x] 可以查询推荐的公招标签(截图识别/手动输文字)
+2. [x] 可以查询干员的技能升级材料、专精材料、精英化材料、模组升级材料
+3. [x] 可以通过网易云点歌，以卡片形式发送
+4. [x] 猜干员小游戏，玩法与 [wordle](https://github.com/noneplugin/nonebot-plugin-wordle) 相同
+5. [x] 可以查看生日为今天的干员
+6. [x] 可以记录当前理智，等回复满后提醒
 
 ### 编写中...
 1. [ ] 可以查询某种资源在哪个关卡期望理智最低
@@ -42,7 +43,7 @@ nb plugin install nonebot_plugin_arktools
 - 使用 pip
 
 ```
-pip install nonebot_plugin_arktools
+pip install -U nonebot_plugin_arktools
 ```
 
 ## 如何使用
@@ -56,10 +57,10 @@ pip install nonebot_plugin_arktools
 nonebot_plugin_arktools
 ├── _data
 │   └── operator_info
-│       ├── font
-│       ├── image
+│       ├── fonts
+│       ├── guess_character
 │       └── json
-├── _apis
+├── src
 ├── ...
 ...
 ```
