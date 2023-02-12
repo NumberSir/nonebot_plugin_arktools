@@ -197,7 +197,7 @@ xxx/yyy 代表 xxx 或 yyy
 
 
 # 更新日志
-> 2023-02-13 v1.0.0
+> 2023-02-13 v1.0.3
 > - 重构插件目录结构
 > - 优化原有功能实现：干员信息、公招查询、理智提醒、塞壬点歌 [@issue/19](https://github.com/NumberSir/nonebot_plugin_arktools/issues/19) [@issue/21](https://github.com/NumberSir/nonebot_plugin_arktools/issues/21)
 >   - 公招查询的截图识别改为 [百度 OCR](https://ai.baidu.com/tech/ocr) (腾讯 OCR 太拉了，识别不出烫金的高资和资深)
