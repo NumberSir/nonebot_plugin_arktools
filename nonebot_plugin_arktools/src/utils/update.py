@@ -8,12 +8,14 @@ from nonebot import logger, get_driver
 
 import httpx
 
-from ..configs.path_config import PathConfig
+from ..configs import PathConfig, ProxyConfig
 
 driver = get_driver()
 pcfg = PathConfig.parse_obj(get_driver().config.dict())
+xcfg = ProxyConfig.parse_obj(get_driver().config.dict())
 
-BASE_URL = "https://raw.kgithub.com"  # 镜像
+BASE_URL_RAW = xcfg.github_raw  # 镜像
+BASE_URL_SITE = xcfg.github_site
 
 REPOSITORIES = {
     "gamedata": "/Kengxxiao/ArknightsGameData/master",
@@ -70,7 +72,7 @@ DIRS = {
 
 class ArknightsGameData:
     def __init__(self, client: httpx.AsyncClient = None):
-        self._url = f"{BASE_URL}{REPOSITORIES['gamedata']}"
+        self._url = f"{BASE_URL_RAW}{REPOSITORIES['gamedata']}"
         self._client = client or httpx.AsyncClient()
 
     async def get_local_version(self) -> str:
@@ -129,12 +131,12 @@ class ArknightsGameImage:
         tasks = []
         for dir_ in DIRS['gameimage_1']:
             await aos.makedirs(tmp / dir_, exist_ok=True)
-            url = f"https://kgithub.com/yuanyan3060/Arknights-Bot-Resource/file-list/main/{dir_}"
+            url = f"{BASE_URL_SITE}/yuanyan3060/Arknights-Bot-Resource/file-list/main/{dir_}"
             tasks.append(self.get_htmls(url, dir_))
             # logger.info(f"\t\t# REQUESTING {url} ... ")
         for dir_ in DIRS['gameimage_2']:
             await aos.makedirs(tmp / dir_, exist_ok=True)
-            url = f"https://kgithub.com/Aceship/Arknight-Images/file-list/main/{dir_}"
+            url = f"{BASE_URL_SITE}/Aceship/Arknight-Images/file-list/main/{dir_}"
             tasks.append(self.get_htmls(url, dir_))
             # logger.info(f"\t\t# REQUESTING {url} ... ")
         await asyncio.gather(*tasks)
@@ -148,7 +150,7 @@ class ArknightsGameImage:
             )
             if REPOSITORIES["gameimage_1"].split("/")[1] in url:
                 self._urls.extend(
-                    f"{BASE_URL}{REPOSITORIES['gameimage_1']}/{dir_}/{file_name}"
+                    f"{BASE_URL_RAW}{REPOSITORIES['gameimage_1']}/{dir_}/{file_name}"
                     for file_name in file_names
 
                     if "recruitment" not in file_name
@@ -165,7 +167,7 @@ class ArknightsGameImage:
             elif REPOSITORIES["gameimage_2"].split("/")[1] in url:
                 if "avatars" in dir_ or "portraits" in dir_:
                     self._urls.extend(
-                        f"{BASE_URL}{REPOSITORIES['gameimage_2']}/{dir_}/{file_name}"
+                        f"{BASE_URL_RAW}{REPOSITORIES['gameimage_2']}/{dir_}/{file_name}"
                         for file_name in file_names
 
                         if "#" not in file_name  # 不要皮肤，太大了
@@ -174,7 +176,7 @@ class ArknightsGameImage:
                     )
                 elif "characters" in dir_:
                     self._urls.extend(
-                        f"{BASE_URL}{REPOSITORIES['gameimage_2']}/{dir_}/{file_name}"
+                        f"{BASE_URL_RAW}{REPOSITORIES['gameimage_2']}/{dir_}/{file_name}"
                         for file_name in file_names
 
                         if "#" not in file_name  # 不要皮肤，太大了
@@ -182,7 +184,7 @@ class ArknightsGameImage:
                     )
                 else:
                     self._urls.extend(
-                        f"{BASE_URL}{REPOSITORIES['gameimage_2']}/{dir_}/{file_name}"
+                        f"{BASE_URL_RAW}{REPOSITORIES['gameimage_2']}/{dir_}/{file_name}"
                         for file_name in file_names
                     )
 
@@ -209,13 +211,13 @@ class ArknightsGameImage:
 async def download_extra_files(client: httpx.AsyncClient):
     """下载字体、猜干员的图片素材"""
     urls = [
-        f"{BASE_URL}/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/data/fonts/Arknights-en.ttf",
-        f"{BASE_URL}/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/data/fonts/Arknights-zh.otf",
-        f"{BASE_URL}/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/data/guess_character/correct.png",
-        f"{BASE_URL}/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/data/guess_character/down.png",
-        f"{BASE_URL}/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/data/guess_character/up.png",
-        f"{BASE_URL}/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/data/guess_character/vague.png",
-        f"{BASE_URL}/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/data/guess_character/wrong.png",
+        f"{BASE_URL_RAW}/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/data/fonts/Arknights-en.ttf",
+        f"{BASE_URL_RAW}/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/data/fonts/Arknights-zh.otf",
+        f"{BASE_URL_RAW}/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/data/guess_character/correct.png",
+        f"{BASE_URL_RAW}/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/data/guess_character/down.png",
+        f"{BASE_URL_RAW}/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/data/guess_character/up.png",
+        f"{BASE_URL_RAW}/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/data/guess_character/vague.png",
+        f"{BASE_URL_RAW}/NumberSir/nonebot_plugin_arktools/main/nonebot_plugin_arktools/data/guess_character/wrong.png",
     ]
     logger.info("##### EXTRA FILES DOWNLOAD BEGIN")
     await aos.makedirs(pcfg.arknights_data_path / "fonts", exist_ok=True)

@@ -37,8 +37,7 @@ class ArknightsDB:
                         "models": [
                             f"{GAME_SQLITE_MODEL_MODULE_NAME}",
                             f"{PLUGIN_SQLITE_MODEL_MODULE_NAME}"
-                        ],
-                        "default_connection": "arknights"
+                        ]
                     }
                 },
                 "timezone": "Asia/Shanghai"
