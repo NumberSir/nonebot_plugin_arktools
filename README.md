@@ -80,12 +80,12 @@ nonebot_plugin_arktools
 ...
 ```
 
-## .env.env 配置项【必填】
+## .env.env 配置项
 
 ```ini
 # 具体见 https://console.bce.baidu.com/ai/?fromai=1#/ai/ocr/app/list
-arknights_baidu_app_id="xxx"    # 百度 OCR APP ID
-arknights_baidu_api_key="xxx"   # 百度 OCR API KEY
+arknights_baidu_app_id="xxx"    # 【必填】百度 OCR APP ID
+arknights_baidu_api_key="xxx"   # 【必填】百度 OCR API KEY
 
 github_raw="xxx"   # 默认为 https://raw.githubusercontent.com，如有镜像源可以替换
 github_site="xxx"  # 默认为 https://github.com，如有镜像源可以替换
