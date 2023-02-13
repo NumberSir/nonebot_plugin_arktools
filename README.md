@@ -200,6 +200,9 @@ xxx/yyy 代表 xxx 或 yyy
 
 
 # 更新日志
+> 2023-02-13 v1.0.4
+> - 可替换 github 镜像源，原先的 kgithub.com 可能出现无法请求的问题
+>
 > 2023-02-13 v1.0.3
 > - 重构插件目录结构
 > - 优化原有功能实现：干员信息、公招查询、理智提醒、塞壬点歌 [@issue/19](https://github.com/NumberSir/nonebot_plugin_arktools/issues/19) [@issue/21](https://github.com/NumberSir/nonebot_plugin_arktools/issues/21)
