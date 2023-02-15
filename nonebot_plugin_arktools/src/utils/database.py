@@ -239,12 +239,12 @@ class ArknightsDB:
         logger.info("\t- Skill data initiated")
 
 
-@driver.on_bot_connect
+@driver.on_startup
 async def _init_db():
     await ArknightsDB.init_db()
 
 
-@driver.on_bot_disconnect
+@driver.on_shutdown
 async def _close_db():
     await ArknightsDB.close_connection()
 
