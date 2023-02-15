@@ -387,7 +387,7 @@ class Character:
 
     @property
     def avatar(self) -> Image:
-        return self._avatar or Image.open(pcfg.arknights_gameimage_path / "avatars" / f"{self.id}.png")
+        return self._avatar or Image.open(pcfg.arknights_gameimage_path / "avatar" / f"{self.id}.png")
 
     @avatar.setter
     def avatar(self, avatar: Image):
@@ -397,9 +397,9 @@ class Character:
     def skin(self) -> Image:
         """立绘(优先精二)"""
         try:
-            return Image.open(pcfg.arknights_gameimage_path / "characters" / f"{self.id}_2.png")
+            return Image.open(pcfg.arknights_gameimage_path / "skin" / f"{self.id}_2b.png")
         except FileNotFoundError:
-            return Image.open(pcfg.arknights_gameimage_path / "characters" / f"{self.id}_1.png")
+            return Image.open(pcfg.arknights_gameimage_path / "skin" / f"{self.id}_1b.png")
 
     # 方便使用的一些判断函数
     @property
@@ -1063,7 +1063,7 @@ class Skill:
     @property
     def icon(self) -> Image:
         """技能图标"""
-        return Image.open(pcfg.arknights_gameimage_path / "skills" / f"skill_icon_{self.icon_id or self.id}.png")
+        return Image.open(pcfg.arknights_gameimage_path / "skill" / f"skill_icon_{self.icon_id or self.id}.png")
 
     def rank(self, lvl: int = 0) -> Image:
         """专精图标"""

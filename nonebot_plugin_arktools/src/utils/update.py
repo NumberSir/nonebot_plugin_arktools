@@ -44,11 +44,14 @@ DIRS = {
         "/zh_CN/gamedata/excel"
     ],
     "gameimage_1": [
-        "item"
+        "avatar",
+        "item",
+        "skill",
+        "skin"
     ],
     "gameimage_2": [
-        "avatars",  # 头像 (180x180)
-        "characters",  # 立绘 (1024x1024 | 2048x2048)
+        # "avatars",  # 头像 (180x180)
+        # "characters",  # 立绘 (1024x1024 | 2048x2048)
         "classes",  # 职业图标 (255x255)
         "equip/icon",  # 模组图标 (511x511)
         "equip/stage",  # 模组阶段图标 (174x160)
@@ -58,7 +61,7 @@ DIRS = {
         # "material",  # 材料图标
         # "material/bg",  # 材料背景图标 (190x190)
         "portraits",  # 画像 (180x360)
-        "skills",  # 技能图标 (128x128)
+        # "skills",  # 技能图标 (128x128)
         "ui/chara",  # 公招出货表层贴图
         "ui/elite",  # 精英化图标
         "ui/infrastructure",  # 基建技能分类图标
@@ -149,44 +152,48 @@ class ArknightsGameImage:
                 "//a[@class='js-navigation-open Link--primary']/text()"
             )
             if REPOSITORIES["gameimage_1"].split("/")[1] in url:
-                self._urls.extend(
-                    f"{BASE_URL_RAW}{REPOSITORIES['gameimage_1']}/{dir_}/{file_name}"
-                    for file_name in file_names
-
-                    if "recruitment" not in file_name
-                    # and "token_" not in file_name
-                    and "ap_" not in file_name
-                    and "clue_" not in file_name
-                    and "itempack_" not in file_name
-                    and "LIMITED_" not in file_name
-                    and "LMTGS_" not in file_name
-                    and "p_char_" not in file_name
-                    and "randomMaterial" not in file_name
-                    and "tier" not in file_name
-                )
-            elif REPOSITORIES["gameimage_2"].split("/")[1] in url:
-                if "avatars" in dir_ or "portraits" in dir_:
+                if "item" in dir_:
                     self._urls.extend(
-                        f"{BASE_URL_RAW}{REPOSITORIES['gameimage_2']}/{dir_}/{file_name}"
+                        f"{BASE_URL_RAW}{REPOSITORIES['gameimage_1']}/{dir_}/{file_name}"
+                        for file_name in file_names
+
+                        if "recruitment" not in file_name
+                        # and "token_" not in file_name
+                        and "ap_" not in file_name
+                        and "clue_" not in file_name
+                        and "itempack_" not in file_name
+                        and "LIMITED_" not in file_name
+                        and "LMTGS_" not in file_name
+                        and "p_char_" not in file_name
+                        and "randomMaterial" not in file_name
+                        and "tier" not in file_name
+                    )
+                elif "avatar" in dir_:
+                    self._urls.extend(
+                        f"{BASE_URL_RAW}{REPOSITORIES['gameimage_1']}/{dir_}/{file_name}"
                         for file_name in file_names
 
                         if "#" not in file_name  # 不要皮肤，太大了
                         and "char" in file_name
                         and "+.png" not in file_name
                     )
-                elif "characters" in dir_:
+                elif "skin" in dir_:
                     self._urls.extend(
-                        f"{BASE_URL_RAW}{REPOSITORIES['gameimage_2']}/{dir_}/{file_name}"
+                        f"{BASE_URL_RAW}{REPOSITORIES['gameimage_1']}/{dir_}/{file_name}"
                         for file_name in file_names
 
                         if "#" not in file_name  # 不要皮肤，太大了
-                        and "b.png" not in file_name
                     )
-                else:
+                elif "skill" in dir_:
                     self._urls.extend(
-                        f"{BASE_URL_RAW}{REPOSITORIES['gameimage_2']}/{dir_}/{file_name}"
+                        f"{BASE_URL_RAW}{REPOSITORIES['gameimage_1']}/{dir_}/{file_name}"
                         for file_name in file_names
                     )
+            elif REPOSITORIES["gameimage_2"].split("/")[1] in url:
+                self._urls.extend(
+                    f"{BASE_URL_RAW}{REPOSITORIES['gameimage_2']}/{dir_}/{file_name}"
+                    for file_name in file_names
+                )
 
         tasks = [self.save(url, tmp) for url in self._urls if not (tmp / url.split('/master/')[-1]).exists()]
         await asyncio.gather(*tasks)
@@ -239,24 +246,25 @@ async def _init_game_files():
         try:
             await download_extra_files(client)
         except httpx.ConnectError as e:
-            logger.error("下载方舟额外素材出错，请修改代理或重试")
+            logger.warning("下载方舟额外素材出错，请修改代理或重试")
 
-            logger.info("检查方舟游戏素材版本中 ...")
-            try:
-                if not await ArknightsGameData(client).is_update_needed():
-                    logger.info("方舟游戏素材当前为最新！")
-                    return
-            except httpx.ConnectError as e:
-                logger.error("检查方舟素材版本出错，请修改代理或重试")
+        logger.info("检查方舟游戏素材版本中 ...")
+        try:
+            if not await ArknightsGameData(client).is_update_needed():
+                logger.info("方舟游戏素材当前为最新！")
+                return
+        except httpx.ConnectError as e:
+            logger.error("检查方舟素材版本出错，请修改代理或重试")
 
-            try:
-                await ArknightsGameData(client).download_files()
-                await ArknightsGameImage(client).download_files()
-            except httpx.ConnectError as e:
-                logger.error("下载方舟素材出错，请修改代理或重试")
+        try:
+            await ArknightsGameData(client).download_files()
+            await ArknightsGameImage(client).download_files()
+        except httpx.ConnectError as e:
+            logger.error("下载方舟素材出错，请修改代理或重试")
 
 
 __all__ = [
     "ArknightsGameImage",
-    "ArknightsGameData"
+    "ArknightsGameData",
+    "_init_game_files"
 ]

@@ -29,6 +29,7 @@ _✨ 基于 OneBot 适配器的 [NoneBot2](https://v2.nonebot.dev/) 明日方舟
 4. [x] 猜干员小游戏，玩法与 [wordle](https://github.com/noneplugin/nonebot-plugin-wordle) 相同
 5. [x] 可以查看生日为今天的干员
 6. [x] 可以记录当前理智，等回复满后提醒
+7. [x] 指定群聊自动推送最新游戏公告
 
 ## 编写中...
 1. [ ] 可以查询某种资源在哪个关卡期望理智最低
@@ -142,6 +143,12 @@ xxx/yyy 代表 xxx 或 yyy
 理智提醒 [当前理智] [回满理智] => 同上，不过手动指定当前理智与回满理智"
 理智查看                    => 查看距离理智回满还有多久，以及当期理智为多少"
 ```
+公告推送
+```text
+添加方舟推送群 / ADDGROUP   => 添加自动推送的群号
+删除方舟推送群 / DELGROUP   => 删除自动推送的群号
+查看方舟推送群 / GETGROUP   => 查看自动推送的群号
+```
 </details>
 
 # 图片示例
@@ -200,6 +207,11 @@ xxx/yyy 代表 xxx 或 yyy
 
 
 # 更新日志
+> 2023-02-15 v1.0.7
+> - 添加自动推送最新公告功能 [@issue/10](https://github.com/NumberSir/nonebot_plugin_arktools/issues/10)
+> - 修复最新图像资源落后版本的问题
+> - 修复启动 nonebot 时不检查素材最新版本的问题
+> 
 > 2023-02-13 v1.0.6
 > - 添加请求素材时的错误反馈
 > 
@@ -216,15 +228,15 @@ xxx/yyy 代表 xxx 或 yyy
 > - 最低支持 Python 版本上调至 Python3.8，与 Nonebot2-rc2 一致
 > 
 > 2022-09-27 v0.5.8
-> - 修复理智恢复提醒文件检测不存在问题[@issue/16](https://github.com/NumberSir/nonebot_plugin_arktools/issues/16)
-> - 重新添加文字公招查询[@issue/17](https://github.com/NumberSir/nonebot_plugin_arktools/issues/17)[@issue/18](https://github.com/NumberSir/nonebot_plugin_arktools/issues/18)
+> - 修复理智恢复提醒文件检测不存在问题 [@issue/16](https://github.com/NumberSir/nonebot_plugin_arktools/issues/16)
+> - 重新添加文字公招查询 [@issue/17](https://github.com/NumberSir/nonebot_plugin_arktools/issues/17) [@issue/18](https://github.com/NumberSir/nonebot_plugin_arktools/issues/18)
 > - 优化干员查询：干员不存在时提醒
 > - 优化公招查询：反馈检测到的公招标签
 > 
 > 2022-09-24 v0.5.7
-> - 修复干员公招查询算法问题[@issue/13](https://github.com/NumberSir/nonebot_plugin_arktools/issues/13)
+> - 修复干员公招查询算法问题 [@issue/13](https://github.com/NumberSir/nonebot_plugin_arktools/issues/13)
 > - 修复干员公招查询作图重叠问题
-> - 修复文件不存在报错问题[@issue/15](https://github.com/NumberSir/nonebot_plugin_arktools/issues/15)
+> - 修复文件不存在报错问题 [@issue/15](https://github.com/NumberSir/nonebot_plugin_arktools/issues/15)
 > - 优化公招查询结果
 > 
 > 2022-09-23 v0.5.6
@@ -232,35 +244,35 @@ xxx/yyy 代表 xxx 或 yyy
 > 
 > 2022-09-15 v0.5.5
 > - 修复了json文件不会覆盖下载的问题
-> - 修复了公招识别读取头像路径的问题[@issue/11](https://github.com/NumberSir/nonebot_plugin_arktools/issues/11)
+> - 修复了公招识别读取头像路径的问题 [@issue/11](https://github.com/NumberSir/nonebot_plugin_arktools/issues/11)
 > 
 > 2022-09-01 v0.5.4
 > - 修改资源获取方式为启动 nonebot 后下载到本地
-> - 修复了检测路径缺失的问题[@issue/8](https://github.com/NumberSir/nonebot_plugin_arktools/issues/8)
+> - 修复了检测路径缺失的问题 [@issue/8](https://github.com/NumberSir/nonebot_plugin_arktools/issues/8)
 >
 > 2022-09-01 v0.5.3
 > - 修复未导入 os 模块的问题
 >
 > 2022-09-01 v0.5.2
-> - 修复公招保存图片出错和缺少文件的问题[@issue/7](https://github.com/NumberSir/nonebot_plugin_arktools/issues/7)
+> - 修复公招保存图片出错和缺少文件的问题 [@issue/7](https://github.com/NumberSir/nonebot_plugin_arktools/issues/7)
 >
 > 2022-09-01 v0.5.1
-> - 重写了查询推荐公招标签的功能[@issue/6](https://github.com/NumberSir/nonebot_plugin_arktools/issues/6)
+> - 重写了查询推荐公招标签的功能 [@issue/6](https://github.com/NumberSir/nonebot_plugin_arktools/issues/6)
 >
 > 2022-08-29 v0.5.0
 > - 添加了查询干员的技能升级材料、专精材料、精英化材料的功能
 >
 > 2022-06-03 v0.4.1
-> - 修复了发行版和源码不匹配的问题[@issue/4](https://github.com/NumberSir/nonebot_plugin_arktools/issues/4)
+> - 修复了发行版和源码不匹配的问题 [@issue/4](https://github.com/NumberSir/nonebot_plugin_arktools/issues/4)
 > 
 > 2022-06-03 v0.4.0
 > - 添加了查询推荐公招标签的功能
 >
 > 2022-05-30 v0.3.0
-> - 向下兼容到 Python 3.7.3 版本[@issue/2](https://github.com/NumberSir/nonebot_plugin_arktools/issues/2)
+> - 向下兼容到 Python 3.7.3 版本 [@issue/2](https://github.com/NumberSir/nonebot_plugin_arktools/issues/2)
 >
 > 2022-05-30 v0.2.1
-> - 修复了使用 nb plugin install 命令安装后无法正常工作的问题[@issue/1](https://github.com/NumberSir/nonebot_plugin_arktools/issues/1)
+> - 修复了使用 nb plugin install 命令安装后无法正常工作的问题 [@issue/1](https://github.com/NumberSir/nonebot_plugin_arktools/issues/1)
 > 
 > 2022-05-26 v0.2.0
 > - 添加了查询最新活动信息的功能
