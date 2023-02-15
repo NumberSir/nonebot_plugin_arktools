@@ -216,7 +216,7 @@ xxx/yyy 代表 xxx 或 yyy
 > - 添加请求素材时的错误反馈
 > 
 > 2023-02-13 v1.0.5
-> - 可替换 github 镜像源，原先的 kgithub.com 可能出现无法请求的问题
+> - 可替换 github 镜像源，原先的 kgithub.com 可能出现无法请求的问题[@issue/26](https://github.com/NumberSir/nonebot_plugin_arktools/issues/26)
 >
 > 2023-02-13 v1.0.3
 > - 重构插件目录结构
