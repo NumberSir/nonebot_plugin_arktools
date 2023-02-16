@@ -46,13 +46,25 @@ async def _(state: T_State, rec: Union[Message, str] = Arg()):
             img_url = rec
         await recruit.send("识别中...")
         async with httpx.AsyncClient() as client:
-            tags = await baidu_ocr(image_url=img_url, client=client)
+            try:
+                tags = await baidu_ocr(image_url=img_url, client=client)
+            except FileNotFoundError as e:
+                logger.error("干员信息缺失，请使用 “更新方舟素材” 命令更新游戏素材后重试")
+                await recruit.finish("公招标签文件缺失，请使用 “更新方舟素材” 命令更新游戏素材后重试")
 
+    if tags is None:
+        await recruit.finish("百度OCR出错，请检查运行日志！", at_sender=True)
     if not tags:
         await recruit.finish("没有检测到符合要求的公招标签！", at_sender=True)
     logger.debug(f"tags: {tags}")
     await recruit.send(f"检测到的公招标签：{', '.join(list(tags))}")
-    recruit_list = await DrawRecruitmentCard.build_target_characters(tags)
+
+    try:
+        recruit_list = await DrawRecruitmentCard.build_target_characters(tags)
+    except FileNotFoundError as e:
+        logger.error("干员信息缺失，请使用 “更新方舟素材” 命令更新游戏素材后重试")
+        await recruit.finish("干员信息缺失，请使用 “更新方舟素材” 命令更新游戏素材后重试")
+
     if not recruit_list:
         await recruit.finish("没有必出稀有干员的标签组合哦！", at_sender=True)
     draw = DrawRecruitmentCard(recruit_list)

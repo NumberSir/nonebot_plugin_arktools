@@ -41,10 +41,6 @@ _✨ 基于 OneBot 适配器的 [NoneBot2](https://v2.nonebot.dev/) 明日方舟
 4. [ ] 定时提醒剿灭 / 蚀刻章 / 合约等活动过期
 
 # 安装
-- 使用 nb-cli
-```
-nb plugin install nonebot_plugin_arktools
-```
 - 使用 pip
 ```
 pip install -U nonebot_plugin_arktools
@@ -85,8 +81,8 @@ nonebot_plugin_arktools
 
 ```ini
 # 具体见 https://console.bce.baidu.com/ai/?fromai=1#/ai/ocr/app/list
-arknights_baidu_app_id="xxx"    # 【必填】百度 OCR APP ID
-arknights_baidu_api_key="xxx"   # 【必填】百度 OCR API KEY
+arknights_baidu_api_key="xxx"    # 【必填】百度 OCR API KEY
+arknights_baidu_secret_key="xxx"   # 【必填】百度 OCR SECRET KEY
 
 github_raw="xxx"   # 默认为 https://raw.githubusercontent.com，如有镜像源可以替换
 github_site="xxx"  # 默认为 https://github.com，如有镜像源可以替换
@@ -207,6 +203,12 @@ xxx/yyy 代表 xxx 或 yyy
 
 
 # 更新日志
+> 2023-02-15 v1.0.8
+> - 移除 `nb plugin install` 安装命令，无法识别最新版本号 [@issue/28](https://github.com/NumberSir/nonebot_plugin_arktools/issues/28)
+> - 修改百度 OCR 配置项名称 [@issue/29](https://github.com/NumberSir/nonebot_plugin_arktools/issues/29)
+> - 修复资源下载与数据库初始化顺序不一致的问题
+> - 补充更多错误提示信息
+> 
 > 2023-02-15 v1.0.7
 > - 添加自动推送最新公告功能 [@issue/10](https://github.com/NumberSir/nonebot_plugin_arktools/issues/10)
 > - 修复最新图像资源落后版本的问题

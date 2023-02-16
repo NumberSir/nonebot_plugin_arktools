@@ -245,21 +245,21 @@ async def _init_game_files():
     async with httpx.AsyncClient(timeout=100) as client:
         try:
             await download_extra_files(client)
-        except httpx.ConnectError as e:
-            logger.warning("下载方舟额外素材出错，请修改代理或重试")
+        except (httpx.ConnectError, httpx.RemoteProtocolError) as e:
+            logger.error("下载方舟额外素材出错，请修改代理或重试")
 
         logger.info("检查方舟游戏素材版本中 ...")
         try:
             if not await ArknightsGameData(client).is_update_needed():
                 logger.info("方舟游戏素材当前为最新！")
                 return
-        except httpx.ConnectError as e:
+        except (httpx.ConnectError, httpx.RemoteProtocolError) as e:
             logger.error("检查方舟素材版本出错，请修改代理或重试")
 
         try:
             await ArknightsGameData(client).download_files()
             await ArknightsGameImage(client).download_files()
-        except httpx.ConnectError as e:
+        except (httpx.ConnectError, httpx.RemoteProtocolError) as e:
             logger.error("下载方舟素材出错，请修改代理或重试")
 
 

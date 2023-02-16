@@ -15,22 +15,22 @@ init_db = on_command("更新方舟数据库")
 
 @update_game_resource.handle()
 async def _():
-    await update_game_resource.send("开始更新游戏素材……")
+    await update_game_resource.send("开始更新游戏素材，视网络情况需5分钟左右……")
     try:
         async with httpx.AsyncClient() as client:
             await ArknightsGameData(client).download_files()
             await ArknightsDB.init_data()
             await ArknightsGameImage(client).download_files()
-    except httpx.ConnectError as e:
-        logger.warning("下载方舟额外素材出错，请修改代理或重试")
-        await update_game_resource.finish("下载方舟额外素材出错，请修改代理或重试")
+    except (httpx.ConnectError, httpx.RemoteProtocolError) as e:
+        logger.error("下载方舟游戏素材出错，请修改代理或重试")
+        await update_game_resource.finish("下载方舟游戏素材出错，请修改代理或重试")
     else:
-        await update_game_resource.finish("游戏数据更新完成！")
+        await update_game_resource.finish("游戏素材更新完成！")
 
 
 @init_db.handle()
 async def _():
-    await update_game_resource.send("开始更新游戏数据库……")
+    await update_game_resource.send("开始更新游戏数据库，视磁盘读写性能需1分钟左右……")
     await ArknightsDB.init_data()
     await update_game_resource.finish("游戏数据库更新完成！")
 

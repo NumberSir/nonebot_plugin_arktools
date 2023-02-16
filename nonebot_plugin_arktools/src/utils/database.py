@@ -239,9 +239,13 @@ class ArknightsDB:
         logger.info("\t- Skill data initiated")
 
 
-@driver.on_bot_connect
+@driver.on_bot_connect  # 不能 on_startup, 要先下资源再初始化数据库
 async def _init_db():
-    await ArknightsDB.init_db()
+    try:
+        await ArknightsDB.init_db()
+    except FileNotFoundError as e:
+        logger.error("初始化数据库失败：所需的数据文件未找到，请手动下载:")
+        logger.error("https://github.com/NumberSir/nonebot_plugin_arktools#%E5%90%AF%E5%8A%A8%E6%B3%A8%E6%84%8F")
 
 
 @driver.on_bot_disconnect

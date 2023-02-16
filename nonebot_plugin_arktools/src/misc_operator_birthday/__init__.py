@@ -1,5 +1,5 @@
 """干员生日提醒"""
-from nonebot import on_command, get_driver
+from nonebot import on_command, get_driver, logger
 from nonebot.plugin import PluginMetadata
 from nonebot.adapters.onebot.v11 import MessageSegment, Message
 from typing import List
@@ -31,23 +31,26 @@ async def _():
     ]
     if not results:
         await today_birthday.finish("哦呀？今天没有干员过生日哦……")
-
-    main_background = Image.new("RGBA", (24*2+128*len(results)+16*(len(results)-1), 24*2+128+24), (0, 0, 0, 0))
-    for idx, cht in enumerate(results):
-        cht_bg = Image.new("RGBA", (128, 128+24), (150, 150, 150, 150))
-        icon = cht.avatar.convert("RGBA").resize((128, 128))
-        cht_bg.paste(im=icon, box=(0, 0), mask=icon.split()[3])
-        text_border(
-            cht.name,
-            Draw(cht_bg),
-            x=64,
-            y=(128 + 12 + 152 * (idx // 6)),
-            anchor="mm",
-            font=ImageFont.truetype((pcfg.arknights_font_path / "Arknights-zh.otf").__str__(), 20),
-            fill_colour=(255, 255, 255, 255),
-            shadow_colour=(0, 0, 0, 255)
-        )
-        main_background.paste(cht_bg, (24+idx*(128+16), 24), mask=cht_bg.split()[3])
+    try:
+        main_background = Image.new("RGBA", (24*2+128*len(results)+16*(len(results)-1), 24*2+128+24), (0, 0, 0, 0))
+        for idx, cht in enumerate(results):
+            cht_bg = Image.new("RGBA", (128, 128+24), (150, 150, 150, 150))
+            icon = cht.avatar.convert("RGBA").resize((128, 128))
+            cht_bg.paste(im=icon, box=(0, 0), mask=icon.split()[3])
+            text_border(
+                cht.name,
+                Draw(cht_bg),
+                x=64,
+                y=(128 + 12 + 152 * (idx // 6)),
+                anchor="mm",
+                font=ImageFont.truetype((pcfg.arknights_font_path / "Arknights-zh.otf").__str__(), 20),
+                fill_colour=(255, 255, 255, 255),
+                shadow_colour=(0, 0, 0, 255)
+            )
+            main_background.paste(cht_bg, (24+idx*(128+16), 24), mask=cht_bg.split()[3])
+    except FileNotFoundError as e:
+        logger.error("干员信息缺失，请使用 “更新方舟素材” 命令更新游戏素材后重试")
+        await today_birthday.finish("干员信息缺失，请使用 “更新方舟素材” 命令更新游戏素材后重试")
 
     output = BytesIO()
     main_background.save(output, format="png")
