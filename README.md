@@ -90,7 +90,7 @@ github_site="xxx"  # 默认为 https://github.com，如有镜像源可以替换
 ```
 各配置项的含义如上。
 <div align="left">
-  <img src="https://user-images.githubusercontent.com/52584526/219335891-37933d79-1b52-4452-8959-04861087f4e8.png" width="500" />
+  <img src="https://user-images.githubusercontent.com/52584526/219335891-37933d79-1b52-4452-8959-04861087f4e8.png" width="700" />
 </div>
 
 ## 指令
