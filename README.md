@@ -95,7 +95,7 @@ github_site="xxx"  # 默认为 https://github.com，如有镜像源可以替换
 
 ## 指令
 <details>
-<summary>详细指令</summary>
+<summary>点击展开</summary>
 
 ### 详细指令
 使用以下指令触发，需加上指令前缀
@@ -152,7 +152,7 @@ xxx/yyy 代表 xxx 或 yyy
 
 # 图片示例
 <details>
-<summary>图片们</summary>
+<summary>点击展开</summary>
 
 ## 图片们
 <div align="left">
@@ -207,7 +207,7 @@ xxx/yyy 代表 xxx 或 yyy
 
 # 更新日志
 <details>
-<summary>日志</summary>
+<summary>点击展开</summary>
 > 2023-02-16 v1.0.8
 > - 移除 `nb plugin install` 安装命令，无法识别最新版本号 [@issue/28](https://github.com/NumberSir/nonebot_plugin_arktools/issues/28)
 > - 修改百度 OCR 配置项名称 [@issue/29](https://github.com/NumberSir/nonebot_plugin_arktools/issues/29)
