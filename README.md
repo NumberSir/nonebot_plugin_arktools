@@ -208,6 +208,7 @@ xxx/yyy 代表 xxx 或 yyy
 # 更新日志
 <details>
 <summary>点击展开</summary>
+
 > 2023-02-16 v1.0.8
 > - 移除 `nb plugin install` 安装命令，无法识别最新版本号 [@issue/28](https://github.com/NumberSir/nonebot_plugin_arktools/issues/28)
 > - 修改百度 OCR 配置项名称 [@issue/29](https://github.com/NumberSir/nonebot_plugin_arktools/issues/29)
@@ -286,4 +287,5 @@ xxx/yyy 代表 xxx 或 yyy
 >
 > 2022-05-24 v0.1.0
 > - 添加了查询今日开放资源关卡的功能
+
 </details>
