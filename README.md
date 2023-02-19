@@ -95,6 +95,9 @@ sanity_notify_interval=10  # 自动检测理智提醒的检测间隔，上述开
 ...
 ```
 各配置项的含义如上。
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/219335891-37933d79-1b52-4452-8959-04861087f4e8.png" width="700" />
+</div>
 
 ## 指令
 <details>
@@ -217,7 +220,7 @@ xxx/yyy 代表 xxx 或 yyy
 > - 修复定时任务导致其它处理器阻塞的问题 [@issue/30](https://github.com/NumberSir/nonebot_plugin_arktools/issues/30) [@zx-issue/9](https://github.com/NumberSir/zhenxun_arktools/issues/9)
 > - 修复猜干员无法判断重复猜的问题 [@zx-issue/10](https://github.com/NumberSir/zhenxun_arktools/issues/10)
 > - 修复猜干员结果图不按顺序绘制的问题
-> 
+>
 > 2023-02-16 v1.0.8
 > - 移除 `nb plugin install` 安装命令，无法识别最新版本号 [@issue/28](https://github.com/NumberSir/nonebot_plugin_arktools/issues/28)
 > - 修改百度 OCR 配置项名称 [@issue/29](https://github.com/NumberSir/nonebot_plugin_arktools/issues/29)
