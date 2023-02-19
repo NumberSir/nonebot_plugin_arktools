@@ -449,7 +449,6 @@ class Character:
     # 猜干员小游戏用
 
 
-
 class Attributes:
     """面板"""
     def __init__(self, cht: Character = None, data: Dict[str, Any] = None):

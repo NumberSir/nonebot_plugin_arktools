@@ -84,15 +84,21 @@ nonebot_plugin_arktools
 arknights_baidu_api_key="xxx"    # 【必填】百度 OCR API KEY
 arknights_baidu_secret_key="xxx"   # 【必填】百度 OCR SECRET KEY
 
-github_raw="xxx"   # 默认为 https://raw.githubusercontent.com，如有镜像源可以替换
-github_site="xxx"  # 默认为 https://github.com，如有镜像源可以替换
+github_raw="https://raw.githubusercontent.com"   # 默认为 https://raw.githubusercontent.com，如有镜像源可以替换
+github_site="https://github.com"  # 默认为 https://github.com，如有镜像源可以替换
+
+announce_push_switch=False  # 是否自动推送舟舟最新公告，默认为 False; True 为开启自动检测
+announce_push_interval=1  # 自动推送最新公告的检测间隔，上述开关开启时有效，默认为 1 分钟
+
+sanity_notify_switch=False  # 是否自动检测理智提醒，默认为 False; True 为开启自动检测
+sanity_notify_interval=10  # 自动检测理智提醒的检测间隔，上述开关开启时有效，默认为 10 分钟
 ...
 ```
 各配置项的含义如上。
 
 ## 指令
 <details>
-<summary>详细指令</summary>
+<summary>点击展开</summary>
 
 ### 详细指令
 使用以下指令触发，需加上指令前缀
@@ -149,7 +155,7 @@ xxx/yyy 代表 xxx 或 yyy
 
 # 图片示例
 <details>
-<summary>图片们</summary>
+<summary>点击展开</summary>
 
 ## 图片们
 <div align="left">
@@ -203,6 +209,15 @@ xxx/yyy 代表 xxx 或 yyy
 
 
 # 更新日志
+<details>
+<summary>点击展开</summary>
+
+> 2023-02-19 v1.0.9
+> - 添加定时任务配置项
+> - 修复定时任务导致其它处理器阻塞的问题 [@issue/30](https://github.com/NumberSir/nonebot_plugin_arktools/issues/30) [@zx-issue/9](https://github.com/NumberSir/zhenxun_arktools/issues/9)
+> - 修复猜干员无法判断重复猜的问题 [@zx-issue/10](https://github.com/NumberSir/zhenxun_arktools/issues/10)
+> - 修复猜干员结果图不按顺序绘制的问题
+> 
 > 2023-02-16 v1.0.8
 > - 移除 `nb plugin install` 安装命令，无法识别最新版本号 [@issue/28](https://github.com/NumberSir/nonebot_plugin_arktools/issues/28)
 > - 修改百度 OCR 配置项名称 [@issue/29](https://github.com/NumberSir/nonebot_plugin_arktools/issues/29)
@@ -281,3 +296,5 @@ xxx/yyy 代表 xxx 或 yyy
 >
 > 2022-05-24 v0.1.0
 > - 添加了查询今日开放资源关卡的功能
+
+</details>

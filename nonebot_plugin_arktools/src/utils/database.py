@@ -1,4 +1,5 @@
 """数据库相关"""
+import tortoise.exceptions
 from tortoise import Tortoise
 from aiofiles import open as aopen
 import json
@@ -246,7 +247,10 @@ async def _init_db():
     except FileNotFoundError as e:
         logger.error("初始化数据库失败：所需的数据文件未找到，请手动下载:")
         logger.error("https://github.com/NumberSir/nonebot_plugin_arktools#%E5%90%AF%E5%8A%A8%E6%B3%A8%E6%84%8F")
-
+        logger.warning("***** ARKNIGHTS-SQLITE DATA INITIATING FAILED")
+    except tortoise.exceptions.BaseORMException as e:
+        logger.error("初始化数据库失败：请检查是否与其它使用 Tortoise-ORM 的插件初始化冲突")
+        logger.warning("***** ARKNIGHTS-SQLITE CONNECTING FAILED")
 
 @driver.on_bot_disconnect
 async def _close_db():

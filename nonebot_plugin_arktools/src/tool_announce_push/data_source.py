@@ -41,11 +41,3 @@ async def get_news() -> Optional[List["RSSNewsModel"]]:
 async def get_bilibili_dynamics():
     """B站动态"""
     ...
-
-# def get_plain_text(raw_text: str):
-#     """处理掉html标签"""
-#     raw_text = raw_text.replace("<br />", "\n").replace("<p>", "\n")
-#     tags = re.findall("<.*?>", raw_text)
-#     for _ in tags:
-#         raw_text = raw_text.replace(_, "")
-#     return unescape(raw_text)

@@ -36,7 +36,7 @@ class GuessCharacter:
     def __init__(self, cht: "Character"):
         self._answer: "Character" = cht  # 目标
         self._times: int = 8  # 能猜的次数
-        self._guessed: Set["Character"] = set()  # 猜过的
+        self._guessed: List["Character"] = []  # 猜过的
 
         self._block_size = (40, 40)  # 表情块尺寸
         self._block_padding = (10, 10)  # 表情块之间间距
@@ -55,9 +55,9 @@ class GuessCharacter:
         """每次猜完"""
         if not await self.is_character_legal(cht.name):
             return GuessResult.ILLEGAL
-        if cht in self._guessed:
+        if cht.name in {_.name for _ in self._guessed}:
             return GuessResult.DUPLICATE
-        self._guessed.add(cht)
+        self._guessed.append(cht)
 
         if cht.name == self._answer.name:
             return GuessResult.WIN
@@ -175,7 +175,7 @@ class GuessCharacter:
         return self._times
 
     @property
-    def guessed(self) -> Set["Character"]:
+    def guessed(self) -> List["Character"]:
         """猜过的干员"""
         return self._guessed
 

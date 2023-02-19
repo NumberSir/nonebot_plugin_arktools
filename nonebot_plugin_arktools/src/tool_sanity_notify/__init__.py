@@ -1,12 +1,17 @@
 """理智恢复提醒"""
-from nonebot import on_command, get_bot, logger
-from nonebot.plugin import PluginMetadata
-from nonebot.params import CommandArg
-from nonebot.adapters.onebot.v11 import GroupMessageEvent, Message, Bot, MessageSegment
-from ..core.database import UserSanityModel
 from datetime import datetime
+
+import tortoise.exceptions
+from nonebot import on_command, get_bot, logger, get_driver
+from nonebot.adapters.onebot.v11 import GroupMessageEvent, Message, Bot, MessageSegment
+from nonebot.params import CommandArg
+from nonebot.plugin import PluginMetadata
 from nonebot_plugin_apscheduler import scheduler
 
+from ..configs.scheduler_config import SchedulerConfig
+from ..core.database import UserSanityModel
+
+scfg = SchedulerConfig.parse_obj(get_driver().config.dict())
 
 add_notify = on_command("理智提醒", aliases={"ADDSAN"})
 check_notify = on_command("理智查看", aliases={"CHECKSAN"})
@@ -46,9 +51,11 @@ async def _(event: GroupMessageEvent, args: Message = CommandArg()):
                 record_time=now, notify_time=notify_time, status=1
             )
     else:
-        await add_notify.finish("小笨蛋，命令的格式是：“理智提醒 [当前理智] [回满理智]” 或 “理智提醒” 哦！", at_sender=True)
+        await add_notify.finish("小笨蛋，命令的格式是：“理智提醒 [当前理智] [回满理智]” 或 “理智提醒” 哦！",
+                                at_sender=True)
 
     await add_notify.finish(f"记录成功！将在 {notify_time.__str__()[:-7]} 提醒博士哦！", at_sender=True)
+
 
 @check_notify.handle()
 async def _(event: GroupMessageEvent):
@@ -76,26 +83,29 @@ async def _(event: GroupMessageEvent):
 
 @scheduler.scheduled_job(
     "interval",
-    minutes=1,
+    minutes=scfg.sanity_notify_interval,
 )
 async def _():
-    logger.debug("checking sanity...")
-    try:
-        bot: Bot = get_bot()
-    except ValueError:
-        return
-
-    now = datetime.now()
-    data = await UserSanityModel.filter(notify_time__lt=now, status=1).all()
-    if not data:
-        return
-
-    for model in data:
-        await bot.send_group_msg(
-            group_id=model.gid,
-            message=Message(MessageSegment.at(model.uid) + f"你的理智已经恢复到{model.notify_san}了哦！")
-        )
-        await UserSanityModel.filter(gid=model.gid, uid=model.uid).update(status=0)
+    if scfg.sanity_notify_switch:
+        logger.debug("checking sanity...")
+        try:
+            bot: Bot = get_bot()
+        except ValueError:
+            pass
+        else:
+            now = datetime.now()
+            try:
+                data = await UserSanityModel.filter(notify_time__lt=now, status=1).all()
+            except tortoise.exceptions.BaseORMException:
+                logger.error("检查理智提醒失败，数据库未初始化")
+            else:
+                if data:
+                    for model in data:
+                        await bot.send_group_msg(
+                            group_id=model.gid,
+                            message=Message(MessageSegment.at(model.uid) + f"你的理智已经恢复到{model.notify_san}了哦！")
+                        )
+                        await UserSanityModel.filter(gid=model.gid, uid=model.uid).update(status=0)
 
 
 __plugin_meta__ = PluginMetadata(
