@@ -85,13 +85,13 @@ class ArknightsGameData:
                 data = await fp.read()
         except FileNotFoundError as e:
             return ""
-        return data.split("\n")[-2].split(":")[1]
+        return data.split(":")[-1].strip("\n").strip()
 
     async def get_latest_version(self) -> str:
         """获取最新版本"""
         url = f"{self._url}/zh_CN/gamedata/excel/data_version.txt"
         response = await self._client.get(url)
-        return response.text.split("\n")[-2].split(":")[1]  # eg: "31.4.0"
+        return response.text.split(":")[-1].strip("\n").strip()  # eg: "31.4.0"
 
     async def is_update_needed(self) -> bool:
         """是否要更新"""
