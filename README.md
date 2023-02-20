@@ -215,6 +215,9 @@ xxx/yyy 代表 xxx 或 yyy
 <details>
 <summary>点击展开</summary>
 
+> 2023-02-20 v1.0.11
+> - 修复最新版本检测出错的问题
+> 
 > 2023-02-19 v1.0.9
 > - 添加定时任务配置项
 > - 修复定时任务导致其它处理器阻塞的问题 [@issue/30](https://github.com/NumberSir/nonebot_plugin_arktools/issues/30) [@zx-issue/9](https://github.com/NumberSir/zhenxun_arktools/issues/9)
