@@ -236,7 +236,7 @@ async def download_extra_files(client: httpx.AsyncClient):
     await aos.makedirs(data_path / "guess_character", exist_ok=True)
     await aos.makedirs(data_path / "arknights/processed_data", exist_ok=True)
     for url in urls:
-        path = url.split("data/")[-1]
+        path = url.split("/data/")[-1]
         if (data_path / path).exists():
             continue
         response = await client.get(url)
