@@ -50,48 +50,71 @@ pip install -U nonebot_plugin_arktools
 ## 启动注意
  - 每次启动并连接到客户端后会从 __[明日方舟常用素材库](https://github.com/yuanyan3060/Arknights-Bot-Resource)__(__[yuanyan3060](https://github.com/yuanyan3060)__), __[《明日方舟》游戏数据库](https://github.com/Kengxxiao/ArknightsGameData)__(__[Kengxxiao](https://github.com/Kengxxiao)__), __[Arknight-Images](https://github.com/Aceship/Arknight-Images)__(__[Aceship](https://github.com/Aceship)__) 下载使用插件必需的文本及图片资源到本地，已经下载过的文件不会重复下载。下载根据网络情况不同可能耗时 5 分钟左右
  - 如需手动更新，请用命令 __“更新方舟素材”__ 进行更新
- - 如果自动下载失败，请手动下载发行版中的 __“`data.zip`”/“`data.tar.gz`”__ 压缩文件，解压到 __“`nonebot_plugin_arktools/data`”__ 文件夹下，正确放置的文件夹结构应为：
+ - 如果自动下载失败，请手动下载发行版中的 __“`data.zip`”/“`data.tar.gz`”__ 压缩文件，解压到 “`机器人根目录/data/arktools` ”文件夹下，正确放置的文件夹结构应为：
 ```txt
-nonebot_plugin_arktools
+举例：
 ├── data
-│   ├── arknights
-│   │   ├── gamedata
-│   │   │   └── excel
-│   │   │       └── ...
-│   │   ├── gameimage
-│   │   │   └── ...
-│   │   └── ...
-│   ├── fonts
-│   │   ├── Arknights-en.ttf
-│   │   └── Arknights-zh.otf
-│   ├── guess_character
-│   │   ├── correct.png
-│   │   ├── down.png
-│   │   ├── up.png
-│   │   ├── vague.png
-│   │   └── wrong.png
-│   └── ...
-├── src
-├── test
-├── ...
+│   └── arktools
+│       ├── arknights
+│       │   ├── gamedata
+│       │   │   └── excel
+│       │   │       └── ...
+│       │   ├── gameimage
+│       │   │   └── ...
+│       │   ├── processed_data
+│       │   │   └── nicknames.json
+│       │   └── ...
+│       ├── fonts
+│       │   ├── Arknights-en.ttf
+│       │   └── Arknights-zh.otf
+│       ├── guess_character
+│       │   ├── correct.png
+│       │   ├── down.png
+│       │   ├── up.png
+│       │   ├── vague.png
+│       │   └── wrong.png
+│       └── ...
+├── plugin
+│   └── nonebot_plugin_arktools
+│       ├── src
+│       └── ...
+├── .env
+├── .env.dev
+├── .env.prod
 ...
 ```
 
 ## .env.env 配置项
 
 ```ini
+# 百度 OCR 配置，公招识别截图用
 # 具体见 https://console.bce.baidu.com/ai/?fromai=1#/ai/ocr/app/list
 arknights_baidu_api_key="xxx"    # 【必填】百度 OCR API KEY
 arknights_baidu_secret_key="xxx"   # 【必填】百度 OCR SECRET KEY
 
+# 代理配置，如部署机器人的服务器在国内大陆地区可能需要修改
 github_raw="https://raw.githubusercontent.com"   # 默认为 https://raw.githubusercontent.com，如有镜像源可以替换
 github_site="https://github.com"  # 默认为 https://github.com，如有镜像源可以替换
+rss_site="https://rsshub.app"  # 默认为 https://rsshub.app，如有镜像源可以替换
 
+# 定时任务配置，默认是关闭的
 announce_push_switch=False  # 是否自动推送舟舟最新公告，默认为 False; True 为开启自动检测
 announce_push_interval=1  # 自动推送最新公告的检测间隔，上述开关开启时有效，默认为 1 分钟
-
 sanity_notify_switch=False  # 是否自动检测理智提醒，默认为 False; True 为开启自动检测
 sanity_notify_interval=10  # 自动检测理智提醒的检测间隔，上述开关开启时有效，默认为 10 分钟
+
+# 资源路径配置，默认在启动机器人的目录下 data/arktools 文件夹中
+arknights_data_path = "data/arktools"                                   # 资源根路径，如果修改了根路径，下方路径都要修改
+arknights_font_path = "data/arktools/fonts"                             # 字体路径
+arknights_gamedata_path = "data/arktools/arknights/gamedata"            # 游戏数据
+arknights_gameimage_path = "data/arktools/arknights/gameimage"          # 游戏图像
+arknights_db_url = "data/arktools/databases/arknights_sqlite.sqlite3"   # 数据库
+
+# 抽卡配置
+draw_rate_6 = 0.02  # 六星概率
+draw_rate_5 = 0.08  # 五星
+draw_rate_4 = 0.48  # 四
+draw_rate_3 = 0.42  # 三
 ...
 ```
 各配置项的含义如上。
@@ -215,6 +238,12 @@ xxx/yyy 代表 xxx 或 yyy
 <details>
 <summary>点击展开</summary>
 
+> 2023-03-08 v1.0.12
+> - 添加 rsshub 代理配置项 [@issue/34](https://github.com/NumberSir/nonebot_plugin_arktools/issues/34)
+> - 修复公招命令不处理的问题 [@issue/35](https://github.com/NumberSir/nonebot_plugin_arktools/issues/35)
+> - 添加方舟素材/资源路径配置项，现在默认在机器人根目录下 data/arktools 文件夹 [@issue/36](https://github.com/NumberSir/nonebot_plugin_arktools/issues/36)
+> - 修复查询暮落干员信息时会选中空白暮落的问题
+> 
 > 2023-02-20 v1.0.11
 > - 修复最新版本检测出错的问题
 > 

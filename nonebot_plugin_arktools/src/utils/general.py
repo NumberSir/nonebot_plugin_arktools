@@ -10,15 +10,17 @@ from ..configs import PathConfig
 
 
 pcfg = PathConfig.parse_obj(get_driver().config.dict())
+data_path = Path(pcfg.arknights_data_path).absolute()
+gamedata_path = Path(pcfg.arknights_gamedata_path).absolute()
 # pcfg = PathConfig()
 
-CHARACTER_FILE = pcfg.arknights_gamedata_path / "excel" / "character_table.json"
-ITEM_FILE = pcfg.arknights_gamedata_path / "excel" / "item_table.json"
-SUB_PROF_FILE = pcfg.arknights_gamedata_path / "excel" / "uniequip_table.json"
+CHARACTER_FILE = gamedata_path / "excel" / "character_table.json"
+ITEM_FILE = gamedata_path / "excel" / "item_table.json"
+SUB_PROF_FILE = gamedata_path / "excel" / "uniequip_table.json"
 EQUIP_FILE = SUB_PROF_FILE
-TEAM_FILE = pcfg.arknights_gamedata_path / "excel" / "handbook_team_table.json"
-SWAP_PATH = pcfg.arknights_data_path / "arknights" / "processed_data"
-GACHA_PATH = pcfg.arknights_gamedata_path / "excel" / "gacha_table.json"
+TEAM_FILE = gamedata_path / "excel" / "handbook_team_table.json"
+SWAP_PATH = data_path / "arknights" / "processed_data"
+GACHA_PATH = gamedata_path / "excel" / "gacha_table.json"
 
 
 async def _name_code_swap(
@@ -133,6 +135,17 @@ async def prof_swap(value: str, type_: str = "name2code") -> str:
         }
     }
     return data[type_][value]
+
+
+async def nickname_swap(value: str) -> str:
+    """干员昵称/外号转换"""
+    swap_file = SWAP_PATH / "nicknames.json"
+    if not swap_file.exists():
+        os.makedirs(swap_file.parent, exist_ok=True)
+        return None
+
+    async with aopen(swap_file, "r", encoding="utf-8") as fp:
+        data = json.loads(await fp.read())
 
 
 async def get_recruitment_available() -> List[str]:

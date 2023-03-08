@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import httpx
 from aiofiles import open as aopen
 import json
@@ -16,6 +18,8 @@ from ..utils import text_border, get_recruitment_available
 
 bconfig = BaiduOCRConfig.parse_obj(get_driver().config.dict())
 pcfg = PathConfig.parse_obj(get_driver().config.dict())
+font_path = Path(pcfg.arknights_font_path).absolute()
+gamedata_path = Path(pcfg.arknights_gamedata_path).absolute()
 
 
 async def baidu_ocr(image_url: str, client: httpx.AsyncClient) -> Set[str]:
@@ -34,7 +38,7 @@ async def baidu_ocr(image_url: str, client: httpx.AsyncClient) -> Set[str]:
         logger.error(f"{response.json()}")
         return None
 
-    async with aopen(pcfg.arknights_gamedata_path / "excel" / "gacha_table.json", "r", encoding="utf-8") as fp:
+    async with aopen(gamedata_path / "excel" / "gacha_table.json", "r", encoding="utf-8") as fp:
         tags = {_["tagName"] for _ in json.loads(await fp.read())["gachaTags"]}
 
     return {_ for _ in all_words if _ in tags}
@@ -84,8 +88,8 @@ class DrawRecruitmentCard:
     """绘图"""
     def __init__(self, result_groups: List[Dict[str, Any]]):
         self.result_groups = result_groups
-        self.font_norm = ImageFont.truetype(str(pcfg.arknights_font_path / "Arknights-zh.otf"), 24)
-        self.font_small = ImageFont.truetype(str(pcfg.arknights_font_path / "Arknights-zh.otf"), 20)
+        self.font_norm = ImageFont.truetype(str(font_path / "Arknights-zh.otf"), 24)
+        self.font_small = ImageFont.truetype(str(font_path / "Arknights-zh.otf"), 20)
 
         self.result_images: List[Tuple[Image, int]] = []
 

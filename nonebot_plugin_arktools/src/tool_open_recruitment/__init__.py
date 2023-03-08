@@ -2,7 +2,7 @@
 import httpx
 from nonebot import on_command, logger
 from nonebot.plugin import PluginMetadata
-from nonebot.params import Arg, CommandStart
+from nonebot.params import Arg, RawCommand
 from nonebot.typing import T_State
 from nonebot.matcher import Matcher
 from nonebot.exception import ActionFailed
@@ -13,11 +13,11 @@ from typing import Union
 from .data_source import DrawRecruitmentCard, process_word_tags, baidu_ocr
 
 
-recruit = on_command("公招", aliases={"公开招募", "方舟公招"})
+recruit = on_command("公招", aliases={"公开招募"})
 
 
 @recruit.handle()
-async def _(state: T_State, event: GroupMessageEvent, matcher: Matcher, start: str = CommandStart()):
+async def _(state: T_State, event: GroupMessageEvent, matcher: Matcher, raw: str = RawCommand()):
     if event.reply:
         event.message = event.reply.message
 
@@ -28,8 +28,8 @@ async def _(state: T_State, event: GroupMessageEvent, matcher: Matcher, start: s
             state["recruit"] = "image"
             matcher.set_arg("rec", img_url)
 
-    elif event.message.extract_plain_text().replace("公招", "").replace(start, "").strip():  # 文字tag
-        tags = event.message.extract_plain_text().replace("公招", "").replace(start, "").strip()
+    elif event.message.extract_plain_text().replace(raw, "").strip():  # 文字tag
+        tags = event.message.extract_plain_text().replace(raw, "").strip()
         logger.debug("直接输入文字标签")
         state["recruit"] = "str"
         matcher.set_arg("rec", tags)

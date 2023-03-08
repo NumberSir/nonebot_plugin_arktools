@@ -228,6 +228,29 @@ class GachaPoolModel(Model):
         table = "gacha_pool"
 
 
+class SkinModel(Model):
+    """皮肤"""
+    skinId = fields.CharField(null=True, max_length=255, description="皮肤代码")
+    charId = fields.CharField(null=True, max_length=255, description="干员代码")
+    tokenSkinMap = fields.JSONField(null=True)
+    illustId = fields.CharField(null=True, max_length=255)
+    dynIllustId = fields.CharField(null=True, max_length=255)
+    avatarId = fields.CharField(null=True, max_length=255)
+    portraitId = fields.CharField(null=True, max_length=255)
+    dynPortraitId = fields.CharField(null=True, max_length=255)
+    dynEntranceId = fields.CharField(null=True, max_length=255)
+    buildingId = fields.CharField(null=True, max_length=255)
+    battleSkin = fields.JSONField(null=True)
+    isBuySkin = fields.BooleanField(null=True)
+    tmplId = fields.CharField(null=True, max_length=255)
+    voiceId = fields.CharField(null=True, max_length=255)
+    voiceType = fields.CharField(null=True, max_length=255)
+    displaySkin = fields.JSONField(null=True)
+
+    class Meta:
+        table = "skin"
+
+
 GAME_SQLITE_MODEL_MODULE_NAME = __name__
 
 
@@ -243,6 +266,7 @@ __all__ = [
     "TermDescriptionModel",
     "WorkshopFormulaModel",
     "GachaPoolModel",
+    "SkinModel",
 
     "GAME_SQLITE_MODEL_MODULE_NAME"
 ]

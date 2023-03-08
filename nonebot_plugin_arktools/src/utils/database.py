@@ -1,4 +1,6 @@
 """数据库相关"""
+from pathlib import Path
+
 import tortoise.exceptions
 from tortoise import Tortoise
 from aiofiles import open as aopen
@@ -14,6 +16,8 @@ from ..core.database import *
 
 driver = get_driver()
 pcfg = PathConfig.parse_obj(driver.config.dict())
+db_url = Path(pcfg.arknights_db_url).absolute()
+gamedata_path = Path(pcfg.arknights_gamedata_path).absolute()
 # pcfg = PathConfig()
 
 class ArknightsDB:
@@ -22,14 +26,14 @@ class ArknightsDB:
     async def init_db():
         """建库，建表"""
         logger.info("##### ARKNIGHTS-SQLITE CONNECTING ...")
-        await aos.makedirs(pcfg.arknights_db_url.parent, exist_ok=True)
+        await aos.makedirs(db_url.parent, exist_ok=True)
         await Tortoise.init(
             {
                 "connections": {
                     "arknights": {
                         "engine": "tortoise.backends.sqlite",
                         "credentials": {
-                            "file_path": f"{pcfg.arknights_db_url}"
+                            "file_path": f"{db_url}"
                         }
                     }
                 },
@@ -67,11 +71,12 @@ class ArknightsDB:
         await ArknightsDB._init_handbook_info()
         await ArknightsDB._init_item()
         await ArknightsDB._init_skill()
+        await ArknightsDB._init_skin()
         logger.info("===== ARKNIGHTS-SQLITE DATA ALL INITIATED")
 
     @staticmethod
     async def _init_building_buff():
-        async with aopen(pcfg.arknights_gamedata_path / "excel" / "building_data.json", "r", encoding="utf-8") as fp:
+        async with aopen(gamedata_path / "excel" / "building_data.json", "r", encoding="utf-8") as fp:
             data = await fp.read()
         data = json.loads(data)
         buff_data = data["buffs"]
@@ -95,9 +100,9 @@ class ArknightsDB:
 
     @staticmethod
     async def _init_character():
-        async with aopen(pcfg.arknights_gamedata_path / "excel" / "character_table.json", "r", encoding="utf-8") as fp:
+        async with aopen(gamedata_path / "excel" / "character_table.json", "r", encoding="utf-8") as fp:
             data = await fp.read()
-        async with aopen(pcfg.arknights_gamedata_path / "excel" / "char_patch_table.json", "r", encoding="utf-8") as fp:
+        async with aopen(gamedata_path / "excel" / "char_patch_table.json", "r", encoding="utf-8") as fp:
             data_ = await fp.read()
         data = json.loads(data)
         data_ = json.loads(data_)["patchChars"]
@@ -111,7 +116,7 @@ class ArknightsDB:
 
     @staticmethod
     async def _init_constance():
-        async with aopen(pcfg.arknights_gamedata_path / "excel" / "gamedata_const.json", "r", encoding="utf-8") as fp:
+        async with aopen(gamedata_path / "excel" / "gamedata_const.json", "r", encoding="utf-8") as fp:
             data = await fp.read()
         data = json.loads(data)
         tasks = {
@@ -152,7 +157,7 @@ class ArknightsDB:
 
     @staticmethod
     async def _init_equip():
-        async with aopen(pcfg.arknights_gamedata_path / "excel" / "uniequip_table.json", "r", encoding="utf-8") as fp:
+        async with aopen(gamedata_path / "excel" / "uniequip_table.json", "r", encoding="utf-8") as fp:
             data = await fp.read()
         data = json.loads(data)
         equip_dict = data["equipDict"]
@@ -182,7 +187,7 @@ class ArknightsDB:
 
     @staticmethod
     async def _init_gacha_pool():
-        async with aopen(pcfg.arknights_gamedata_path / "excel" / "gacha_table.json", "r", encoding="utf-8") as fp:
+        async with aopen(gamedata_path / "excel" / "gacha_table.json", "r", encoding="utf-8") as fp:
             data = await fp.read()
         data = json.loads(data)["gachaPoolClient"]
         tasks = {
@@ -194,7 +199,7 @@ class ArknightsDB:
 
     @staticmethod
     async def _init_handbook_info():
-        async with aopen(pcfg.arknights_gamedata_path / "excel" / "handbook_info_table.json", "r", encoding="utf-8") as fp:
+        async with aopen(gamedata_path / "excel" / "handbook_info_table.json", "r", encoding="utf-8") as fp:
             data = await fp.read()
         data = json.loads(data)["handbookDict"]
         tasks = {
@@ -211,7 +216,7 @@ class ArknightsDB:
 
     @staticmethod
     async def _init_item():
-        async with aopen(pcfg.arknights_gamedata_path / "excel" / "item_table.json", "r", encoding="utf-8") as fp:
+        async with aopen(gamedata_path / "excel" / "item_table.json", "r", encoding="utf-8") as fp:
             data = await fp.read()
         data = json.loads(data)["items"]
         tasks = {
@@ -223,7 +228,7 @@ class ArknightsDB:
 
     @staticmethod
     async def _init_skill():
-        async with aopen(pcfg.arknights_gamedata_path / "excel" / "skill_table.json", "r", encoding="utf-8") as fp:
+        async with aopen(gamedata_path / "excel" / "skill_table.json", "r", encoding="utf-8") as fp:
             data = await fp.read()
         data = json.loads(data)
         tasks = {
@@ -238,6 +243,18 @@ class ArknightsDB:
         }
         await asyncio.gather(*tasks)
         logger.info("\t- Skill data initiated")
+
+    @staticmethod
+    async def _init_skin():
+        async with aopen(gamedata_path / "excel" / "skin_table.json", "r", encoding="utf-8") as fp:
+            data = await fp.read()
+        data = json.loads(data)["charSkins"]
+        tasks = {
+            SkinModel.update_or_create(**v)
+            for _, v in data.items()
+        }
+        await asyncio.gather(*tasks)
+        logger.info("\t- Skin data initiated")
 
 
 @driver.on_bot_connect  # 不能 on_startup, 要先下资源再初始化数据库

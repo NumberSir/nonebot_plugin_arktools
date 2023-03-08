@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from ..core.models_v3 import Character
 from ..configs.path_config import PathConfig
 
@@ -12,7 +14,9 @@ from io import BytesIO
 
 driver = get_driver()
 pcfg = PathConfig.parse_obj(get_driver().config.dict())
-GUESS_IMG_PATH = pcfg.arknights_data_path / "guess_character"
+data_path = Path(pcfg.arknights_data_path).absolute()
+font_path = Path(pcfg.arknights_font_path).absolute()
+GUESS_IMG_PATH = data_path / "guess_character"
 
 
 async def get_all_characters() -> List["Character"]:
@@ -42,7 +46,7 @@ class GuessCharacter:
         self._block_padding = (10, 10)  # 表情块之间间距
         self._padding = (20, 20)  # 边界间距
         self._font_size = 32  # 字体大小
-        self._font = ImageFont.truetype((pcfg.arknights_font_path / "Arknights-zh.otf").__str__(), self._font_size)
+        self._font = ImageFont.truetype((font_path / "Arknights-zh.otf").__str__(), self._font_size)
         self._bg_color = (255, 255, 255)  # 背景颜色
 
         self._correct_face = Image.open(GUESS_IMG_PATH / "correct.png", "r").convert("RGBA")  # 完全一致

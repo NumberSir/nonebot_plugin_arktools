@@ -25,12 +25,15 @@ from nonebot import get_driver
 
 
 pcfg = PathConfig.parse_obj(get_driver().config.dict())
+font_path = Path(pcfg.arknights_font_path).absolute()
+gameimage_path = Path(pcfg.arknights_gameimage_path).absolute()
+gamedata_path = Path(pcfg.arknights_gamedata_path).absolute()
 # pcfg = PathConfig()
 
 
 class BuildOperatorInfo:
     """作图"""
-    def __init__(self, cht: Character, font_en: Union[str, Path] = pcfg.arknights_font_path / "Arknights-en.ttf", font_zh: Union[str, Path] = pcfg.arknights_font_path / "Arknights-zh.otf"):
+    def __init__(self, cht: Character, font_en: Union[str, Path] = font_path / "Arknights-en.ttf", font_zh: Union[str, Path] = font_path / "Arknights-zh.otf"):
         self._operator = cht
         self._font_en = font_en if isinstance(font_en, str) else font_en.__str__()
         self._font_zh = font_zh if isinstance(font_zh, str) else font_zh.__str__()
@@ -76,7 +79,7 @@ class BuildOperatorInfo:
         for lvl, all_skills in enumerate(self.character.all_skill_level_up):
             background = Image.new(mode="RGBA", size=(352, 96), color=(235, 235, 235, 160))  # 底图
             icon_box = Image.new(mode="RGBA", size=(96, 96), color=(205, 205, 205, 200))  # 左侧阴影
-            rank_icon = Image.open(pcfg.arknights_gameimage_path / "ui" / "rank" / f"{lvl+1}.png").convert("RGBA").resize((96, 96))
+            rank_icon = Image.open(gameimage_path / "ui" / "rank" / f"{lvl+1}.png").convert("RGBA").resize((96, 96))
             icon_box.paste(rank_icon, mask=rank_icon.split()[3])
             background.paste(im=icon_box, box=(0, 0), mask=icon_box.split()[3])
             # text_border(text=f"{lvl}~{lvl + 1}", draw=Draw(background), x=48, y=60, font=font_en, shadow_colour=(0, 0, 0, 255), fill_colour=(255, 255, 255, 255))  # 顶部文字
@@ -131,9 +134,9 @@ class BuildOperatorInfo:
         for equip in await self.character.get_equips():
             equip_main_backgrounds = Image.new(mode="RGBA", size=(352, 384), color=(235, 235, 235, 160))  # 每个模组的底图
             if equip.type_icon == "original":
-                equip_icon = Image.open(pcfg.arknights_gameimage_path / "equip" / "icon" / "default.png").convert("RGBA").resize((96, 96))
+                equip_icon = Image.open(gameimage_path / "equip" / "icon" / "default.png").convert("RGBA").resize((96, 96))
             else:
-                equip_icon = Image.open(pcfg.arknights_gameimage_path / "equip" / "icon" / f"{equip.icon_id}.png").convert("RGBA").resize((96, 96))
+                equip_icon = Image.open(gameimage_path / "equip" / "icon" / f"{equip.icon_id}.png").convert("RGBA").resize((96, 96))
             icon_shadow = Image.new(mode="RGBA", size=(96, 96), color=(205, 205, 205, 200))  # 左侧阴影
             icon_shadow.paste(im=equip_icon, box=(0, 0), mask=equip_icon.split()[3])
             equip_main_backgrounds.paste(im=icon_shadow, box=(0, 0), mask=icon_shadow.split()[3])
@@ -211,14 +214,10 @@ class BuildOperatorInfo:
             background = Image.new(mode="RGBA", size=(432, 96), color=(235, 235, 235, 160))  # 底图
             icon_box = Image.new(mode="RGBA", size=(96, 96), color=(205, 205, 205, 200))  # 左侧阴影
             background.paste(im=icon_box, box=(0, 0), mask=icon_box.split()[3])
-            level_icon = Image.open(pcfg.arknights_gameimage_path / "ui" / "elite" / f"{lvl}.png", mode="r").convert("RGBA")
-            if lvl == 1:
+            level_icon = Image.open(gameimage_path / "ui" / "elite" / f"{lvl}.png", mode="r").convert("RGBA")
+            if lvl in [1, 2]:
                 level_icon = level_icon.resize(size=(96, 93))
                 background.paste(im=level_icon, box=(0, 0), mask=level_icon.split()[3])
-            elif lvl == 2:
-                level_icon = level_icon.resize(size=(96, 93))
-                background.paste(im=level_icon, box=(0, 0), mask=level_icon.split()[3])
-
             costs = await phase.get_elite_cost()
             item_count = 0
             for cost_item in costs:

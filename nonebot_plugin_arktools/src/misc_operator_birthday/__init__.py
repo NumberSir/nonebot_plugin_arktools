@@ -1,4 +1,6 @@
 """干员生日提醒"""
+from pathlib import Path
+
 from nonebot import on_command, get_driver, logger
 from nonebot.plugin import PluginMetadata
 from nonebot.adapters.onebot.v11 import MessageSegment, Message
@@ -14,6 +16,7 @@ from ..configs.path_config import PathConfig
 
 
 pcfg = PathConfig.parse_obj(get_driver().config.dict())
+font_path = Path(pcfg.arknights_font_path).absolute()
 
 
 today_birthday = on_command("今日干员")
@@ -43,7 +46,7 @@ async def _():
                 x=64,
                 y=(128 + 12 + 152 * (idx // 6)),
                 anchor="mm",
-                font=ImageFont.truetype((pcfg.arknights_font_path / "Arknights-zh.otf").__str__(), 20),
+                font=ImageFont.truetype((font_path / "Arknights-zh.otf").__str__(), 20),
                 fill_colour=(255, 255, 255, 255),
                 shadow_colour=(0, 0, 0, 255)
             )

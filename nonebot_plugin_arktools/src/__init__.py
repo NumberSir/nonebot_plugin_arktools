@@ -1,3 +1,4 @@
+from .game_draw_card import *  # 抽卡
 from .game_guess_operator import *  # 猜干员
 
 from .misc_monster_siren import *  # 点歌

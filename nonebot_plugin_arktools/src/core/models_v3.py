@@ -1,4 +1,5 @@
 """与tortoise-orm对接，默认数据库是已经连接好的"""
+from pathlib import Path
 from typing import Optional, List, Dict, Any
 from PIL import Image
 import re
@@ -16,6 +17,8 @@ from ..exceptions import *
 
 
 pcfg = PathConfig.parse_obj(get_driver().config.dict())
+gameimage_path = Path(pcfg.arknights_gameimage_path).absolute()
+gamedata_path = Path(pcfg.arknights_gamedata_path).absolute()
 # pcfg = PathConfig()
 
 ##### CHARACTER #####
@@ -47,7 +50,7 @@ class Character:
     @staticmethod
     async def parse_name(name: str) -> Optional["Character"]:
         """根据名称查"""
-        data = await CharacterModel.filter(name=name)
+        data = await CharacterModel.filter(name=name).exclude(itemUsage=None)
         if not data:
             raise NamedCharacterNotExistException(details=name)
         return await Character().init(id_=data[0].charId, data=data[0].__dict__) if data else None
@@ -353,6 +356,18 @@ class Character:
         ]
 
     # 不在 arknights_character_table 中的：
+    async def get_skins(self) -> List["Skin"]:
+        """干员的所有皮肤"""
+        data = await SkinModel.filter(charId=self._id)
+        if not data:
+            return []
+
+        result = []
+        for d in data:
+            skin = await Skin().init(id_=d.__dict__["skinId"], data=d.__dict__)
+            result.append(skin)
+        return result
+
     async def get_equips(self) -> List["Equip"]:
         """干员有的模组"""
         data = await EquipModel.filter(character=self._id, uniEquipIcon__not="original")
@@ -387,7 +402,7 @@ class Character:
 
     @property
     def avatar(self) -> Image:
-        return self._avatar or Image.open(pcfg.arknights_gameimage_path / "avatar" / f"{self.id}.png")
+        return self._avatar or Image.open(gameimage_path / "avatar" / f"{self.id}.png")
 
     @avatar.setter
     def avatar(self, avatar: Image):
@@ -397,9 +412,9 @@ class Character:
     def skin(self) -> Image:
         """立绘(优先精二)"""
         try:
-            return Image.open(pcfg.arknights_gameimage_path / "skin" / f"{self.id}_2b.png")
+            return Image.open(gameimage_path / "skin" / f"{self.id}_2b.png")
         except FileNotFoundError:
-            return Image.open(pcfg.arknights_gameimage_path / "skin" / f"{self.id}_1b.png")
+            return Image.open(gameimage_path / "skin" / f"{self.id}_1b.png")
 
     # 方便使用的一些判断函数
     @property
@@ -447,6 +462,10 @@ class Character:
         return tags
 
     # 猜干员小游戏用
+    async def get_drawer(self) -> str:
+        """获取画师"""
+        skins = await self.get_skins()
+        return skins[0].drawers[0] if skins else ""
 
 
 class Attributes:
@@ -1062,11 +1081,11 @@ class Skill:
     @property
     def icon(self) -> Image:
         """技能图标"""
-        return Image.open(pcfg.arknights_gameimage_path / "skill" / f"skill_icon_{self.icon_id or self.id}.png")
+        return Image.open(gameimage_path / "skill" / f"skill_icon_{self.icon_id or self.id}.png")
 
     def rank(self, lvl: int = 0) -> Image:
         """专精图标"""
-        return Image.open(pcfg.arknights_gameimage_path / "ui" / "rank" / f"m-{lvl}.png")
+        return Image.open(gameimage_path / "ui" / "rank" / f"m-{lvl}.png")
 
 
 class SkillLevelUpCondition:
@@ -1386,7 +1405,7 @@ class Item:
     @property
     def icon(self) -> Image:
         """技能图标"""
-        return Image.open(pcfg.arknights_gameimage_path / "item" / f"{self.icon_id or self.id}.png")
+        return Image.open(gameimage_path / "item" / f"{self.icon_id or self.id}.png")
 
 
 ##### WORKSHOP_FORMULA #####
@@ -1526,15 +1545,14 @@ class Equip:
         return self
 
     def __str__(self):
-        return f"{self.character} - {self.name}({self.id})"
+        return f"{self.name}({self.id})"
 
     def __repr__(self):
         return self.__str__()
 
-    @property
-    def character(self) -> Character:
+    async def get_character(self) -> Character:
         """哪个干员的"""
-        return Character(id_=self._data["charId"])
+        return await Character().init(id_=self._data["charId"])
 
     @property
     def id(self) -> str:
@@ -1607,7 +1625,7 @@ class Equip:
     # 不在 arknights_equip_table 中的:
     def rank(self, lvl: int = 0):
         """模组1,2,3级图标"""
-        return Image.open(pcfg.arknights_gameimage_path / "equip" / "stage" / f"img_stg{lvl}.png")
+        return Image.open(gameimage_path / "equip" / "stage" / f"img_stg{lvl}.png")
 
 
 ##### GACHA_POOL #####
@@ -1674,10 +1692,153 @@ class GachaPool:
         return self._data["gachaRuleType"]
 
 
+##### SKIN #####
+class Skin:
+    """皮肤"""
+    def __init__(self, id_: str = None, data: dict = None):
+        self._id = id_
+        self._data = data
+
+    async def init(self, id_: str, data: dict = None) -> "Skin":
+        """异步实例化"""
+        self._id = id_
+        self._data = data
+        if not self._data:
+            data = await SkinModel.filter(skinId=self._id).first()
+            if not data:
+                raise  # TODO
+            self._data = data.__dict__
+        return self
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return f"{self.name}({self.id})"
+
+    async def get_character(self) -> "Character":
+        """哪个干员的"""
+        return await Character().init(id_=self._data["charId"])
+
+    @property
+    def id(self) -> str:
+        """皮肤代码"""
+        return self._data["skinId"]
+
+    @property
+    def illust_id(self) -> str:
+        """画师代码"""
+        return self._data["illustId"]
+
+    @property
+    def avatar_id(self) -> str:
+        """干员头图代码"""
+        return self._data["avatarId"]
+
+    @property
+    def portrait_id(self) -> str:
+        """干员半身像代码"""
+        return self._data["portraitId"]
+
+    @property
+    def building_id(self) -> str:
+        """?"""
+        return self._data["buildingId"]
+
+    @property
+    def is_buy_skin(self) -> bool:
+        """?"""
+        return self._data["isBuySkin"]
+
+    @property
+    def display_skin(self) -> "SkinDisplaySkin":
+        """显示信息"""
+        return SkinDisplaySkin(skin=self, data=self._data["displaySkin"])
+
+    # 不在 table 中的
+    @property
+    def name(self) -> str:
+        """名称"""
+        return self.display_skin.name or self.display_skin.group_name
+
+    @property
+    def description(self) -> str:
+        """介绍"""
+        return self.display_skin.description or self.display_skin.content
+
+    @property
+    def drawers(self) -> List[str]:
+        """画师们"""
+        return self.display_skin.drawers
+
+
+class SkinDisplaySkin:
+    """显示信息"""
+    def __init__(self, skin: "Skin", data):
+        self._skin = skin
+        self._data = data
+
+    @property
+    def skin(self) -> "Skin":
+        """哪个皮肤的"""
+        return self._skin
+
+    @property
+    def name(self) -> str:
+        """皮肤名"""
+        return self._data["skinName"]
+
+    @property
+    def drawers(self) -> List[str]:
+        """画师们"""
+        return self._data["drawerList"]
+
+    @property
+    def group_id(self) -> str:
+        """分类代码，默认为 “ILLUST_0” """
+        return self._data["skinGroupId"]
+
+    @property
+    def group_name(self) -> str:
+        """分类名，默认为 “默认服装” """
+        return self._data["skinGroupName"]
+
+    @property
+    def content(self) -> str:
+        """介绍？"""
+        return self._data["content"]
+
+    @property
+    def dialog(self) -> str:
+        """也是介绍？"""
+        return self._data["dialog"]
+
+    @property
+    def usage(self) -> str:
+        """还是介绍？"""
+        return self._data["usage"]
+
+    @property
+    def description(self) -> str:
+        """好多介绍"""
+        return self._data["description"]
+
+    @property
+    def obtain(self) -> str:
+        """获取方式"""
+        return self._data["obtainApproach"]
+
+    @property
+    def time(self) -> int:
+        """获取时间"""
+        return self._data["getTime"]
+
+
 __all__ = [
     "Character",
     "Skill",
     "Item",
     "Equip",
-    "GachaPool"
+    "GachaPool",
+    "Skin"
 ]
