@@ -137,6 +137,25 @@ async def prof_swap(value: str, type_: str = "name2code") -> str:
     return data[type_][value]
 
 
+async def gacha_rule_swap(value: str, type_: str = "name2code") -> str:
+    """池子类型"""
+    data = {
+        "name2code": {
+            "春节": "ATTAIN",
+            "限定": "LIMITED",
+            "联动": "LINKAGE",
+            "普通": "NORMAL"
+        },
+        "code2name": {
+            "ATTAIN": "春节",
+            "LIMITED": "限定",
+            "LINKAGE": "联动",
+            "NORMAL": "普通"
+        }
+    }
+    return data[type_][value]
+
+
 async def nickname_swap(value: str) -> str:
     """干员昵称/外号转换"""
     swap_file = SWAP_PATH / "nicknames.json"
@@ -169,6 +188,7 @@ __all__ = [
     "equip_swap",
     "prof_swap",
     "faction_swap",
+    "gacha_rule_swap",
 
     "get_recruitment_available"
 ]

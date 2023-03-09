@@ -10,7 +10,7 @@ from nonebot.adapters.onebot.v11 import Message, MessageSegment, GroupMessageEve
 
 from typing import Union
 
-from .data_source import DrawRecruitmentCard, process_word_tags, baidu_ocr
+from .data_source import BuildRecruitmentCard, process_word_tags, baidu_ocr
 
 
 recruit = on_command("公招", aliases={"公开招募"})
@@ -60,14 +60,14 @@ async def _(state: T_State, rec: Union[Message, str] = Arg()):
     await recruit.send(f"检测到的公招标签：{', '.join(list(tags))}")
 
     try:
-        recruit_list = await DrawRecruitmentCard.build_target_characters(tags)
+        recruit_list = await BuildRecruitmentCard.build_target_characters(tags)
     except FileNotFoundError as e:
         logger.error("干员信息缺失，请使用 “更新方舟素材” 命令更新游戏素材后重试")
         await recruit.finish("干员信息缺失，请使用 “更新方舟素材” 命令更新游戏素材后重试")
 
     if not recruit_list:
         await recruit.finish("没有必出稀有干员的标签组合哦！", at_sender=True)
-    draw = DrawRecruitmentCard(recruit_list)
+    draw = BuildRecruitmentCard(recruit_list)
     image = draw.build_main()
     img = MessageSegment.image(image)
     try:

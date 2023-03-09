@@ -84,7 +84,7 @@ def process_word_tags(tags: list):
     return tags
 
 
-class DrawRecruitmentCard:
+class BuildRecruitmentCard:
     """绘图"""
     def __init__(self, result_groups: List[Dict[str, Any]]):
         self.result_groups = result_groups
@@ -234,7 +234,7 @@ class DrawRecruitmentCard:
     async def build_target_characters(tags: set) -> List[Dict[str, Union[str, List[Character]]]]:
         """tag-干员组合"""
         chts = [(await Character().init(_)) for _ in await get_recruitment_available()]  # 所有可公招的干员
-        combs = DrawRecruitmentCard.build_combinations(tags)  # 所有可能的tag组合
+        combs = BuildRecruitmentCard.build_combinations(tags)  # 所有可能的tag组合
         cht_tags = {  # 这一条提出来，省了1k倍速度
             _.name: await _.get_tags_for_open_recruitment()
             for _ in chts
@@ -263,7 +263,7 @@ class DrawRecruitmentCard:
 
 
 __all__ = [
-    "DrawRecruitmentCard",
+    "BuildRecruitmentCard",
     "process_word_tags",
     "baidu_ocr"
 ]

@@ -21,6 +21,13 @@ class NamedCharacterNotExistException(ArkBaseException):
         super().__init__(msg, details)
 
 
+class NamedPoolNotExistException(ArkBaseException):
+    """这个名字的池子不存在"""
+    def __init__(self, msg: str = "卡池不存在！", details: str = ""):
+        super().__init__(msg, details)
+
+
 __all__ = [
-    "NamedCharacterNotExistException"
+    "NamedCharacterNotExistException",
+    "NamedPoolNotExistException"
 ]
