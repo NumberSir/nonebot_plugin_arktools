@@ -93,8 +93,8 @@ arknights_baidu_api_key="xxx"    # 【必填】百度 OCR API KEY
 arknights_baidu_secret_key="xxx"   # 【必填】百度 OCR SECRET KEY
 
 # 代理配置，如部署机器人的服务器在国内大陆地区可能需要修改
-github_raw="https://raw.githubusercontent.com"   # 默认为 https://raw.githubusercontent.com，如有镜像源可以替换
-github_site="https://github.com"  # 默认为 https://github.com，如有镜像源可以替换
+github_raw="https://raw.githubusercontent.com"   # 默认为 https://raw.githubusercontent.com，如有镜像源可以替换，如 https://ghproxy.com/https://raw.githubusercontent.com
+github_site="https://github.com"  # 默认为 https://github.com，如有镜像源可以替换，如 https://ghproxy.com/https://github.com
 rss_site="https://rsshub.app"  # 默认为 https://rsshub.app，如有镜像源可以替换
 
 # 定时任务配置，默认是关闭的
