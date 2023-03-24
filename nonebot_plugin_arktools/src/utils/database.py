@@ -106,7 +106,13 @@ class ArknightsDB:
             data_ = await fp.read()
         data = json.loads(data)
         data_ = json.loads(data_)["patchChars"]
+        data_["char_1001_amiya2"]["name"] = "近卫阿米娅"
         data.update(data_)
+
+        amiya = await CharacterModel.filter(charId="char_1001_amiya2", name='阿米娅').first()
+        if amiya:
+            await amiya.delete()
+
         tasks = {
             CharacterModel.update_or_create(charId=k, **v)
             for k, v in data.items()

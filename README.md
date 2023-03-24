@@ -238,10 +238,13 @@ xxx/yyy 代表 xxx 或 yyy
 <details>
 <summary>点击展开</summary>
 
+> 2023-03-24 v1.0.14
+> - 修复阿米娅与近卫阿米娅冲突的问题 [@zx-issue/13](https://github.com/NumberSir/zhenxun_arktools/issues/13)
+> 
 > 2023-03-08 v1.0.12
 > - 添加 rsshub 代理配置项 [@issue/34](https://github.com/NumberSir/nonebot_plugin_arktools/issues/34)
 > - 修复公招命令不处理的问题 [@issue/35](https://github.com/NumberSir/nonebot_plugin_arktools/issues/35)
-> - 添加方舟素材/资源路径配置项，现在默认在机器人根目录下 data/arktools 文件夹 [@issue/36](https://github.com/NumberSir/nonebot_plugin_arktools/issues/36)
+> - 添加方舟素材/资源路径配置项，现在默认在机器人根目录下 `data/arktools` 文件夹 [@issue/36](https://github.com/NumberSir/nonebot_plugin_arktools/issues/36)
 > - 修复查询暮落干员信息时会选中空白暮落的问题
 > 
 > 2023-02-20 v1.0.11
