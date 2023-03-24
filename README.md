@@ -10,7 +10,7 @@ _✨ 基于 OneBot 适配器的 [NoneBot2](https://v2.nonebot.dev/) 明日方舟
   
 </div>
 
-[![OSCS Status](https://www.oscs1024.com/platform/badge/NumberSir/nonebot_plugin_arktools.svg?size=small)](https://www.oscs1024.com/project/NumberSir/nonebot_plugin_arktools?ref=badge_small)
+[![OSCS Status](https://www.oscs1024.com/platform/badge/NumberSir/nonebot_plugin_arktools.svg?size=small)](https://www.oscs1024.com/project/NumberSir/nonebot_plugin_arktools?ref=badge_small)  [![star](https://gitee.com/Number_Sir/nonebot_plugin_arktools/badge/star.svg?theme=white)](https://gitee.com/Number_Sir/nonebot_plugin_arktools/stargazers)
 
 本人python小萌新，插件有不完善和可以改进之处欢迎各位多提pr和issue
 
@@ -50,7 +50,7 @@ pip install -U nonebot_plugin_arktools
 ## 启动注意
  - 每次启动并连接到客户端后会从 __[明日方舟常用素材库](https://github.com/yuanyan3060/Arknights-Bot-Resource)__(__[yuanyan3060](https://github.com/yuanyan3060)__), __[《明日方舟》游戏数据库](https://github.com/Kengxxiao/ArknightsGameData)__(__[Kengxxiao](https://github.com/Kengxxiao)__), __[Arknight-Images](https://github.com/Aceship/Arknight-Images)__(__[Aceship](https://github.com/Aceship)__) 下载使用插件必需的文本及图片资源到本地，已经下载过的文件不会重复下载。下载根据网络情况不同可能耗时 5 分钟左右
  - 如需手动更新，请用命令 __“更新方舟素材”__ 进行更新
- - 如果自动下载失败，请手动下载发行版中的 __“`data.zip`”/“`data.tar.gz`”__ 压缩文件，解压到 “`机器人根目录`” 文件夹下(即运行 `nb run` 命令的文件夹/ `bot.py` 的文件夹)，正确放置的文件夹结构应为：
+ - 如果自动下载失败，请手动下载发行版中的 __“`data.zip`”/“`data.tar.gz`”__ 压缩文件，解压到 “`机器人根目录`” 文件夹下(即运行 `nb run` 命令的文件夹/ `bot.py` 的文件夹)。如 github 下载速度慢，可从 __[gitee备份仓库](https://gitee.com/Number_Sir/nonebot_plugin_arktools)__ 下载发行版。正确放置的文件夹结构应为：
 ```txt
 举例：
 ├── data
