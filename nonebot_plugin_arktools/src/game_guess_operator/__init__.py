@@ -18,6 +18,7 @@ from asyncio import TimerHandle
 
 from .data_source import *
 from ..core.models_v3 import Character
+from ..utils.general import nickname_swap
 
 
 GAMES: Dict[str, GuessCharacter] = {}  # 记录游戏数据
@@ -90,6 +91,7 @@ async def handle_arkguess(matcher: Matcher, event: GroupMessageEvent, argv: List
     if options.hint:
         await send(message=await game.get_hint())
 
+    options.cht_name = await nickname_swap(options.cht_name)
     cht = await Character.parse_name(options.cht_name)
     result = await game.guess(cht)
     if result in [GuessResult.WIN, GuessResult.LOSE]:

@@ -122,6 +122,10 @@ draw_rate_3 = 0.42  # 三
   <img src="https://user-images.githubusercontent.com/52584526/219335891-37933d79-1b52-4452-8959-04861087f4e8.png" width="700" />
 </div>
 
+
+## 干员昵称
+位置默认在 `data/arknights/processed_data/nicknames.json` 键为干员中文名称，值为昵称，可自行修改。
+
 ## 指令
 <details>
 <summary>点击展开</summary>
@@ -238,6 +242,9 @@ xxx/yyy 代表 xxx 或 yyy
 <details>
 <summary>点击展开</summary>
 
+> 2023-03-28 v1.0.15
+> - 猜干员与干员信息功能可以使用干员昵称(可自行增删改查)
+> 
 > 2023-03-24 v1.0.14
 > - 修复阿米娅与近卫阿米娅冲突的问题 [@zx-issue/13](https://github.com/NumberSir/zhenxun_arktools/issues/13)
 > 

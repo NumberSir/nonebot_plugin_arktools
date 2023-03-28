@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Union, Dict, List
 from nonebot import get_driver
 from aiofiles import open as aopen
+from nonebot import logger
 
 from ..configs import PathConfig
 
@@ -159,13 +160,14 @@ async def gacha_rule_swap(value: str, type_: str = "name2code") -> str:
 async def nickname_swap(value: str) -> str:
     """干员昵称/外号转换"""
     swap_file = SWAP_PATH / "nicknames.json"
-    if not swap_file.exists():
-        os.makedirs(swap_file.parent, exist_ok=True)
-        return None
-
     async with aopen(swap_file, "r", encoding="utf-8") as fp:
         data = json.loads(await fp.read())
 
+    for k, v in data.items():
+        if value == k or value in v:
+            logger.info(f"{value} -> {k}")
+            return k
+    return value
 
 async def get_recruitment_available() -> List[str]:
     """获取可以公招获取的干员id们"""
@@ -189,6 +191,8 @@ __all__ = [
     "prof_swap",
     "faction_swap",
     "gacha_rule_swap",
+
+    "nickname_swap",
 
     "get_recruitment_available"
 ]
