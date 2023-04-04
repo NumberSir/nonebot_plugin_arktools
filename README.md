@@ -46,6 +46,11 @@ _✨ 基于 OneBot 适配器的 [NoneBot2](https://v2.nonebot.dev/) 明日方舟
 pip install -U nonebot_plugin_arktools
 ```
 
+- 使用 nb-cli
+```
+nb plugin install nonebot_plugin_arktools
+```
+
 # 如何使用
 ## 启动注意
  - 每次启动并连接到客户端后会从 __[明日方舟常用素材库](https://github.com/yuanyan3060/Arknights-Bot-Resource)__(__[yuanyan3060](https://github.com/yuanyan3060)__), __[《明日方舟》游戏数据库](https://github.com/Kengxxiao/ArknightsGameData)__(__[Kengxxiao](https://github.com/Kengxxiao)__), __[Arknight-Images](https://github.com/Aceship/Arknight-Images)__(__[Aceship](https://github.com/Aceship)__) 下载使用插件必需的文本及图片资源到本地，已经下载过的文件不会重复下载。下载根据网络情况不同可能耗时 5 分钟左右
@@ -89,32 +94,35 @@ pip install -U nonebot_plugin_arktools
 ```ini
 # 百度 OCR 配置，公招识别截图用
 # 具体见 https://console.bce.baidu.com/ai/?fromai=1#/ai/ocr/app/list
-arknights_baidu_api_key="xxx"    # 【必填】百度 OCR API KEY
-arknights_baidu_secret_key="xxx"   # 【必填】百度 OCR SECRET KEY
+ARKNIGHTS_BAIDU_API_KEY="xxx"    # 【必填】百度 OCR API KEY
+ARKNIGHTS_BAIDU_SECRET_KEY="xxx"   # 【必填】百度 OCR SECRET KEY
 
 # 代理配置，如部署机器人的服务器在国内大陆地区可能需要修改
-github_raw="https://raw.githubusercontent.com"   # 默认为 https://raw.githubusercontent.com，如有镜像源可以替换，如 https://ghproxy.com/https://raw.githubusercontent.com
-github_site="https://github.com"  # 默认为 https://github.com，如有镜像源可以替换，如 https://kgithub.com
-rss_site="https://rsshub.app"  # 默认为 https://rsshub.app，如有镜像源可以替换
+GITHUB_RAW="https://raw.githubusercontent.com"   # 默认为 https://raw.githubusercontent.com，如有镜像源可以替换，如 https://ghproxy.com/https://raw.githubusercontent.com
+GITHUB_SITE="https://github.com"  # 默认为 https://github.com，如有镜像源可以替换，如 https://kgithub.com
+RSS_SITE="https://rsshub.app"  # 默认为 https://rsshub.app，如有镜像源可以替换
 
 # 定时任务配置，默认是关闭的
-announce_push_switch=False  # 是否自动推送舟舟最新公告，默认为 False; True 为开启自动检测
-announce_push_interval=1  # 自动推送最新公告的检测间隔，上述开关开启时有效，默认为 1 分钟
-sanity_notify_switch=False  # 是否自动检测理智提醒，默认为 False; True 为开启自动检测
-sanity_notify_interval=10  # 自动检测理智提醒的检测间隔，上述开关开启时有效，默认为 10 分钟
+ANNOUNCE_PUSH_SWITCH=False  # 是否自动推送舟舟最新公告，默认为 False; True 为开启自动检测
+ANNOUNCE_PUSH_INTERVAL=1  # 自动推送最新公告的检测间隔，上述开关开启时有效，默认为 1 分钟
+SANITY_NOTIFY_SWITCH=False  # 是否自动检测理智提醒，默认为 False; True 为开启自动检测
+SANITY_NOTIFY_INTERVAL=10  # 自动检测理智提醒的检测间隔，上述开关开启时有效，默认为 10 分钟
+
+# 启动前素材检查配置，默认是开启的
+ARKNIGHTS_UPDATE_CHECK_SWITCH=True  # 是否在启动bot时检查素材版本并下载，默认为True; False 为禁用检查
 
 # 资源路径配置，默认在启动机器人的目录中/运行nb run的目录中/放bot.py的目录中
-arknights_data_path = "data/arktools"                                   # 资源根路径，如果修改了根路径，下方路径都要修改
-arknights_font_path = "data/arktools/fonts"                             # 字体路径
-arknights_gamedata_path = "data/arktools/arknights/gamedata"            # 游戏数据
-arknights_gameimage_path = "data/arktools/arknights/gameimage"          # 游戏图像
-arknights_db_url = "data/arktools/databases/arknights_sqlite.sqlite3"   # 数据库
+ARKNIGHTS_DATA_PATH = "data/arktools"                                   # 资源根路径，如果修改了根路径，下方路径都要修改
+ARKNIGHTS_FONT_PATH = "data/arktools/fonts"                             # 字体路径
+ARKNIGHTS_GAMEDATA_PATH = "data/arktools/arknights/gamedata"            # 游戏数据
+ARKNIGHTS_GAMEIMAGE_PATH = "data/arktools/arknights/gameimage"          # 游戏图像
+ARKNIGHTS_DB_URL = "data/arktools/databases/arknights_sqlite.sqlite3"   # 数据库
 
-# 抽卡配置
-draw_rate_6 = 0.02  # 六星概率
-draw_rate_5 = 0.08  # 五星
-draw_rate_4 = 0.48  # 四
-draw_rate_3 = 0.42  # 三
+# 抽卡配置(未实装)
+DRAW_RATE_6 = 0.02  # 六星概率
+DRAW_RATE_5 = 0.08  # 五星
+DRAW_RATE_4 = 0.48  # 四
+DRAW_RATE_3 = 0.42  # 三
 ...
 ```
 各配置项的含义如上。
@@ -242,6 +250,10 @@ xxx/yyy 代表 xxx 或 yyy
 <details>
 <summary>点击展开</summary>
 
+> 2023-04-04 v1.0.16
+> - 添加数据库初始化检查，不再每次启动bot时重复创建
+> - 添加每次启动bot时的数据更新检查开关，默认启用 [@issue/39](https://github.com/NumberSir/nonebot_plugin_arktools/issues/39)
+>
 > 2023-03-28 v1.0.15
 > - 猜干员与干员信息功能可以使用干员昵称(可自行增删改查)
 > 

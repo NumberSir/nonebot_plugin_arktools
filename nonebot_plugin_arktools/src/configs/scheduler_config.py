@@ -10,6 +10,8 @@ class SchedulerConfig(BaseModel, extra=Extra.ignore):
     sanity_notify_switch: bool = False  # 检测理智提醒开关
     sanity_notify_interval: int = 10  # 间隔多少分钟运行一次
 
+    arknights_update_check_switch: bool = True  # 检测更新开关
+
 
 __all__ = [
     "SchedulerConfig"

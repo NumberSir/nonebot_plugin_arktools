@@ -8,7 +8,7 @@ from nonebot import logger, get_driver
 
 import httpx
 
-from ..configs import PathConfig, ProxyConfig
+from ..configs import PathConfig, ProxyConfig, SchedulerConfig
 
 driver = get_driver()
 pcfg = PathConfig.parse_obj(get_driver().config.dict())
@@ -18,9 +18,10 @@ gameimage_path = Path(pcfg.arknights_gameimage_path).absolute()
 font_path = Path(pcfg.arknights_font_path).absolute()
 
 xcfg = ProxyConfig.parse_obj(get_driver().config.dict())
-
 BASE_URL_RAW = xcfg.github_raw  # 镜像
 BASE_URL_SITE = xcfg.github_site
+
+scfg = SchedulerConfig.parse_obj(get_driver().config.dict())
 
 REPOSITORIES = {
     "gamedata": "/Kengxxiao/ArknightsGameData/master",
@@ -266,30 +267,32 @@ async def download_fonts(client: httpx.AsyncClient):
 
 @driver.on_startup
 async def _init_game_files():
-    async with httpx.AsyncClient(timeout=100) as client:
-        try:
-            await download_extra_files(client)
-        except (httpx.ConnectError, httpx.RemoteProtocolError, httpx.TimeoutException) as e:
-            logger.error("下载方舟额外素材请求出错或连接超时，请修改代理、重试或手动下载：")
-            logger.error("https://github.com/NumberSir/nonebot_plugin_arktools#%E5%90%AF%E5%8A%A8%E6%B3%A8%E6%84%8F")
+    if scfg.arknights_update_check_switch:
+        async with httpx.AsyncClient(timeout=100) as client:
+            try:
+                await download_extra_files(client)
+            except (httpx.ConnectError, httpx.RemoteProtocolError, httpx.TimeoutException) as e:
+                logger.error("下载方舟额外素材请求出错或连接超时，请修改代理、重试或手动下载：")
+                logger.error("https://github.com/NumberSir/nonebot_plugin_arktools#%E5%90%AF%E5%8A%A8%E6%B3%A8%E6%84%8F")
 
-        logger.info("检查方舟游戏素材版本中 ...")
-        is_latest = False
-        try:
-            if not await ArknightsGameData(client).is_update_needed():
-                logger.info("方舟游戏素材当前为最新！")
-                is_latest = True
-        except (httpx.ConnectError, httpx.RemoteProtocolError, httpx.TimeoutException) as e:
-            logger.error("检查方舟素材版本请求出错或连接超时，请修改代理、重试或手动下载：")
-            logger.error("https://github.com/NumberSir/nonebot_plugin_arktools#%E5%90%AF%E5%8A%A8%E6%B3%A8%E6%84%8F")
-        else:
-            if not is_latest:
-                try:
-                    await ArknightsGameData(client).download_files()
-                    await ArknightsGameImage(client).download_files()
-                except (httpx.ConnectError, httpx.RemoteProtocolError, httpx.TimeoutException) as e:
-                    logger.error("下载方舟素材请求出错或连接超时，请修改代理、重试或手动下载：")
-                    logger.error("https://github.com/NumberSir/nonebot_plugin_arktools#%E5%90%AF%E5%8A%A8%E6%B3%A8%E6%84%8F")
+            logger.info("检查方舟游戏素材版本中 ...")
+            is_latest = False
+            try:
+                if not await ArknightsGameData(client).is_update_needed():
+                    logger.info("方舟游戏素材当前为最新！")
+                    is_latest = True
+            except (httpx.ConnectError, httpx.RemoteProtocolError, httpx.TimeoutException) as e:
+                logger.error("检查方舟素材版本请求出错或连接超时，请修改代理、重试或手动下载：")
+                logger.error("https://github.com/NumberSir/nonebot_plugin_arktools#%E5%90%AF%E5%8A%A8%E6%B3%A8%E6%84%8F")
+            else:
+                if not is_latest:
+                    logger.info("方舟游戏素材需要更新，开始下载素材...")
+                    try:
+                        await ArknightsGameData(client).download_files()
+                        await ArknightsGameImage(client).download_files()
+                    except (httpx.ConnectError, httpx.RemoteProtocolError, httpx.TimeoutException) as e:
+                        logger.error("下载方舟素材请求出错或连接超时，请修改代理、重试或手动下载：")
+                        logger.error("https://github.com/NumberSir/nonebot_plugin_arktools#%E5%90%AF%E5%8A%A8%E6%B3%A8%E6%84%8F")
 
 
 __all__ = [

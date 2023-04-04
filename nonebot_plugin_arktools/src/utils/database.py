@@ -2,7 +2,7 @@
 from pathlib import Path
 
 import tortoise.exceptions
-from tortoise import Tortoise
+from tortoise import Tortoise, connections
 from aiofiles import open as aopen
 import json
 import asyncio
@@ -60,22 +60,25 @@ class ArknightsDB:
         logger.info("===== ARKNIGHTS-SQLITE CONNECTION CLOSED.")
 
     @staticmethod
-    async def init_data():
+    async def init_data(force: bool = False):
         """填充数据"""
         logger.info("##### ARKNIGHTS-SQLITE DATA ALL INITIATING ...")
-        await ArknightsDB._init_building_buff()
-        await ArknightsDB._init_character()
-        await ArknightsDB._init_constance()
-        await ArknightsDB._init_equip()
-        await ArknightsDB._init_gacha_pool()
-        await ArknightsDB._init_handbook_info()
-        await ArknightsDB._init_item()
-        await ArknightsDB._init_skill()
-        await ArknightsDB._init_skin()
+        await ArknightsDB._init_building_buff(force)
+        await ArknightsDB._init_character(force)
+        await ArknightsDB._init_constance(force)
+        await ArknightsDB._init_equip(force)
+        await ArknightsDB._init_gacha_pool(force)
+        await ArknightsDB._init_handbook_info(force)
+        await ArknightsDB._init_item(force)
+        await ArknightsDB._init_skill(force)
+        await ArknightsDB._init_skin(force)
         logger.info("===== ARKNIGHTS-SQLITE DATA ALL INITIATED")
 
     @staticmethod
-    async def _init_building_buff():
+    async def _init_building_buff(force: bool = False):
+        if await ArknightsDB.check_table_exists(BuildingBuffModel.Meta.table) and not force:
+            logger.info("\t- BuildingBuff data already initiated.")
+            return
         async with aopen(gamedata_path / "excel" / "building_data.json", "r", encoding="utf-8") as fp:
             data = await fp.read()
         data = json.loads(data)
@@ -99,7 +102,10 @@ class ArknightsDB:
         logger.info("\t- WorkshopFormula data initiated.")
 
     @staticmethod
-    async def _init_character():
+    async def _init_character(force: bool = False):
+        if await ArknightsDB.check_table_exists(CharacterModel.Meta.table) and not force:
+            logger.info("\t- Character data already initiated.")
+            return
         async with aopen(gamedata_path / "excel" / "character_table.json", "r", encoding="utf-8") as fp:
             data = await fp.read()
         async with aopen(gamedata_path / "excel" / "char_patch_table.json", "r", encoding="utf-8") as fp:
@@ -121,7 +127,10 @@ class ArknightsDB:
         logger.info("\t- Character data initiated.")
 
     @staticmethod
-    async def _init_constance():
+    async def _init_constance(force: bool = False):
+        if await ArknightsDB.check_table_exists(ConstanceModel.Meta.table) and not force:
+            logger.info("\t- Constance data already initiated.")
+            return
         async with aopen(gamedata_path / "excel" / "gamedata_const.json", "r", encoding="utf-8") as fp:
             data = await fp.read()
         data = json.loads(data)
@@ -162,7 +171,10 @@ class ArknightsDB:
         logger.info("\t\t- TermDescription data initiated.")
 
     @staticmethod
-    async def _init_equip():
+    async def _init_equip(force: bool = False):
+        if await ArknightsDB.check_table_exists(EquipModel.Meta.table) and not force:
+            logger.info("\t- Equip data already initiated.")
+            return
         async with aopen(gamedata_path / "excel" / "uniequip_table.json", "r", encoding="utf-8") as fp:
             data = await fp.read()
         data = json.loads(data)
@@ -192,7 +204,10 @@ class ArknightsDB:
         logger.info("\t- Equip data initiated")
 
     @staticmethod
-    async def _init_gacha_pool():
+    async def _init_gacha_pool(force: bool = False):
+        if await ArknightsDB.check_table_exists(GachaPoolModel.Meta.table) and not force:
+            logger.info("\t- GachaPool data already initiated.")
+            return
         async with aopen(gamedata_path / "excel" / "gacha_table.json", "r", encoding="utf-8") as fp:
             data = await fp.read()
         data = json.loads(data)["gachaPoolClient"]
@@ -204,7 +219,10 @@ class ArknightsDB:
         logger.info("\t- GachaPool data initiated")
 
     @staticmethod
-    async def _init_handbook_info():
+    async def _init_handbook_info(force: bool = False):
+        if await ArknightsDB.check_table_exists(HandbookInfoModel.Meta.table) and not force:
+            logger.info("\t- HandbookInfo data already initiated.")
+            return
         async with aopen(gamedata_path / "excel" / "handbook_info_table.json", "r", encoding="utf-8") as fp:
             data = await fp.read()
         data = json.loads(data)["handbookDict"]
@@ -221,7 +239,10 @@ class ArknightsDB:
         logger.info("\t- HandbookInfo data initiated.")
 
     @staticmethod
-    async def _init_item():
+    async def _init_item(force: bool = False):
+        if await ArknightsDB.check_table_exists(ItemModel.Meta.table) and not force:
+            logger.info("\t- Item data already initiated.")
+            return
         async with aopen(gamedata_path / "excel" / "item_table.json", "r", encoding="utf-8") as fp:
             data = await fp.read()
         data = json.loads(data)["items"]
@@ -233,7 +254,10 @@ class ArknightsDB:
         logger.info("\t- Item data initiated")
 
     @staticmethod
-    async def _init_skill():
+    async def _init_skill(force: bool = False):
+        if await ArknightsDB.check_table_exists(SkillModel.Meta.table) and not force:
+            logger.info("\t- Skill data already initiated.")
+            return
         async with aopen(gamedata_path / "excel" / "skill_table.json", "r", encoding="utf-8") as fp:
             data = await fp.read()
         data = json.loads(data)
@@ -251,7 +275,10 @@ class ArknightsDB:
         logger.info("\t- Skill data initiated")
 
     @staticmethod
-    async def _init_skin():
+    async def _init_skin(force: bool = False):
+        if await ArknightsDB.check_table_exists(SkinModel.Meta.table) and not force:
+            logger.info("\t- Skin data already initiated.")
+            return
         async with aopen(gamedata_path / "excel" / "skin_table.json", "r", encoding="utf-8") as fp:
             data = await fp.read()
         data = json.loads(data)["charSkins"]
@@ -262,6 +289,12 @@ class ArknightsDB:
         await asyncio.gather(*tasks)
         logger.info("\t- Skin data initiated")
 
+    @staticmethod
+    async def check_table_exists(table_name: str) -> bool:
+        """存在就不要反复创建了"""
+        conn = connections.get("arknights")
+        table_names = await conn.execute_query_dict("SELECT `name` FROM sqlite_master WHERE `type`='table'")
+        return any(row["name"] == table_name for row in table_names)
 
 @driver.on_bot_connect  # 不能 on_startup, 要先下资源再初始化数据库
 async def _init_db():

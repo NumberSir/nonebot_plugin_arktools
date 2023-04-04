@@ -19,7 +19,7 @@ async def _():
     try:
         async with httpx.AsyncClient() as client:
             await ArknightsGameData(client).download_files()
-            await ArknightsDB.init_data()
+            await ArknightsDB.init_data(force=True)
             await ArknightsGameImage(client).download_files()
     except (httpx.ConnectError, httpx.RemoteProtocolError, httpx.TimeoutException) as e:
         logger.error("下载方舟游戏素材请求出错或连接超时，请修改代理、重试或手动下载：")
