@@ -27,7 +27,7 @@ setuptools.setup(
         'nonebot-adapter-onebot>=2.2.0',
         'nonebot2>=2.0.0rc2',
         'nonebot-plugin-apscheduler>=0.2.0',
-        'nonebot-plugin-imageutils>=0.1.14'
+        'nonebot-plugin-imageutils>=0.1.14',
         'nonebot-plugin-htmlrender>=0.2.0.1',
 
         'httpx>=0.23.1',
