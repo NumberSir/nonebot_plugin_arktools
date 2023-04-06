@@ -250,6 +250,9 @@ xxx/yyy 代表 xxx 或 yyy
 <details>
 <summary>点击展开</summary>
 
+> 2023-04-06 v1.0.18
+> - 修复了舟舟更新数据结构导致的创建表单错误
+>
 > 2023-04-04 v1.0.17
 > - 添加数据库初始化检查，不再每次启动bot时重复创建
 > - 添加每次启动bot时的数据更新检查开关，默认启用 [@issue/39](https://github.com/NumberSir/nonebot_plugin_arktools/issues/39)

@@ -29,6 +29,7 @@ class CharacterModel(Model):
     canUseActivityPotentialItem = fields.BooleanField(null=True)
     potentialItemId = fields.CharField(null=True, max_length=255)
     activityPotentialItemId = fields.CharField(null=True, max_length=255)
+    classicPotentialItemId = fields.CharField(null=True, max_length=255)
     nationId = fields.CharField(null=True, max_length=255)
     groupId = fields.CharField(null=True, max_length=255)
     teamId = fields.CharField(null=True, max_length=255)

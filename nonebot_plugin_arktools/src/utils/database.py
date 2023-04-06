@@ -60,19 +60,24 @@ class ArknightsDB:
         await Tortoise.close_connections()
         logger.info("===== ARKNIGHTS-SQLITE CONNECTION CLOSED.")
 
+    """ INIT DATA"""
     @staticmethod
     async def init_data(force: bool = False):
         """填充数据"""
         logger.info("##### ARKNIGHTS-SQLITE DATA ALL INITIATING ...")
-        await ArknightsDB._init_building_buff(force)
-        await ArknightsDB._init_character(force)
-        await ArknightsDB._init_constance(force)
-        await ArknightsDB._init_equip(force)
-        await ArknightsDB._init_gacha_pool(force)
-        await ArknightsDB._init_handbook_info(force)
-        await ArknightsDB._init_item(force)
-        await ArknightsDB._init_skill(force)
-        await ArknightsDB._init_skin(force)
+        try:
+            await ArknightsDB._init_building_buff(force)
+            await ArknightsDB._init_character(force)
+            await ArknightsDB._init_constance(force)
+            await ArknightsDB._init_equip(force)
+            await ArknightsDB._init_gacha_pool(force)
+            await ArknightsDB._init_handbook_info(force)
+            await ArknightsDB._init_item(force)
+            await ArknightsDB._init_skill(force)
+            await ArknightsDB._init_skin(force)
+        except (tortoise.exceptions.OperationalError, tortoise.exceptions.FieldError) as e:
+            await ArknightsDB.drop_data()
+            await ArknightsDB.init_db()
         logger.info("===== ARKNIGHTS-SQLITE DATA ALL INITIATED")
 
     @staticmethod
@@ -120,10 +125,12 @@ class ArknightsDB:
         if amiya:
             await amiya.delete()
 
-        tasks = {
-            CharacterModel.update_or_create(charId=k, **v)
-            for k, v in data.items()
-        }
+        tasks = set()
+        for k, v in data.items():
+            if "classicPotentialItemId" in v:
+                tasks.add(CharacterModel.update_or_create(charId=k, **v))
+            else:
+                tasks.add(CharacterModel.update_or_create(charId=k, classicPotentialItemId=None, **v))
         await asyncio.gather(*tasks)
         logger.info("\t- Character data initiated.")
 
@@ -290,11 +297,29 @@ class ArknightsDB:
         await asyncio.gather(*tasks)
         logger.info("\t- Skin data initiated")
 
+    """ DROP DATA """
+    @staticmethod
+    async def drop_data():
+        """填充数据"""
+        logger.warning("***** ARKNIGHTS-SQLITE DATA ALL DROPPING ...")
+        conn = Tortoise.get_connection("arknights")
+        await conn.db_delete()
+        logger.warning("***** ARKNIGHTS-SQLITE DATA ALL DROPPED")
+
     @staticmethod
     async def is_table_empty(model: Model) -> bool:
         """已经有数据就不要再 init 了"""
         count = await model.all().count()
         return count == 0
+
+    @staticmethod
+    async def is_insert_new_column(model: Model) -> bool:
+        """改模型了"""
+        try:
+            await model.filter()
+        except tortoise.exceptions.OperationalError as e:
+            return True
+        return False
 
 @driver.on_bot_connect  # 不能 on_startup, 要先下资源再初始化数据库
 async def _init_db():
