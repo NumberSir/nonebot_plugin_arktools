@@ -32,7 +32,7 @@ async def _():
 @init_db.handle()
 async def _():
     await update_game_resource.send("开始更新游戏数据库，视磁盘读写性能需1分钟左右……")
-    await ArknightsDB.init_data()
+    await ArknightsDB.init_data(force=True)
     await update_game_resource.finish("游戏数据库更新完成！")
 
 
