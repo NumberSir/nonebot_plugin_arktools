@@ -329,10 +329,12 @@ class Character:
     @property
     def talents(self) -> List["CharacterTalent"]:
         """天赋们"""
-        return [
-            CharacterTalent(cht=self, data=d)
-            for d in self._data["talents"][0]["candidates"]
-        ]
+        results = []
+        for t in self._data["talents"]:
+            results.extend(
+                CharacterTalent(cht=self, data=d) for d in t["candidates"]
+            )
+        return results
 
     @property
     def potential_ranks(self) -> List["CharacterPotentialRank"]:
