@@ -242,6 +242,18 @@ maa查作业 [关键词1 关键词2 ...] | [热度/最新/访问]  => 同上，�
 <div align="left">
   <img src="https://user-images.githubusercontent.com/52584526/218328361-95ae9117-cd5e-4295-982c-9498e0b880fb.png" width="500" />
 </div>
+
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/232200400-43d46da2-09a7-4e89-9cd0-dacc2cfe3c9c.png" width="500" />
+</div>
+
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/232200403-275f5ef9-bcd3-4bd3-9aa5-3429bb0ecff9.png" width="500" />
+</div>
+
+<div align="left">
+  <img src="https://user-images.githubusercontent.com/52584526/232200407-b689d0af-e764-4254-9689-f871af80b079.png" width="500" />
+</div>
 </details>
 
 
