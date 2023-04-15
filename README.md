@@ -30,6 +30,7 @@ _✨ 基于 OneBot 适配器的 [NoneBot2](https://v2.nonebot.dev/) 明日方舟
 5. [x] 可以查看生日为今天的干员
 6. [x] 可以记录当前理智，等回复满后提醒
 7. [x] 指定群聊自动推送最新游戏公告
+8. [x] 查询、订阅、推送 [MAA 作业站](https://prts.plus)的作业
 
 ## 编写中...
 1. [ ] 可以查询某种资源在哪个关卡期望理智最低
@@ -107,22 +108,19 @@ ANNOUNCE_PUSH_SWITCH=False  # 是否自动推送舟舟最新公告，默认为 F
 ANNOUNCE_PUSH_INTERVAL=1  # 自动推送最新公告的检测间隔，上述开关开启时有效，默认为 1 分钟
 SANITY_NOTIFY_SWITCH=False  # 是否自动检测理智提醒，默认为 False; True 为开启自动检测
 SANITY_NOTIFY_INTERVAL=10  # 自动检测理智提醒的检测间隔，上述开关开启时有效，默认为 10 分钟
+MAA_COPILOT_SWITCH=False  # 是否自动推送MAA作业站新作业，默认为 False; True 为开启自动检测
+MAA_COPILOT_INTERVAL=60  # 自动推送MAA作业站新作业的检测间隔，上述开关开启时有效，默认为 60 分钟
 
 # 启动前素材检查配置，默认是开启的
 ARKNIGHTS_UPDATE_CHECK_SWITCH=True  # 是否在启动bot时检查素材版本并下载，默认为True; False 为禁用检查
 
 # 资源路径配置，默认在启动机器人的目录中/运行nb run的目录中/放bot.py的目录中
-ARKNIGHTS_DATA_PATH = "data/arktools"                                   # 资源根路径，如果修改了根路径，下方路径都要修改
-ARKNIGHTS_FONT_PATH = "data/arktools/fonts"                             # 字体路径
-ARKNIGHTS_GAMEDATA_PATH = "data/arktools/arknights/gamedata"            # 游戏数据
-ARKNIGHTS_GAMEIMAGE_PATH = "data/arktools/arknights/gameimage"          # 游戏图像
-ARKNIGHTS_DB_URL = "data/arktools/databases/arknights_sqlite.sqlite3"   # 数据库
+ARKNIGHTS_DATA_PATH="data/arktools"                                   # 资源根路径，如果修改了根路径，下方路径都要修改
+ARKNIGHTS_FONT_PATH="data/arktools/fonts"                             # 字体路径
+ARKNIGHTS_GAMEDATA_PATH="data/arktools/arknights/gamedata"            # 游戏数据
+ARKNIGHTS_GAMEIMAGE_PATH="data/arktools/arknights/gameimage"          # 游戏图像
+ARKNIGHTS_DB_URL="data/arktools/databases/arknights_sqlite.sqlite3"   # 数据库
 
-# 抽卡配置(未实装)
-DRAW_RATE_6 = 0.02  # 六星概率
-DRAW_RATE_5 = 0.08  # 五星
-DRAW_RATE_4 = 0.48  # 四
-DRAW_RATE_3 = 0.42  # 三
 ...
 ```
 各配置项的含义如上。
@@ -189,6 +187,15 @@ xxx/yyy 代表 xxx 或 yyy
 删除方舟推送群 / DELGROUP   => 删除自动推送的群号
 查看方舟推送群 / GETGROUP   => 查看自动推送的群号
 ```
+MAA 作业站相关
+```text
+maa添加订阅 / ADDMAA [关键词1 关键词2 ...]  => 添加自动推送的关键词
+maa删除订阅 / DELMAA [关键词1 关键词2 ...]  => 删除自动推送的关键词
+maa查看订阅 / GETMAA                      => 查看本群自动推送的关键词
+
+maa查作业 [关键词1 关键词2 ...]                   => 按关键词组合查作业，默认为最新发布的第一个作业
+maa查作业 [关键词1 关键词2 ...] | [热度/最新/访问]  => 同上，不过可以指定按什么顺序查询
+```
 </details>
 
 # 图片示例
@@ -244,12 +251,18 @@ xxx/yyy 代表 xxx 或 yyy
  - __[Aceship](https://github.com/Aceship)__ 的 __[Arknight-Images](https://github.com/Aceship/Arknight-Images)__
  - __[AmiyaBot](https://github.com/AmiyaBot)__ 的 __[Amiya-bot](https://github.com/AmiyaBot/Amiya-Bot)__
  - __[Strelizia02](https://github.com/Strelizia02)__ 的 __[AngelinaBot](https://github.com/Strelizia02/AngelinaBot)__
-
+ - __[MaaAssistantArknights](https://github.com/MaaAssistantArknights)__ 的 __[MAA](https://github.com/MaaAssistantArknights/MaaAssistantArknights)__
 
 # 更新日志
 <details>
 <summary>点击展开</summary>
 
+> 2023-04-15 v1.1.0
+> - 公招查询、猜干员、理智提醒现在均可以私聊进行 (不推荐，私聊发消息可能导致风控)
+> - 简易修复了与其它同用 Tortoise-ORM 的插件初始化冲突的问题 [@zx-issue/15](https://github.com/NumberSir/zhenxun_arktools/issues/15)
+> - 添加在群聊查询、订阅、推送 [MAA 作业站](https://prts.plus)作业的功能
+> - 修复了更新数据库中某张表格时会删除所有表格的问题
+> 
 > 2023-04-08 v1.0.20
 > - 修复因素材库更新滞后导致无法查看干员的问题
 > 

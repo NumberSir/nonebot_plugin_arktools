@@ -43,6 +43,7 @@ FILES = {
         "zh_CN/gamedata/excel/uniequip_table.json",         # 模组表、子职业映射
         "zh_CN/gamedata/excel/handbook_team_table.json",    # 干员阵营
         "zh_CN/gamedata/excel/skin_table.json",             # 皮肤
+        "zh_CN/gamedata/excel/stage_table.json",            # 关卡
     ]
 }
 

@@ -12,6 +12,9 @@ class SchedulerConfig(BaseModel, extra=Extra.ignore):
 
     arknights_update_check_switch: bool = True  # 检测更新开关
 
+    maa_copilot_switch: bool = False  # 查询 MAA 作业站订阅内容开关
+    maa_copilot_interval: int = 60  # 间隔多少分钟运行一次
+
 
 __all__ = [
     "SchedulerConfig"

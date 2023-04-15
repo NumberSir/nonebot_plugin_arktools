@@ -6,7 +6,7 @@ from nonebot.exception import ParserExit
 from nonebot.rule import Rule, ArgumentParser, to_me
 from nonebot.matcher import Matcher
 from nonebot.typing import T_State
-from nonebot.adapters.onebot.v11 import Message, GroupMessageEvent, MessageSegment
+from nonebot.adapters.onebot.v11 import Message, MessageEvent, MessageSegment, GroupMessageEvent
 
 import asyncio
 import shlex
@@ -40,12 +40,12 @@ parser.add_argument("cht_name", nargs="?", help="干员名")
 
 arkguess = on_shell_command("猜干员", parser=parser)
 @arkguess.handle()
-async def _(matcher: Matcher, event: GroupMessageEvent, argv: List[str] = ShellCommandArgv()):
+async def _(matcher: Matcher, event: MessageEvent, argv: List[str] = ShellCommandArgv()):
     """开始游戏"""
     await handle_arkguess(matcher, event, argv)
 
 
-async def handle_arkguess(matcher: Matcher, event: GroupMessageEvent, argv: List[str]):
+async def handle_arkguess(matcher: Matcher, event: MessageEvent, argv: List[str]):
     async def send(message: Optional[str] = None, image: Optional[BytesIO] = None):
         if not (message or image):
             await matcher.finish()
@@ -64,7 +64,7 @@ async def handle_arkguess(matcher: Matcher, event: GroupMessageEvent, argv: List
         await send()
 
     options = Options(**vars(args))
-    cid = f"group_{event.group_id}"
+    cid = f"group_{event.group_id}" if isinstance(event, GroupMessageEvent) else f"group_{event.user_id}"
     if not GAMES.get(cid):
         if options.cht_name or options.stop or options.hint:
             await matcher.finish("小笨蛋，没有正在进行的游戏哦！")
@@ -142,7 +142,7 @@ def shortcut(cmd: str, argv: List[str] = None, **kwargs):
     command = on_command(cmd, **kwargs)
 
     @command.handle()
-    async def _(matcher: Matcher, event: GroupMessageEvent, msg: Message = CommandArg()):
+    async def _(matcher: Matcher, event: MessageEvent, msg: Message = CommandArg()):
         try:
             args = shlex.split(msg.extract_plain_text().strip())
         except Exception as e:
@@ -150,9 +150,9 @@ def shortcut(cmd: str, argv: List[str] = None, **kwargs):
         await handle_arkguess(matcher, event, argv + args)
 
 
-def is_game_running(event: GroupMessageEvent) -> bool:
+def is_game_running(event: MessageEvent) -> bool:
     """判断游戏运行"""
-    return bool(GAMES.get(f"group_{event.group_id}"))
+    return bool(GAMES.get(f"group_{event.group_id}")) if isinstance(event, GroupMessageEvent) else bool(GAMES.get(f"group_{event.user_id}"))
 
 
 def get_word_input(state: T_State, msg: str = EventPlainText()) -> bool:
@@ -170,7 +170,7 @@ shortcut("结束", ["--stop"], rule=is_game_running)
 
 word_matcher = on_message(Rule(is_game_running) & get_word_input)
 @word_matcher.handle()
-async def _(matcher: Matcher, event: GroupMessageEvent, state: T_State):
+async def _(matcher: Matcher, event: MessageEvent, state: T_State):
     cht_name: str = state["cht_name"]
     await handle_arkguess(matcher, event, [cht_name])
 
