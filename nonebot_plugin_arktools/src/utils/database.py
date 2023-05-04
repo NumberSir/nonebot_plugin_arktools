@@ -78,7 +78,7 @@ class ArknightsDB:
             await ArknightsDB._init_skill(force)
             await ArknightsDB._init_skin(force)
             await ArknightsDB._init_stage(force)
-        except (tortoise.exceptions.OperationalError, tortoise.exceptions.FieldError) as e:
+        except tortoise.exceptions.BaseORMException as e:
             logger.error(f"数据库初始化出错: {e}")
             await ArknightsDB.drop_data()
             await ArknightsDB.init_db()
@@ -292,7 +292,7 @@ class ArknightsDB:
             SkillModel.update_or_create(
                 name=v["levels"][0]["name"],
                 skillType=v["levels"][0]["skillType"],
-                durationType=v["levels"][0]["skillType"],
+                durationType=v["levels"][0]["durationType"],
                 prefabId=v["levels"][0]["prefabId"],
                 **v
             )

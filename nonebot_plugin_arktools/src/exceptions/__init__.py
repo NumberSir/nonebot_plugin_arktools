@@ -39,9 +39,16 @@ class MAANoResultException(ArkBaseException):
         super().__init__(msg, details)
 
 
+class NoHandbookInfoException(ArkBaseException):
+    """没有档案"""
+    def __init__(self, msg: str = "干员没有档案！", details: str = ""):
+        super().__init__(msg, details)
+
+
 __all__ = [
     "NamedCharacterNotExistException",
     "NamedPoolNotExistException",
+    "NoHandbookInfoException",
 
     "MAAFailedResponseException",
     "MAANoResultException"

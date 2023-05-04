@@ -1,6 +1,7 @@
 import json
 import random
 from io import BytesIO
+from datetime import datetime
 from typing import List, Dict, Tuple, Optional
 
 import httpx
@@ -58,7 +59,7 @@ async def process_works(works: List[Dict], keyword: str) -> Optional[Tuple[Bytes
     work = works[0]
     local_data = await MAACopilotSubsModel.filter(sub_keyword=keyword).first()
     local_upload_time = local_data.latest_upload_time
-    latest_upload_time = work["upload_time"]
+    latest_upload_time = datetime.fromisoformat(work["upload_time"]).timestamp()
 
     if latest_upload_time <= local_upload_time:
         return None

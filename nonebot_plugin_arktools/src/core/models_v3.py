@@ -1231,7 +1231,7 @@ class Skill:
             raise NotImplementedError("未输入干员数据！")
         return [
             SkillLevelUpCondition(skill=self, data=d)
-            for d in self._extra_data["levelUpCostCond"]
+            for d in self._extra_data["specializeLevelUpData"]
         ]
 
     @property
@@ -1239,7 +1239,7 @@ class Skill:
         """解锁(phase, level)"""
         if not self._extra_data:
             raise NotImplementedError("未输入干员数据！")
-        return CharacterUnlockCondition(data=self._extra_data["unlockCond"])
+        return CharacterUnlockCondition(data=self._extra_data["initialUnlockCond"])
 
     # 不在 arknights_skill_table 中的
     @property

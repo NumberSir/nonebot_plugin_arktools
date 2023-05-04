@@ -149,6 +149,7 @@ xxx/yyy 代表 xxx 或 yyy
 方舟帮助 / arkhelp   => 查看指令列表
 更新方舟素材          => 手动更新游戏数据(json)与图片
 更新方舟数据库        => 手动更新数据库
+更新方舟数据库 -D     => 删除原数据库各表并重新写入
 ```
 猜干员
 ```text
@@ -259,7 +260,6 @@ maa查作业 [关键词1 关键词2 ...] | [热度/最新/访问]  => 同上，�
 
 # 感谢
  - __[yuanyan3060](https://github.com/yuanyan3060)__ 的 __[明日方舟常用素材库](https://github.com/yuanyan3060/Arknights-Bot-Resource)__
- - __[Kengxxiao](https://github.com/Kengxxiao)__ 的 __[《明日方舟》游戏数据库](https://github.com/Kengxxiao/ArknightsGameData)__
  - __[Aceship](https://github.com/Aceship)__ 的 __[Arknight-Images](https://github.com/Aceship/Arknight-Images)__
  - __[AmiyaBot](https://github.com/AmiyaBot)__ 的 __[Amiya-bot](https://github.com/AmiyaBot/Amiya-Bot)__
  - __[Strelizia02](https://github.com/Strelizia02)__ 的 __[AngelinaBot](https://github.com/Strelizia02/AngelinaBot)__
@@ -269,6 +269,13 @@ maa查作业 [关键词1 关键词2 ...] | [热度/最新/访问]  => 同上，�
 <details>
 <summary>点击展开</summary>
 
+> 2023-05-04 v1.2.0
+> - 更换数据源 [@issue/42](https://github.com/NumberSir/nonebot_plugin_arktools/issues/42)
+> - 更新数据键值对
+> - 修复了使用 `ghproxy` 作为 github 镜像时无法获取数据的问题
+> - 添加了删表重写功能
+> - 修复了从 maa 作业站自动推送作业出错的问题
+> 
 > 2023-04-15 v1.1.0
 > - 公招查询、猜干员、理智提醒现在均可以私聊进行 (不推荐，私聊发消息可能导致风控)
 > - 简易修复了与其它同用 Tortoise-ORM 的插件初始化冲突的问题 [@zx-issue/15](https://github.com/NumberSir/zhenxun_arktools/issues/15)
@@ -286,7 +293,7 @@ maa查作业 [关键词1 关键词2 ...] | [热度/最新/访问]  => 同上，�
 >
 > 2023-04-04 v1.0.17
 > - 添加数据库初始化检查，不再每次启动bot时重复创建
-> - 添加每次启动bot时的数据更新检查开关，默认启用 [@issue/39](https://github.com/NumberSir/nonebot_plugin_arktools/issues/39)
+> - 添加每次启动 bot 时的数据更新检查开关，默认启用 [@issue/39](https://github.com/NumberSir/nonebot_plugin_arktools/issues/39)
 >
 > 2023-03-28 v1.0.15
 > - 猜干员与干员信息功能可以使用干员昵称(可自行增删改查)

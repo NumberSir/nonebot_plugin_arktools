@@ -24,26 +24,26 @@ BASE_URL_SITE = xcfg.github_site
 scfg = SchedulerConfig.parse_obj(get_driver().config.dict())
 
 REPOSITORIES = {
-    "gamedata": "/Kengxxiao/ArknightsGameData/master",
+    "gamedata": "/yuanyan3060/ArknightsGameResource/master",
     "gameimage_1": "/yuanyan3060/Arknights-Bot-Resource/master",
     "gameimage_2": "/Aceship/Arknight-Images/master",
 }
 
 FILES = {
     "gamedata": [
-        "zh_CN/gamedata/excel/building_data.json",          # 基建技能，制造配方
-        "zh_CN/gamedata/excel/char_patch_table.json",       # 升变阿米娅
-        "zh_CN/gamedata/excel/character_table.json",        # 干员表
-        "zh_CN/gamedata/excel/data_version.txt",            # 数据版本
-        "zh_CN/gamedata/excel/gamedata_const.json",         # 游戏常数
-        "zh_CN/gamedata/excel/gacha_table.json",            # 公招相关
-        "zh_CN/gamedata/excel/item_table.json",             # 物品表
-        "zh_CN/gamedata/excel/handbook_info_table.json",    # 档案表
-        "zh_CN/gamedata/excel/skill_table.json",            # 技能表
-        "zh_CN/gamedata/excel/uniequip_table.json",         # 模组表、子职业映射
-        "zh_CN/gamedata/excel/handbook_team_table.json",    # 干员阵营
-        "zh_CN/gamedata/excel/skin_table.json",             # 皮肤
-        "zh_CN/gamedata/excel/stage_table.json",            # 关卡
+        "gamedata/excel/building_data.json",          # 基建技能，制造配方
+        "gamedata/excel/char_patch_table.json",       # 升变阿米娅
+        "gamedata/excel/character_table.json",        # 干员表
+        "gamedata/excel/data_version.txt",            # 数据版本
+        "gamedata/excel/gamedata_const.json",         # 游戏常数
+        "gamedata/excel/gacha_table.json",            # 公招相关
+        "gamedata/excel/item_table.json",             # 物品表
+        "gamedata/excel/handbook_info_table.json",    # 档案表
+        "gamedata/excel/skill_table.json",            # 技能表
+        "gamedata/excel/uniequip_table.json",         # 模组表、子职业映射
+        "gamedata/excel/handbook_team_table.json",    # 干员阵营
+        "gamedata/excel/skin_table.json",             # 皮肤
+        "gamedata/excel/stage_table.json",            # 关卡
     ]
 }
 
@@ -97,8 +97,8 @@ class ArknightsGameData:
 
     async def get_latest_version(self) -> str:
         """获取最新版本"""
-        url = f"{self._url}/zh_CN/gamedata/excel/data_version.txt"
-        response = await self._client.get(url)
+        url = f"{self._url}/gamedata/excel/data_version.txt"
+        response = await self._client.get(url, follow_redirects=True)
         return response.text.split(":")[-1].strip("\n").strip()  # eg: "31.4.0"
 
     async def is_update_needed(self) -> bool:
@@ -120,7 +120,7 @@ class ArknightsGameData:
 
     async def save(self, url: str, file: str, tmp: Path):
         """异步gather用"""
-        content = (await self._client.get(f"{url}/{file}", timeout=100)).content
+        content = (await self._client.get(f"{url}/{file}", timeout=100, follow_redirects=True)).content
         async with aopen(tmp / file.split('/')[-1], "wb") as fp:
             await fp.write(content)
         logger.info(f"\t- Arknights-Data downloaded: {file.split('/')[-1]}")
@@ -209,13 +209,13 @@ class ArknightsGameImage:
 
     async def get_htmls(self, url: str, dir_: str):
         """异步gather用"""
-        html = (await self._client.get(url, timeout=100)).text
+        html = (await self._client.get(url, timeout=100, follow_redirects=True)).text
         self._htmls[dir_] = (html, url)
 
     async def save(self, url: str, tmp: Path):
         """异步gather用"""
         # print(url)
-        content = (await self._client.get(quote(url, safe="/:"), timeout=100)).content
+        content = (await self._client.get(quote(url, safe="/:"), timeout=100, follow_redirects=True)).content
         if not url.endswith(".png"):
             return
         async with aopen(tmp / unquote(url).split('/master/')[-1], "wb") as fp:
@@ -241,7 +241,7 @@ async def download_extra_files(client: httpx.AsyncClient):
         path = url.split("/data/")[-1]
         if (data_path / path).exists():
             continue
-        response = await client.get(url)
+        response = await client.get(url, follow_redirects=True)
         async with aopen(data_path / path, "wb") as fp:
             await fp.write(response.content)
             logger.info(f"\t- Extra file downloaded: {path}")
@@ -260,7 +260,7 @@ async def download_fonts(client: httpx.AsyncClient):
         path = url.split("/")[-1]
         if (font_path / path).exists():
             continue
-        response = await client.get(url)
+        response = await client.get(url, follow_redirects=True)
         async with aopen(font_path / path, "wb") as fp:
             await fp.write(response.content)
             logger.info(f"\t- Font file downloaded: {path}")
