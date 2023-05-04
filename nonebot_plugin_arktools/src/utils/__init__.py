@@ -37,7 +37,9 @@ async def _(args: Message = CommandArg()):
     if args.extract_plain_text().strip() == "-D":
         await ArknightsDB.drop_data()
         await update_game_resource.send("已彻底删除原表，开始重新写入数据库……")
-    await ArknightsDB.init_data(force=True)
+        await ArknightsDB.init_db()
+    else:
+        await ArknightsDB.init_data(force=True)
     await update_game_resource.finish("游戏数据库更新完成！")
 
 
