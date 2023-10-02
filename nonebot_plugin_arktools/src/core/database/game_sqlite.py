@@ -54,6 +54,7 @@ class CharacterModel(Model):
     potentialRanks = fields.JSONField(null=True)
     favorKeyFrames = fields.JSONField(null=True)
     allSkillLvlup = fields.JSONField(null=True)
+    displayTokenDict = fields.JSONField(null=True)
 
     class Meta:
         table = "character"
