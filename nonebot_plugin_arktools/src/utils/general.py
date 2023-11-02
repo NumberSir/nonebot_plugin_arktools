@@ -197,7 +197,7 @@ async def get_recruitment_available() -> List[str]:
     text = text.replace("\\n", "\n").replace("<@rc.eml>", "\n").replace("</>", "\n").split("\n")
     text = [_ for _ in text if _ and "<" not in _ and "--" not in _ and "★" not in _ and _ != " / "][1:]
     text = [" ".join(_.split(" / ")) for _ in text]
-    text = " ".join(_.strip() for _ in text).split()
+    text = " ".join(_.strip() for _ in text).split()[1:]
     result = [await character_swap(_) for _ in text]
     return result
 
