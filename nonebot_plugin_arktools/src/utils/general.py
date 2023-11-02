@@ -198,8 +198,7 @@ async def get_recruitment_available() -> List[str]:
     text = [_ for _ in text if _ and "<" not in _ and "--" not in _ and "★" not in _ and _ != " / "][1:]
     text = [" ".join(_.split(" / ")) for _ in text]
     text = " ".join(_.strip() for _ in text).split()[1:]
-    result = [await character_swap(_) for _ in text]
-    return result
+    return [await character_swap(_) for _ in text]
 
 
 __all__ = [
